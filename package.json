@@ -12,7 +12,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "lint": "eslint .",
-    "format": "prettier --write \"**/*.{ts,tsx,astro}\"",
+    "format": "prettier --write .",
     "typecheck": "astro check"
   },
   "dependencies": {
