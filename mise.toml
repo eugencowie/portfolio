@@ -8,6 +8,16 @@ node = "latest"
 pnpm = "latest"
 python = "latest"
 
+[tasks]
+install = "pnpm install"
+dev = "pnpm run dev"
+build = "pnpm run build"
+preview = "pnpm run preview"
+astro = "pnpm run astro"
+lint = "pnpm run lint"
+format = "pnpm run format"
+typecheck = "pnpm run typecheck"
+
 [tasks."template:update"]
 description = "Update project with the latest changes from the template"
 run = "cruft update"
