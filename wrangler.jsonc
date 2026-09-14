@@ -1,0 +1,21 @@
+// Build configuration
+// - Build command: pnpm run build
+// - Deploy command: pnpm run deploy
+// - Version command: pnpm run version
+// - Root directory: /
+//
+// Branch control
+// - Production branch: main
+// - Builds for non-production branches: true
+//
+// Variables and secrets
+// - NODE_VERSION: 26.8.1
+// - PNPM_VERSION: 12.3.4
+
+{
+  "name": "portfolio",
+  "compatibility_date": "2026-09-14",
+  "assets": {
+    "directory": "./dist",
+  },
+}

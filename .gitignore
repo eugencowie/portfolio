@@ -21,6 +21,12 @@ playwright/.cache/
 playwright/.auth/
 
 #
+# Cloudflare
+#
+
+.wrangler/
+
+#
 # https://github.com/github/gitignore/blob/main/Node.gitignore
 #
 

@@ -1,6 +1,7 @@
 allowBuilds:
   "@playwright/browser-chromium": true
   esbuild: true
+  workerd: true
 
 patchedDependencies:
   prettier-plugin-tailwindcss@0.8.1: patches/prettier-plugin-tailwindcss@0.8.1.patch
