@@ -4,7 +4,26 @@ disable_backends = ["asdf"] # cannot be updated by Renovate
 [tools]
 "aqua:astral-sh/uv" = "latest"
 "pipx:cruft" = "latest"
+pnpm = "latest"
 python = "latest"
+
+[tasks]
+install = "pnpm install"
+node = "pnpm exec node"
+astro = "pnpm exec astro"
+dev = "pnpm run dev"
+build = "pnpm run build"
+preview = ["pnpm run build", "pnpm run preview"]
+check = "pnpm run check"
+lint = "pnpm run lint"
+"lint:fix" = "pnpm run lint:fix"
+format = "pnpm run format"
+"format:fix" = "pnpm run format:fix"
+test = "pnpm run test"
+"test:watch" = "pnpm run test:watch"
+e2e = ["pnpm run build", "pnpm run e2e"]
+validate = "pnpm run validate"
+"validate:fix" = "pnpm run validate:fix"
 
 [tasks."template:update"]
 description = "Update project with the latest changes from the template"
