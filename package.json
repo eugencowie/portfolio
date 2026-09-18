@@ -4,6 +4,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "build:assets": "node scripts/assets.mjs",
     "preview": "astro preview",
     "check": "astro check",
     "lint": "eslint .",
@@ -27,7 +28,6 @@
     "@eslint/js": "10.0.1",
     "@fontsource/commit-mono": "5.3.0",
     "@fontsource/michroma": "5.3.0",
-    "@lucide/astro": "1.45.0",
     "@playwright/browser-chromium": "1.63.0",
     "@playwright/test": "1.63.0",
     "@tailwindcss/vite": "4.3.3",

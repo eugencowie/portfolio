@@ -16,20 +16,17 @@ const { tagline } = Astro.props;
     it. The maths lives in `--overlap`, `--wm` and `--baseline` in <style>.
   -->
   <div class="hero-stack relative flex w-full flex-col items-center">
-    <div>
-      <Image
-        src={avatar}
-        alt="Illustrated portrait of Eugen: long hair, beard, aviator sunglasses, lit magenta on one side and cyan on the other."
-        width={416}
-        densities={[1, 2, 3]}
-        loading="eager"
-        fetchpriority="high"
-        class="avatar h-auto w-88 max-w-full select-none sm:w-104"
-      />
-    </div>
+    <Image
+      src={avatar}
+      alt="Illustrated portrait of Eugen: long hair, beard, aviator sunglasses, lit magenta on one side and cyan on the other."
+      width={416}
+      densities={[1, 2, 3]}
+      priority
+      class="avatar h-auto w-88 max-w-full select-none sm:w-104"
+    />
     <div class="wordmark relative w-full">
       <div aria-hidden="true" class="horizon absolute inset-x-0 h-px"></div>
-      <Wordmark class="relative w-full text-center text-7xl sm:text-8xl" />
+      <Wordmark class="relative w-full text-center" />
     </div>
   </div>
   <p class="mt-20 max-w-xl text-lg text-muted sm:text-xl">{tagline}</p>
@@ -38,7 +35,7 @@ const { tagline } = Astro.props;
 <style>
   /* Horizon geometry.
      --overlap: how far the Wordmark rises into the avatar.
-     --wm: the Wordmark font size (mirrors text-7xl / text-8xl).
+     --wm: the Wordmark font size.
      --baseline: Michroma's baseline as a fraction of a line-height-1 box
        (ascent 2368, descent 544, upm 2048 => 0.945). */
   .hero-stack {
@@ -54,6 +51,7 @@ const { tagline } = Astro.props;
     }
   }
   .wordmark {
+    font-size: var(--wm);
     margin-top: calc(-1 * var(--overlap));
   }
   .avatar {

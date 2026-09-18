@@ -1,9 +1,11 @@
 ---
-// Copy to src/pages/og.astro to render the Open Graph image. See scripts/README.md.
+// Rendered to public/og.png by `mise run assets`.
 import { Image } from "astro:assets";
 import avatar from "@/assets/avatar.png";
 import Wordmark from "@/components/Wordmark.astro";
 import "@/styles/global.css";
+
+const taglines = ["I build things for fun.", "Some of them work."];
 ---
 
 <html lang="en">
@@ -26,9 +28,9 @@ import "@/styles/global.css";
       <div class="relative flex flex-col gap-16">
         <Wordmark class="text-8xl" />
         <p class="mt-4 text-2xl text-muted">
-          I build things for fun.
-          <br />
-          Some of them work.
+          {taglines.map((line) => (
+            <span class="block">{line}</span>
+          ))}
         </p>
       </div>
     </div>
