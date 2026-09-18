@@ -122,6 +122,15 @@ importers:
       '@eslint/js':
         specifier: 10.0.1
         version: 10.0.1(eslint@10.10.0(jiti@2.7.0)(supports-color@10.2.2))
+      '@fontsource/commit-mono':
+        specifier: 5.3.0
+        version: 5.3.0
+      '@fontsource/michroma':
+        specifier: 5.3.0
+        version: 5.3.0
+      '@lucide/astro':
+        specifier: 1.45.0
+        version: 1.45.0(astro@7.3.2(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@26.6.1)(jiti@2.7.0)(yaml@2.9.1))
       '@playwright/browser-chromium':
         specifier: 1.63.0
         version: 1.63.0
@@ -155,6 +164,9 @@ importers:
       prettier-plugin-tailwindcss:
         specifier: 0.8.1
         version: 0.8.1(patch_hash=71ad7b7f5fa30d037639b62c8968d286b3c8f655c8c38a313985ad23b0787085)(prettier-plugin-astro@1.0.0(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(prettier@3.9.7))(prettier@3.9.7)
+      sharp:
+        specifier: 0.35.4
+        version: 0.35.4(@types/node@26.6.1)
       tailwindcss:
         specifier: 4.3.3
         version: 4.3.3
@@ -797,6 +809,12 @@ packages:
     resolution: {integrity: sha512-IkO+/KEUvwbVpiURZg+P7zF74z5Jxe0UgJxVni+RtoHQ6IZieXaO02kmadomap/q+l6bc/jdPGGqTjhuZnuz1Q==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
 
+  '@fontsource/commit-mono@5.3.0':
+    resolution: {integrity: sha512-Bs+zlEWHDgk/cCVWEMJJaA7LbBU3Ixi5Zums+SSwMKdm2N7RJ4P7jCJTwsMHRt5WFiXYB0tu0q9HMfkn0YsLsQ==}
+
+  '@fontsource/michroma@5.3.0':
+    resolution: {integrity: sha512-9sbGD7ek1hGvq0TmgNPFbuI3k7qwXVdZ+zCDsTHDGRIQqfYrpYWwEYcwH2fzOtvn8uiGqzAoJ72vuFE3v/hDdg==}
+
   '@humanfs/core@0.19.2':
     resolution: {integrity: sha512-UhXNm+CFMWcbChXywFwkmhqjs3PRCmcSa/hfBgLIb7oQ5HNb1wS0icWsGtSAUNgefHeI+eBrA8I1fxmbHsGdvA==}
     engines: {node: '>=18.18.0'}
@@ -1006,6 +1024,11 @@ packages:
 
   '@keyv/serialize@1.1.1':
     resolution: {integrity: sha512-dXn3FZhPv0US+7dtJsIi2R+c7qWYiReoEh5zUntWCf4oSpMNib8FDhSoed6m3QyZdx5hK7iLFkYk3rNxwt8vTA==}
+
+  '@lucide/astro@1.45.0':
+    resolution: {integrity: sha512-U4PZYsb90BNPDHzp/GTkLrFfstuVc9Qjj+00kVF2HUA4TLx/JCZozeoyZm3ncODgg3XtqCCXW7b3kIT7xbokgg==}
+    peerDependencies:
+      astro: ^4 || ^5 || ^6 || ^7
 
   '@napi-rs/wasm-runtime@1.2.4':
     resolution: {integrity: sha512-AJxoUD2/15ESHbvpcyjU274nsAPLuOtPHCk0vKJM5pj//Fg/B1FXNWjPnXTT9PymCYYiHo4zPj0ZomXBKhoy7g==}
@@ -3576,6 +3599,10 @@ snapshots:
       '@eslint/core': 1.2.1
       levn: 0.4.1
 
+  '@fontsource/commit-mono@5.3.0': {}
+
+  '@fontsource/michroma@5.3.0': {}
+
   '@humanfs/core@0.19.2':
     dependencies:
       '@humanfs/types': 0.15.0
@@ -3729,6 +3756,10 @@ snapshots:
       keyv: 5.6.0
 
   '@keyv/serialize@1.1.1': {}
+
+  '@lucide/astro@1.45.0(astro@7.3.2(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@26.6.1)(jiti@2.7.0)(yaml@2.9.1))':
+    dependencies:
+      astro: 7.3.2(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@26.6.1)(jiti@2.7.0)(yaml@2.9.1)
 
   '@napi-rs/wasm-runtime@1.2.4(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)':
     dependencies:

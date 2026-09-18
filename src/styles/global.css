@@ -1,1 +1,43 @@
 @import "tailwindcss";
+@import "@fontsource/michroma";
+@import "@fontsource/commit-mono";
+@import "@fontsource/commit-mono/700.css";
+
+/* Dark navy + off-white + cyan UI + rare magenta. Dark only. */
+:root {
+  color-scheme: dark;
+  --background: #090b1a;
+  --surface: #0d1324;
+  --foreground: #f2f0f7;
+  --muted: #8b91a4;
+  --border: #1b2940;
+  --cyan: #0ad7e6;
+  --magenta: #f22c95;
+}
+
+@theme inline {
+  --font-mono: "Commit Mono", ui-monospace, monospace;
+  --font-display: "Michroma", sans-serif;
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-cyan: var(--cyan);
+  --color-magenta: var(--magenta);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    @apply bg-background font-mono text-foreground antialiased;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-cyan;
+  }
+  ::selection {
+    @apply bg-magenta text-background;
+  }
+}
