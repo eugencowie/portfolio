@@ -128,9 +128,6 @@ importers:
       '@fontsource/michroma':
         specifier: 5.3.0
         version: 5.3.0
-      '@lucide/astro':
-        specifier: 1.45.0
-        version: 1.45.0(astro@7.3.2(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@26.6.1)(jiti@2.7.0)(yaml@2.9.1))
       '@playwright/browser-chromium':
         specifier: 1.63.0
         version: 1.63.0
@@ -1024,11 +1021,6 @@ packages:
 
   '@keyv/serialize@1.1.1':
     resolution: {integrity: sha512-dXn3FZhPv0US+7dtJsIi2R+c7qWYiReoEh5zUntWCf4oSpMNib8FDhSoed6m3QyZdx5hK7iLFkYk3rNxwt8vTA==}
-
-  '@lucide/astro@1.45.0':
-    resolution: {integrity: sha512-U4PZYsb90BNPDHzp/GTkLrFfstuVc9Qjj+00kVF2HUA4TLx/JCZozeoyZm3ncODgg3XtqCCXW7b3kIT7xbokgg==}
-    peerDependencies:
-      astro: ^4 || ^5 || ^6 || ^7
 
   '@napi-rs/wasm-runtime@1.2.4':
     resolution: {integrity: sha512-AJxoUD2/15ESHbvpcyjU274nsAPLuOtPHCk0vKJM5pj//Fg/B1FXNWjPnXTT9PymCYYiHo4zPj0ZomXBKhoy7g==}
@@ -3756,10 +3748,6 @@ snapshots:
       keyv: 5.6.0
 
   '@keyv/serialize@1.1.1': {}
-
-  '@lucide/astro@1.45.0(astro@7.3.2(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@26.6.1)(jiti@2.7.0)(yaml@2.9.1))':
-    dependencies:
-      astro: 7.3.2(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@26.6.1)(jiti@2.7.0)(yaml@2.9.1)
 
   '@napi-rs/wasm-runtime@1.2.4(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)':
     dependencies:
