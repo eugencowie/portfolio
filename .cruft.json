@@ -1,17 +1,18 @@
 {
   "template": "https://github.com/eugencowie/templates",
-  "commit": "9fb3642e0ca7d5d463d877ba5c53b74788787b31",
-  "checkout": "v1.5.15",
+  "commit": "5142af38bcbe6a2d0cfb1da1eb004a9178fdfd6d",
+  "checkout": "v1.6.7",
   "context": {
     "cookiecutter": {
-      "project_slug": "portfolio",
       "_copy_without_render": [
         ".github/renovate.json5",
+        ".github/workflows/ci.yml",
         ".github/workflows/renovate.yml"
       ],
+      "project_slug": "portfolio",
       "_template": "https://github.com/eugencowie/templates",
-      "_commit": "9fb3642e0ca7d5d463d877ba5c53b74788787b31"
+      "_commit": "5142af38bcbe6a2d0cfb1da1eb004a9178fdfd6d"
     }
   },
-  "directory": "bare"
+  "directory": "astro"
 }
