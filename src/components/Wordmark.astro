@@ -1,0 +1,24 @@
+---
+/**
+ * The `eugen` / `codes` identity lockup. `codes` is centred beneath the `g`
+ * by giving the `g` its own positioned span, so the alignment holds at any size.
+ */
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+
+<h1 class:list={["font-display leading-none text-foreground", className]}>
+  <span class="sr-only">eugen.codes</span>
+  <span aria-hidden="true" class="inline-flex whitespace-nowrap">
+    <span>eu</span>
+    <span class="relative inline-block">
+      g
+      <span class="absolute top-full left-1/2 mt-[0.15em] -translate-x-1/2 font-mono text-[0.42em] font-bold tracking-normal text-cyan">
+        codes
+      </span>
+    </span>
+    <span>en</span>
+  </span>
+</h1>
