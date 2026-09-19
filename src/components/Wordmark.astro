@@ -6,10 +6,13 @@
 interface Props {
   class?: string;
 }
-const { class: className } = Astro.props;
+const { class: className, ...rest } = Astro.props;
 ---
 
-<h1 class:list={["font-display leading-none text-foreground", className]}>
+<h1
+  {...rest}
+  class:list={["font-display leading-none text-foreground", className]}
+>
   <span class="sr-only">eugen.codes</span>
   <span aria-hidden="true" class="inline-flex whitespace-nowrap">
     <span>eu</span>
