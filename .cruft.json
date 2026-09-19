@@ -1,7 +1,7 @@
 {
   "template": "https://github.com/eugencowie/templates",
-  "commit": "5142af38bcbe6a2d0cfb1da1eb004a9178fdfd6d",
-  "checkout": "v1.6.7",
+  "commit": "2f09f89475cf1eaf0f421de804a09c5f54e5f151",
+  "checkout": "v1.6.8",
   "context": {
     "cookiecutter": {
       "_copy_without_render": [
@@ -11,7 +11,7 @@
       ],
       "project_slug": "portfolio",
       "_template": "https://github.com/eugencowie/templates",
-      "_commit": "5142af38bcbe6a2d0cfb1da1eb004a9178fdfd6d"
+      "_commit": "2f09f89475cf1eaf0f421de804a09c5f54e5f151"
     }
   },
   "directory": "astro"
