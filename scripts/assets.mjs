@@ -11,7 +11,7 @@ import sharp from "sharp";
 const projectRoot = fileURLToPath(new URL("../", import.meta.url));
 const avatarPath = join(projectRoot, "src/assets/avatar.png");
 const publicDirectory = join(projectRoot, "public");
-const face = { left: 310, top: 40, width: 660, height: 660 };
+const face = { left: 260, top: 20, width: 800, height: 800 };
 
 // Matches --background in src/styles/global.css.
 const background = "#090b1a";
