@@ -1,0 +1,35 @@
+---
+// Rendered to public/og.png by `mise run build:assets`. Not indexed: it exists only to be screenshotted.
+import { Image } from "astro:assets";
+import avatar from "@/assets/avatar.png";
+import Fonts from "@/components/Fonts.astro";
+import Wordmark from "@/components/Wordmark.astro";
+import { taglineLines } from "@/site";
+import "@/styles/global.css";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <Fonts />
+  </head>
+  <body class="m-0 bg-background">
+    <div class="relative flex h-[630px] w-[1200px] items-center justify-center gap-16 overflow-hidden">
+      <div
+        aria-hidden="true"
+        class="pointer-events-none absolute inset-0 blur-3xl"
+        style="background: radial-gradient(circle at 35% 50%, color-mix(in oklab, var(--magenta) 22%, transparent), transparent 45%), radial-gradient(circle at 60% 50%, color-mix(in oklab, var(--cyan) 22%, transparent), transparent 45%);"
+      ></div>
+      <Image src={avatar} alt="" width={480} class="relative size-[440px]" />
+      <div class="relative flex flex-col gap-16">
+        <Wordmark class="text-8xl" />
+        <p class="mt-4 text-2xl text-muted">
+          {taglineLines.map((line) => (
+            <span class="block">{line}</span>
+          ))}
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

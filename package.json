@@ -4,6 +4,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "build:assets": "node scripts/assets.mjs",
     "preview": "astro preview",
     "check": "astro check",
     "lint": "eslint .",
@@ -35,6 +36,7 @@
     "prettier": "3.9.7",
     "prettier-plugin-astro": "1.0.0",
     "prettier-plugin-tailwindcss": "0.8.1",
+    "sharp": "0.35.4",
     "tailwindcss": "4.3.3",
     "typescript": "6.0.3",
     "typescript-eslint": "8.70.0",

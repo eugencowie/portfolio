@@ -1,0 +1,11 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Hero from "@/components/Hero.astro";
+import { tagline, title } from "@/site";
+---
+
+<BaseLayout title={title} description={tagline}>
+  <main class="mx-auto max-w-4xl px-6 py-20 sm:py-28">
+    <Hero tagline={tagline} />
+  </main>
+</BaseLayout>

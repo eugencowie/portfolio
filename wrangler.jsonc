@@ -11,6 +11,7 @@
 // Variables and secrets
 // - NODE_VERSION: 26.8.1
 // - PNPM_VERSION: 12.3.4
+// - SITE_URL: https://example.com
 
 {
   "name": "portfolio",
