@@ -2,7 +2,6 @@ import { defineConfig, fontProviders } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-  site: "https://eugen.codes",
   fonts: [
     {
       provider: fontProviders.fontsource(),
