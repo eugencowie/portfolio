@@ -13,6 +13,7 @@ node = "pnpm exec node"
 astro = "pnpm exec astro"
 dev = "pnpm run dev"
 build = "pnpm run build"
+"build:assets" = "pnpm run build:assets"
 preview = ["pnpm run build", "pnpm run preview"]
 check = "pnpm run check"
 lint = "pnpm run lint"
