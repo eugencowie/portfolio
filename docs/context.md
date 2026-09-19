@@ -1,8 +1,10 @@
 # Portfolio
 
-The personal site at the root of eugen.codes: a single identity page plus the assets that represent it elsewhere (browser tabs, home screens, link previews).
+A single-page personal maker homepage showing what Eugen is building now. It exists so a stranger who found one project can see the rest.
 
 ## Language
+
+### Core concepts
 
 **Avatar**:
 The illustrated portrait of Eugen. The single source illustration every other likeness on the site is derived from.
@@ -43,3 +45,37 @@ _Avoid_: background (that is the page colour, not the picture), backdrop, wallpa
 **Sky**:
 The CSS night behind the Skyline: an indigo gradient warming to a magenta glow at the horizon, scattered with stars laid out from a fixed seed at build time.
 _Avoid_: starfield, background gradient
+
+### Projects
+
+**Project**:
+A thing Eugen built or is building, shown on the homepage with a name, tagline, and link. Projects in the Building and Games sections also have a screenshot.
+_Avoid_: Work, piece, case study
+
+**Section**:
+The homepage group a Project belongs to: Building, Games, or Other.
+
+**Card Section**:
+A Building or Games Section. Its Projects are shown as cards with a screenshot, and one of them may be Featured.
+_Avoid_: showcase, grid, featured section
+
+**Building**:
+The Section for Projects Eugen is currently building, shown under "Currently building".
+
+**Games**:
+The Section for game Projects.
+
+**Other**:
+The Section for Projects shown under "Other projects".
+
+**Live link**:
+The URL of a Project's deployed site. A Project without one links to its Repo link instead.
+_Avoid_: Demo, website, homepage
+
+**Repo link**:
+The URL of a Project's GitHub repository.
+_Avoid_: Source, code link
+
+**Featured**:
+The one Project given extra visual weight within a Building or Games Section. At most one Project per Section is Featured.
+_Avoid_: Highlighted, pinned, hero project

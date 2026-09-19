@@ -1,0 +1,24 @@
+---
+import type { CardProjectEntry } from "@/lib/projects";
+import SectionHeading from "./SectionHeading.astro";
+import ProjectCard from "./ProjectCard.astro";
+
+interface Props {
+  id: string;
+  projects: CardProjectEntry[];
+}
+const { id, projects } = Astro.props;
+---
+
+{projects.length > 0 && (
+  <section aria-labelledby={id} class="mx-6 flex flex-col gap-8">
+    <SectionHeading id={id}>
+      <slot />
+    </SectionHeading>
+    <div class="grid gap-6 sm:grid-cols-2">
+      {projects.map((project) => (
+        <ProjectCard project={project} />
+      ))}
+    </div>
+  </section>
+)}
