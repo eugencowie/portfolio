@@ -1,8 +1,8 @@
 import { defineConfig, fontProviders } from "astro/config";
-import pages from "astro-pages";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
+  // Deploy-time setting; see the variables section in wrangler.jsonc.
   site: process.env.SITE_URL,
   vite: {
     plugins: [tailwindcss()],
@@ -26,14 +26,5 @@ export default defineConfig({
       subsets: ["latin"],
       fallbacks: ["sans-serif"],
     },
-  ],
-  integrations: [
-    process.env.NODE_ENV === "development"
-      ? pages({
-          dir: "debug",
-          glob: "**/*.astro",
-          pattern: ({ pattern }) => `/debug${pattern}`,
-        })
-      : undefined,
   ],
 });

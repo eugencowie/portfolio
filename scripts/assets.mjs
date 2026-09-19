@@ -49,8 +49,7 @@ async function generateDisc(size, outputPath) {
 
 async function generateOpenGraphImage(outputPath) {
   const port = await getAvailablePort();
-  const url = `http://127.0.0.1:${port}/debug/og`;
-  process.env.NODE_ENV = "development";
+  const url = `http://127.0.0.1:${port}/og`;
   const developmentServer = await dev({
     devToolbar: { enabled: false },
     root: projectRoot,

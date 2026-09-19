@@ -1,5 +1,5 @@
 ---
-// Available at /debug/og in development and rendered to public/og.png by `mise run build:assets`.
+// Rendered to public/og.png by `mise run build:assets`. Not indexed: it exists only to be screenshotted.
 import { Image } from "astro:assets";
 import avatar from "@/assets/avatar.png";
 import Wordmark from "@/components/Wordmark.astro";
@@ -11,6 +11,7 @@ const taglines = ["I build things for fun.", "Some of them work."];
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
   </head>
   <body class="m-0 bg-background">
     <div class="relative flex h-[630px] w-[1200px] items-center justify-center gap-16 overflow-hidden">
