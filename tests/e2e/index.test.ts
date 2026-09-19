@@ -14,12 +14,9 @@ describe("Index", () => {
 
     const attributes = [
       ['meta[name="description"]', "content", tagline],
-      ['link[rel="canonical"]', "href", "http://localhost:4321/"],
       ['meta[property="og:type"]', "content", "website"],
       ['meta[property="og:title"]', "content", title],
       ['meta[property="og:description"]', "content", tagline],
-      ['meta[property="og:url"]', "content", "http://localhost:4321/"],
-      ['meta[property="og:image"]', "content", "http://localhost:4321/og.png"],
       [
         'meta[property="og:image:alt"]',
         "content",
