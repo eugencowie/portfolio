@@ -2,7 +2,7 @@ import { describe, expect, it } from "./playwright";
 
 describe("Index", () => {
   it("presents the site identity and sharing metadata", async ({ page }) => {
-    const title = "eugen codes";
+    const title = "eugen";
     const tagline = "I build things for fun. Some of them work.";
     await page.goto("/");
 
@@ -20,7 +20,7 @@ describe("Index", () => {
       [
         'meta[property="og:image:alt"]',
         "content",
-        "Illustrated portrait of Eugen beside the eugen codes wordmark and the tagline “I build things for fun. Some of them work.”",
+        'Illustrated portrait of eugen beside the tagline "I build things for fun. Some of them work."',
       ],
       ['meta[property="og:image:width"]', "content", "1200"],
       ['meta[property="og:image:height"]', "content", "630"],

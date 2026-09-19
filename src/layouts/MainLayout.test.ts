@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
-import { openGraphImageAlt } from "@/site";
 import MainLayout from "./MainLayout.astro";
 
 describe("MainLayout", () => {
@@ -18,7 +17,7 @@ describe("MainLayout", () => {
 
   it("describes the site-wide Open Graph image", async () => {
     expect(await render()).toContain(
-      `<meta property="og:image:alt" content="${openGraphImageAlt}">`,
+      '<meta property="og:image:alt" content="Illustrated portrait of Astro beside the tagline &quot;Astro site.&quot;">',
     );
   });
 
