@@ -1,7 +1,11 @@
 import { defineConfig, fontProviders } from "astro/config";
+import pages from "astro-pages";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
+  vite: {
+    plugins: [tailwindcss()],
+  },
   fonts: [
     {
       provider: fontProviders.fontsource(),
@@ -22,7 +26,13 @@ export default defineConfig({
       fallbacks: ["sans-serif"],
     },
   ],
-  vite: {
-    plugins: [tailwindcss()],
-  },
+  integrations: [
+    process.env.NODE_ENV === "development"
+      ? pages({
+          dir: "debug",
+          glob: "**/*.astro",
+          pattern: ({ pattern }) => `/debug${pattern}`,
+        })
+      : undefined,
+  ],
 });

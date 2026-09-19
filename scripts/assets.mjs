@@ -1,7 +1,5 @@
-import { spawn } from "node:child_process";
 import { Buffer } from "node:buffer";
 import { once } from "node:events";
-import { constants } from "node:fs";
 import { copyFile, mkdtemp, rm } from "node:fs/promises";
 import { createServer } from "node:net";
 import { tmpdir } from "node:os";
@@ -9,64 +7,13 @@ import { join } from "node:path";
 import process from "node:process";
 import { fileURLToPath, URL } from "node:url";
 import { chromium } from "@playwright/test";
+import { dev } from "astro";
 import sharp from "sharp";
 
 const projectRoot = fileURLToPath(new URL("../", import.meta.url));
 const avatarPath = join(projectRoot, "src/assets/avatar.png");
-const ogTemplatePath = join(projectRoot, "scripts/og.astro");
-const ogPagePath = join(projectRoot, "src/pages/og.astro");
 const publicDirectory = join(projectRoot, "public");
 const face = { left: 310, top: 40, width: 660, height: 660 };
-
-async function buildOpenGraphPage(outputDirectory) {
-  const child = spawn(
-    "mise",
-    [
-      "exec",
-      "--",
-      "pnpm",
-      "exec",
-      "astro",
-      "build",
-      "--out-dir",
-      outputDirectory,
-    ],
-    {
-      cwd: projectRoot,
-      stdio: "inherit",
-    },
-  );
-  const [code] = await once(child, "exit");
-  if (code !== 0) {
-    throw new Error(`Astro build exited with code ${code}`);
-  }
-}
-
-function startPreview(outputDirectory, port) {
-  return spawn(
-    "mise",
-    [
-      "exec",
-      "--",
-      "pnpm",
-      "exec",
-      "astro",
-      "preview",
-      "--host",
-      "127.0.0.1",
-      "--port",
-      `${port}`,
-      "--out-dir",
-      outputDirectory,
-      "--ignore-lock",
-    ],
-    {
-      cwd: projectRoot,
-      env: { ...process.env, ASTRO_PREVIEW_BACKGROUND: "1" },
-      stdio: "inherit",
-    },
-  );
-}
 
 async function getAvailablePort() {
   const server = createServer();
@@ -74,29 +21,12 @@ async function getAvailablePort() {
   await once(server, "listening");
   const address = server.address();
   if (!address || typeof address === "string") {
-    throw new Error("Could not allocate a preview port");
+    throw new Error("Could not allocate a development server port");
   }
   const closed = once(server, "close");
   server.close();
   await closed;
   return address.port;
-}
-
-async function waitForPage(url, preview) {
-  const deadline = Date.now() + 15_000;
-  while (Date.now() < deadline) {
-    if (preview.exitCode !== null) {
-      throw new Error(`Astro preview exited with code ${preview.exitCode}`);
-    }
-    try {
-      const response = await globalThis.fetch(url);
-      if (response.ok) return;
-    } catch {
-      // The preview server is still starting.
-    }
-    await new Promise((resolve) => globalThis.setTimeout(resolve, 100));
-  }
-  throw new Error("Timed out waiting for the Open Graph preview");
 }
 
 async function generateDisc(size, outputPath) {
@@ -117,38 +47,32 @@ async function generateDisc(size, outputPath) {
     .toFile(outputPath);
 }
 
-async function generateOpenGraphImage(outputPath, outputDirectory) {
-  let pageCreated = false;
-  try {
-    await copyFile(ogTemplatePath, ogPagePath, constants.COPYFILE_EXCL);
-    pageCreated = true;
-    await buildOpenGraphPage(outputDirectory);
-  } finally {
-    if (pageCreated) await rm(ogPagePath);
-  }
-
+async function generateOpenGraphImage(outputPath) {
   const port = await getAvailablePort();
-  const url = `http://127.0.0.1:${port}/og`;
-  const preview = startPreview(outputDirectory, port);
+  const url = `http://127.0.0.1:${port}/debug/og`;
+  process.env.NODE_ENV = "development";
+  const developmentServer = await dev({
+    devToolbar: { enabled: false },
+    root: projectRoot,
+    server: { host: "127.0.0.1", port },
+  });
   let browser;
   try {
-    await waitForPage(url, preview);
     browser = await chromium.launch();
     const page = await browser.newPage({
       colorScheme: "dark",
       deviceScaleFactor: 1,
       viewport: { width: 1200, height: 630 },
     });
-    await page.goto(url, { waitUntil: "networkidle" });
+    const response = await page.goto(url, { waitUntil: "networkidle" });
+    if (!response?.ok()) {
+      throw new Error(`Could not load ${url}: HTTP ${response?.status()}`);
+    }
     await page.evaluate(() => globalThis.document.fonts.ready);
     await page.screenshot({ path: outputPath });
   } finally {
     await browser?.close();
-    if (preview.exitCode === null) {
-      const exited = once(preview, "exit");
-      preview.kill("SIGTERM");
-      await exited;
-    }
+    await developmentServer.stop();
   }
 }
 
@@ -157,13 +81,12 @@ try {
   const faviconPath = join(temporaryDirectory, "favicon.png");
   const appleTouchIconPath = join(temporaryDirectory, "apple-touch-icon.png");
   const ogImagePath = join(temporaryDirectory, "og.png");
-  const buildDirectory = join(temporaryDirectory, "dist");
 
   await Promise.all([
     generateDisc(64, faviconPath),
     generateDisc(180, appleTouchIconPath),
   ]);
-  await generateOpenGraphImage(ogImagePath, buildDirectory);
+  await generateOpenGraphImage(ogImagePath);
   await Promise.all([
     copyFile(faviconPath, join(publicDirectory, "favicon.png")),
     copyFile(appleTouchIconPath, join(publicDirectory, "apple-touch-icon.png")),
