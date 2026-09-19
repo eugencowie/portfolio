@@ -1,7 +1,4 @@
 @import "tailwindcss";
-@import "@fontsource/michroma";
-@import "@fontsource/commit-mono";
-@import "@fontsource/commit-mono/700.css";
 
 /* Dark navy + off-white + cyan UI + rare magenta. Dark only. */
 :root {
@@ -14,8 +11,8 @@
 }
 
 @theme inline {
-  --font-mono: "Commit Mono", ui-monospace, monospace;
-  --font-display: "Michroma", sans-serif;
+  --font-mono: var(--font-commit-mono);
+  --font-display: var(--font-michroma);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
