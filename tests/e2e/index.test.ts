@@ -20,6 +20,11 @@ describe("Index", () => {
       ['meta[property="og:description"]', "content", tagline],
       ['meta[property="og:url"]', "content", "https://eugen.codes/"],
       ['meta[property="og:image"]', "content", "https://eugen.codes/og.png"],
+      [
+        'meta[property="og:image:alt"]',
+        "content",
+        "Illustrated portrait of Eugen beside the eugen codes wordmark and the tagline “I build things for fun. Some of them work.”",
+      ],
       ['meta[property="og:image:width"]', "content", "1200"],
       ['meta[property="og:image:height"]', "content", "630"],
       ['meta[name="twitter:card"]', "content", "summary_large_image"],

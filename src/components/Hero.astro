@@ -20,7 +20,9 @@ const { tagline } = Astro.props;
       src={avatar}
       alt="Illustrated portrait of Eugen: long hair, beard, aviator sunglasses, lit magenta on one side and cyan on the other."
       width={416}
-      densities={[1, 2, 3]}
+      layout="constrained"
+      widths={[272, 352, 416, 544, 704, 832]}
+      sizes="(min-width: 40rem) 416px, (min-width: 400px) 352px, calc(100vw - 48px)"
       priority
       class="avatar h-auto w-88 max-w-full select-none sm:w-104"
     />
