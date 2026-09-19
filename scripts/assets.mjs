@@ -13,20 +13,18 @@ const avatarPath = join(projectRoot, "src/assets/avatar.png");
 const publicDirectory = join(projectRoot, "public");
 const face = { left: 310, top: 40, width: 660, height: 660 };
 
-async function generateDisc(size, outputPath) {
-  const portrait = await sharp(avatarPath)
-    .extract(face)
-    .resize(size, size)
-    .png()
-    .toBuffer();
+// Matches --background in src/styles/global.css.
+const background = "#090b1a";
+
+async function generateIcon(size, outputPath) {
   const mask = Buffer.from(
     `<svg width="${size}" height="${size}"><circle cx="${size / 2}" cy="${size / 2}" r="${size / 2}" fill="#fff"/></svg>`,
   );
-  const background = Buffer.from(
-    `<svg width="${size}" height="${size}"><circle cx="${size / 2}" cy="${size / 2}" r="${size / 2}" fill="#090B1A"/></svg>`,
-  );
-  await sharp(background)
-    .composite([{ input: portrait }, { input: mask, blend: "dest-in" }])
+  await sharp(avatarPath)
+    .extract(face)
+    .resize(size, size)
+    .flatten({ background })
+    .composite([{ input: mask, blend: "dest-in" }])
     .png()
     .toFile(outputPath);
 }
@@ -65,8 +63,8 @@ try {
   const ogImagePath = join(temporaryDirectory, "og.png");
 
   await Promise.all([
-    generateDisc(64, faviconPath),
-    generateDisc(180, appleTouchIconPath),
+    generateIcon(64, faviconPath),
+    generateIcon(180, appleTouchIconPath),
   ]);
   await generateOpenGraphImage(ogImagePath);
   await Promise.all([
