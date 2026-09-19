@@ -3,6 +3,7 @@ import pages from "astro-pages";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
+  site: process.env.SITE_URL,
   vite: {
     plugins: [tailwindcss()],
   },

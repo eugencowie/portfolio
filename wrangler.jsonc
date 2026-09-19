@@ -1,5 +1,5 @@
 // Build configuration
-// - Build command: pnpm run build --site "https://example.com"
+// - Build command: pnpm run build
 // - Deploy command: pnpm run deploy
 // - Version command: pnpm run version
 // - Root directory: /
@@ -11,6 +11,7 @@
 // Variables and secrets
 // - NODE_VERSION: 26.8.1
 // - PNPM_VERSION: 12.3.4
+// - SITE_URL: https://example.com
 
 {
   "name": "portfolio",

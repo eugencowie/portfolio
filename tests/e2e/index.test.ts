@@ -14,12 +14,12 @@ describe("Index", () => {
 
     const attributes = [
       ['meta[name="description"]', "content", tagline],
-      ['link[rel="canonical"]', "href", "https://eugen.codes/"],
+      ['link[rel="canonical"]', "href", "http://localhost:4321/"],
       ['meta[property="og:type"]', "content", "website"],
       ['meta[property="og:title"]', "content", title],
       ['meta[property="og:description"]', "content", tagline],
-      ['meta[property="og:url"]', "content", "https://eugen.codes/"],
-      ['meta[property="og:image"]', "content", "https://eugen.codes/og.png"],
+      ['meta[property="og:url"]', "content", "http://localhost:4321/"],
+      ['meta[property="og:image"]', "content", "http://localhost:4321/og.png"],
       [
         'meta[property="og:image:alt"]',
         "content",

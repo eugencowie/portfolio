@@ -8,8 +8,8 @@ interface Props {
 }
 
 const { title, description } = Astro.props;
-const canonical = new URL(Astro.url.pathname, Astro.site);
-const ogImage = new URL("/og.png", Astro.site);
+const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
+const ogImage = new URL("/og.png", canonical);
 const ogImageAlt =
   "Illustrated portrait of Eugen beside the eugen codes wordmark and the tagline “I build things for fun. Some of them work.”";
 ---
