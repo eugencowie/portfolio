@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
 import { openGraphImageAlt } from "@/site";
-import BaseLayout from "./BaseLayout.astro";
+import MainLayout from "./MainLayout.astro";
 
-describe("BaseLayout", () => {
+describe("MainLayout", () => {
   async function render({ site }: { site?: string } = {}) {
     const container = await AstroContainer.create({ astroConfig: { site } });
-    return container.renderToString(BaseLayout, {
+    return container.renderToString(MainLayout, {
       props: { title: "Astro", description: "Astro site." },
       request: new Request("http://localhost:4321/about/"),
     });
