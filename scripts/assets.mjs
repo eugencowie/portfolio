@@ -1,7 +1,5 @@
 import { Buffer } from "node:buffer";
-import { once } from "node:events";
 import { copyFile, mkdtemp, rm } from "node:fs/promises";
-import { createServer } from "node:net";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import process from "node:process";
@@ -14,20 +12,6 @@ const projectRoot = fileURLToPath(new URL("../", import.meta.url));
 const avatarPath = join(projectRoot, "src/assets/avatar.png");
 const publicDirectory = join(projectRoot, "public");
 const face = { left: 310, top: 40, width: 660, height: 660 };
-
-async function getAvailablePort() {
-  const server = createServer();
-  server.listen(0, "127.0.0.1");
-  await once(server, "listening");
-  const address = server.address();
-  if (!address || typeof address === "string") {
-    throw new Error("Could not allocate a development server port");
-  }
-  const closed = once(server, "close");
-  server.close();
-  await closed;
-  return address.port;
-}
 
 async function generateDisc(size, outputPath) {
   const portrait = await sharp(avatarPath)
@@ -48,13 +32,12 @@ async function generateDisc(size, outputPath) {
 }
 
 async function generateOpenGraphImage(outputPath) {
-  const port = await getAvailablePort();
-  const url = `http://127.0.0.1:${port}/og`;
   const developmentServer = await dev({
     devToolbar: { enabled: false },
     root: projectRoot,
-    server: { host: "127.0.0.1", port },
+    server: { host: "127.0.0.1" },
   });
+  const url = `http://127.0.0.1:${developmentServer.address.port}/og`;
   let browser;
   try {
     browser = await chromium.launch();
