@@ -1,5 +1,5 @@
 // Build configuration
-// - Build command: pnpm run build
+// - Build command: pnpm run build --site "https://example.com"
 // - Deploy command: pnpm run deploy
 // - Version command: pnpm run version
 // - Root directory: /
