@@ -35,3 +35,7 @@ _Avoid_: social image, share card, OG card, og image
 **Skyline**:
 The neon illustration of the Glasgow waterfront pinned behind every page, sunk so the river reflection just clears the bottom of the viewport.
 _Avoid_: background (that is the file name and the page colour, not the picture), backdrop, wallpaper
+
+**Sky**:
+The CSS night behind the Skyline: an indigo gradient warming to a magenta glow at the horizon, scattered with stars laid out from a fixed seed at build time.
+_Avoid_: starfield, background gradient
