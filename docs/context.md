@@ -31,3 +31,7 @@ _Avoid_: banner, header, masthead
 **Open Graph image**:
 The single site-wide picture shown when a link to the site is previewed elsewhere. One image for every page, composed from the Avatar, the Wordmark, and the Social Links.
 _Avoid_: social image, share card, OG card, og image
+
+**Skyline**:
+The neon illustration of the Glasgow waterfront pinned behind every page, sunk so the river reflection just clears the bottom of the viewport.
+_Avoid_: background (that is the file name and the page colour, not the picture), backdrop, wallpaper

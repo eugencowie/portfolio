@@ -1,0 +1,40 @@
+---
+/**
+ * The neon Glasgow skyline pinned to the bottom of the viewport behind every
+ * page. It scales with the viewport width and sinks so only a sliver of the
+ * river reflection stays visible; the rooftops fade into the page background
+ * so copy stays readable where the two overlap on short viewports.
+ */
+import { Image } from "astro:assets";
+import background from "@/assets/background.png";
+---
+
+<div
+  aria-hidden="true"
+  class="pointer-events-none fixed inset-0 -z-10 overflow-hidden select-none"
+>
+  <Image
+    src={background}
+    alt=""
+    widths={[640, 960, 1280, background.width]}
+    sizes="100vw"
+    loading="eager"
+    class="skyline absolute left-1/2 h-auto max-w-none -translate-x-1/2"
+  />
+</div>
+
+<style>
+  /* Image geometry as fractions of its height: sky ends at the tallest tower
+     (0.30), the waterline sits at 0.66 and the reflection fills the rest. */
+  .skyline {
+    --aspect: 0.75;
+    /* Never narrower than this, so phones get a centred crop rather than a strip. */
+    --width: max(100vw, 48rem);
+    --reflection: calc(var(--width) * var(--aspect) * 0.34);
+    width: var(--width);
+    --reflection-shown: 10svh;
+    bottom: min(0px, calc(var(--reflection-shown) - var(--reflection)));
+    opacity: 0.55;
+    mask-image: linear-gradient(to bottom, transparent 30%, black 66%);
+  }
+</style>

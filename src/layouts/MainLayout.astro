@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
+import Skyline from "@/components/Skyline.astro";
 import { socialLinks } from "@/site";
 
 interface Props {
@@ -30,5 +31,6 @@ const openGraphImageAlt = `Illustrated portrait of ${title} beside social links:
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
   </Fragment>
+  <Skyline />
   <slot />
 </BaseLayout>
