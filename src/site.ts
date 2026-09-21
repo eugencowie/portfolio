@@ -1,7 +1,7 @@
-/** Site-wide copy: the title, the Wordmark's text, the Description, and the Social Links. */
+/** Site-wide copy: the title, the site's name, the Description, and the Social Links. */
 export const title = "eugen";
 
-export const wordmark = "eugen.codes";
+export const siteName = "eugen.codes";
 
 export const description = "Personal website of eugen, who codes.";
 

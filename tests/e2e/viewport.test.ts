@@ -20,9 +20,11 @@ describe("Hero", () => {
       await page.goto("/");
       await page.evaluate(() => document.fonts.ready.then(() => undefined));
 
-      const scrollHeight = await page.evaluate(
-        () => document.documentElement.scrollHeight,
-      );
+      const { scrollWidth, scrollHeight } = await page.evaluate(() => ({
+        scrollWidth: document.documentElement.scrollWidth,
+        scrollHeight: document.documentElement.scrollHeight,
+      }));
+      expect(scrollWidth).toBeLessThanOrEqual(viewport.width);
       expect(scrollHeight).toBeLessThanOrEqual(viewport.height);
       await expect(
         page.getByRole("heading", { level: 1, name: "eugen.codes" }),
