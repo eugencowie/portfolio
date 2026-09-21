@@ -14,7 +14,7 @@ const { name, tagline, liveUrl, repoUrl, href } = project.data;
   <h3 class="font-bold">
     <a
       href={href}
-      class="group-hover:text-cyan after:absolute after:inset-0 after:content-['']"
+      class="group-hover:text-magenta after:absolute after:inset-0 after:content-['']"
     >
       {name}
     </a>
@@ -24,14 +24,14 @@ const { name, tagline, liveUrl, repoUrl, href } = project.data;
       <a
         href={repoUrl}
         aria-label={`${name} on GitHub`}
-        class="relative z-10 hover:text-cyan"
+        class="relative z-10 hover:text-magenta"
       >
         <GithubIcon class="size-4" />
       </a>
     ) : repoUrl ? (
       <GithubIcon class="size-4" />
     ) : null}
-    <ArrowUpRight class="size-4 group-hover:text-cyan" aria-hidden="true" />
+    <ArrowUpRight class="size-4 group-hover:text-magenta" aria-hidden="true" />
   </span>
   <p class="col-span-2 min-w-0 text-sm text-muted sm:col-span-1 sm:truncate">
     {tagline}

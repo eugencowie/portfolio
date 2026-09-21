@@ -32,7 +32,7 @@
     @apply bg-background font-mono text-foreground antialiased;
   }
   :focus-visible {
-    @apply outline-2 outline-offset-2 outline-cyan;
+    @apply outline-2 outline-offset-2 outline-magenta;
   }
   ::selection {
     @apply bg-magenta text-background;

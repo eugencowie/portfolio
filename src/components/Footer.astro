@@ -4,7 +4,10 @@ import { socialLinks } from "@/site";
 
 <footer class="flex flex-col gap-2 border-t pt-8 text-sm text-muted sm:flex-row sm:items-center sm:justify-between sm:gap-4">
   {socialLinks.map((link) => (
-    <a href={link.url} class="inline-flex items-center gap-2 hover:text-cyan">
+    <a
+      href={link.url}
+      class="inline-flex items-center gap-2 hover:text-magenta"
+    >
       {link.displayUrl}
     </a>
   ))}

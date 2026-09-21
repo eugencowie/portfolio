@@ -14,7 +14,7 @@ const { name, tagline, liveUrl, repoUrl, screenshot, featured, href } =
 
 <article
   class:list={[
-    "group relative flex overflow-hidden rounded-lg border bg-surface transition-colors focus-within:border-cyan hover:border-cyan",
+    "group relative flex overflow-hidden rounded-lg border bg-surface transition-colors focus-within:border-magenta hover:border-magenta",
     featured ? "flex-col sm:col-span-2 md:flex-row" : "flex-col",
   ]}
 >
@@ -38,7 +38,7 @@ const { name, tagline, liveUrl, repoUrl, screenshot, featured, href } =
       <h3 class:list={["font-bold", featured ? "text-2xl" : "text-lg"]}>
         <a
           href={href}
-          class="group-hover:text-cyan after:absolute after:inset-0 after:content-['']"
+          class="group-hover:text-magenta after:absolute after:inset-0 after:content-['']"
         >
           {name}
         </a>
@@ -47,7 +47,7 @@ const { name, tagline, liveUrl, repoUrl, screenshot, featured, href } =
         <a
           href={repoUrl}
           aria-label={`${name} on GitHub`}
-          class="relative z-10 shrink-0 text-muted hover:text-cyan"
+          class="relative z-10 shrink-0 text-muted hover:text-magenta"
         >
           <GithubIcon class="size-5" />
         </a>
