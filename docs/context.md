@@ -29,5 +29,13 @@ The home page header composing the Avatar, the Wordmark, and the Social Links, w
 _Avoid_: banner, header, masthead
 
 **Open Graph image**:
-The single site-wide picture shown when a link to the site is previewed elsewhere. One image for every page, composed from the Avatar, the Wordmark, and the Social Links.
+The single site-wide picture shown when a link to the site is previewed elsewhere. One image for every page, composed from the Avatar, the Wordmark, and the Social Links over the Sky and Skyline.
 _Avoid_: social image, share card, OG card, og image
+
+**Skyline**:
+The neon waterfront illustration pinned behind every page, sunk so the river reflection just clears the bottom of the viewport.
+_Avoid_: background (that is the page colour, not the picture), backdrop, wallpaper
+
+**Sky**:
+The CSS night behind the Skyline: an indigo gradient warming to a magenta glow at the horizon, scattered with stars laid out from a fixed seed at build time.
+_Avoid_: starfield, background gradient

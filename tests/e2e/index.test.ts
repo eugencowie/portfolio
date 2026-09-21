@@ -27,7 +27,7 @@ describe("Index", () => {
       [
         'meta[property="og:image:alt"]',
         "content",
-        "Illustrated portrait of eugen beside social links: github.com/eugencowie and x.com/eugencowie",
+        "Illustrated portrait of eugen in front of a neon skyline at night, beside social links: github.com/eugencowie and x.com/eugencowie",
       ],
       ['meta[property="og:image:width"]', "content", "1200"],
       ['meta[property="og:image:height"]', "content", "630"],
