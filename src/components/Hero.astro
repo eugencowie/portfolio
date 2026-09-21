@@ -38,20 +38,22 @@ import { socialLinks } from "@/site";
 <style>
   /* Clip geometry.
      --overlap: how far the Wordmark rises into the avatar.
-     --wm: the Wordmark font size.
+     --wm: the Wordmark font size, chosen so `eugen` spans the Avatar's width
+       (the Avatar's rendered width divided by the block's width per em,
+       2.58 for Anton with 0.02em letter-spacing).
      --baseline: Anton's baseline as a fraction of a line-height-1 box,
        0.5 + (ascent - descent) / (2 * upm) from the hhea table
        (ascent 2409, descent 674, upm 2048 => 0.924). */
   .hero-stack {
     --overlap: 5.5rem;
-    --wm: 6.5rem;
+    --wm: calc(min(22rem, 100vw - 3rem) / 2.58);
     --baseline: 0.924;
     --wm-baseline: calc(var(--wm) * var(--baseline));
   }
   @media (min-width: 40rem) {
     .hero-stack {
       --overlap: 7.5rem;
-      --wm: 8.75rem;
+      --wm: calc(26rem / 2.58);
     }
   }
   .wordmark {
