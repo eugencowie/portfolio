@@ -11,7 +11,7 @@ interface Props {
 const { title, description } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
 const openGraphImage = new URL("/og.png", canonical);
-const openGraphImageAlt = `Illustrated portrait of ${title} in front of the Glasgow skyline at night, beside social links: ${socialLinks.map((link) => link.printLabel).join(" and ")}`;
+const openGraphImageAlt = `Illustrated portrait of ${title} in front of a neon skyline at night, beside social links: ${socialLinks.map((link) => link.printLabel).join(" and ")}`;
 ---
 
 <BaseLayout>

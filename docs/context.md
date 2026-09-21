@@ -33,7 +33,7 @@ The single site-wide picture shown when a link to the site is previewed elsewher
 _Avoid_: social image, share card, OG card, og image
 
 **Skyline**:
-The neon illustration of the Glasgow waterfront pinned behind every page, sunk so the river reflection just clears the bottom of the viewport.
+The neon waterfront illustration pinned behind every page, sunk so the river reflection just clears the bottom of the viewport.
 _Avoid_: background (that is the page colour, not the picture), backdrop, wallpaper
 
 **Sky**:
