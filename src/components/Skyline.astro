@@ -6,7 +6,7 @@
  * so copy stays readable where the two overlap on short viewports.
  */
 import { Image } from "astro:assets";
-import background from "@/assets/background.png";
+import skyline from "@/assets/skyline.png";
 ---
 
 <div
@@ -14,9 +14,9 @@ import background from "@/assets/background.png";
   class="pointer-events-none fixed inset-0 -z-10 overflow-hidden select-none"
 >
   <Image
-    src={background}
+    src={skyline}
     alt=""
-    widths={[640, 960, 1280, background.width]}
+    widths={[640, 960, 1280, skyline.width]}
     sizes="100vw"
     loading="eager"
     class="skyline absolute left-1/2 h-auto max-w-none -translate-x-1/2"
