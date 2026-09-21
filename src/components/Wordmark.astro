@@ -15,8 +15,7 @@ const { class: className, ...rest } = Astro.props;
   <span class="sr-only">eugen.codes</span>
   <span aria-hidden="true" class="flex flex-col items-center">
     <span class="block-word relative inline-block font-display whitespace-nowrap text-magenta">
-      <span class="block-glow absolute inset-0">eugen</span>
-      <span class="block-fill relative">eugen</span>
+      <span class="block-fill inline-block">eugen</span>
     </span>
     <span class="script-word relative font-script whitespace-nowrap">
       codes
@@ -25,33 +24,41 @@ const { class: className, ...rest } = Astro.props;
 </h1>
 
 <style>
+  /* The glow is a drop shadow of the already cut-out shape, so the cutouts
+     stay dark instead of filling with magenta haze. */
   .block-word {
     letter-spacing: 0.02em;
+    filter: drop-shadow(
+        0 0 0.04em color-mix(in oklab, var(--magenta) 90%, white)
+      )
+      drop-shadow(
+        0 0 0.18em color-mix(in oklab, var(--magenta) 70%, transparent)
+      )
+      drop-shadow(
+        0 0 0.5em color-mix(in oklab, var(--magenta) 45%, transparent)
+      );
   }
-  /* The glow lives on an unmasked copy beneath so the cutouts don't slice it. */
-  .block-glow {
-    color: transparent;
-    text-shadow:
-      0 0 0.04em color-mix(in oklab, var(--magenta) 90%, white),
-      0 0 0.18em color-mix(in oklab, var(--magenta) 70%, transparent),
-      0 0 0.5em color-mix(in oklab, var(--magenta) 45%, transparent),
-      0 0 1.2em color-mix(in oklab, var(--magenta) 25%, transparent);
-  }
-  /* Solid at the top, horizontal line cutouts creeping in from the bottom. */
+  /* Solid at the top, horizontal line cutouts creeping in all the way down,
+     descender included. A mask clips to the border box, and Anton's descender
+     hangs 0.33em below the line box, so pad the box down to cover it and pull
+     the padding back out of layout with a negative margin. */
   .block-fill {
+    padding-bottom: 0.35em;
+    margin-bottom: -0.35em;
     mask-image:
-      linear-gradient(to bottom, black 40%, transparent 92%),
+      linear-gradient(to bottom, black 0.35em, transparent 0.75em),
       repeating-linear-gradient(
         to bottom,
-        black 0 0.045em,
-        transparent 0.045em 0.075em
+        black 0 0.05em,
+        transparent 0.05em 0.085em
       );
+    mask-repeat: no-repeat;
     mask-composite: add;
   }
   .script-word {
     font-size: 0.6em;
     line-height: 1;
-    margin-top: -0.25em;
+    margin-top: 0.05em;
     padding: 0 0.3em 0.2em;
     transform: rotate(-5deg);
     color: color-mix(in oklab, var(--cyan) 55%, white);
