@@ -1,12 +1,11 @@
 ---
 import MainLayout from "@/layouts/MainLayout.astro";
 import Hero from "@/components/Hero.astro";
-
-const tagline = "I build things for fun. Some of them work.";
+import { description, title } from "@/site";
 ---
 
-<MainLayout title="eugen" description={tagline}>
+<MainLayout title={title} description={description}>
   <main class="mx-auto max-w-4xl px-6 py-20 sm:py-28">
-    <Hero tagline={tagline} />
+    <Hero />
   </main>
 </MainLayout>
