@@ -1,36 +1,15 @@
 ---
-import { Image } from "astro:assets";
-import avatar from "@/assets/avatar.png";
-import Wordmark from "./Wordmark.astro";
+import Identity from "./Identity.astro";
 import { socialLinks } from "@/site";
 
-/** The Avatar's rendered width, capped by the viewport width and height so
- * the whole Hero, Social Links included, fits on one screen from a landscape
- * phone up to a desktop monitor. Everything else in the Hero scales from it. */
+/** The Avatar's width, capped by the viewport width and height so the whole
+ * Hero, Social Links included, fits on one screen from a landscape phone up to
+ * a desktop monitor. */
 const avatarWidth = "min(26rem, 100vw - 3rem, 48svh)";
 ---
 
 <header class="flex flex-col items-center text-center">
-  {/*
-    The Avatar is clipped at the Wordmark's baseline, so `eugen` sits directly
-    beneath it and `codes` below that. The maths lives in `--avatar-width`,
-    `--overlap`, `--wm` and `--baseline` in <style>.
-  */}
-  <div class="hero-stack relative flex w-full flex-col items-center">
-    <Image
-      src={avatar}
-      alt="Illustrated portrait of Eugen: long hair, beard, aviator sunglasses, lit magenta on one side and cyan on the other."
-      width={416}
-      layout="constrained"
-      widths={[272, 352, 416, 544, 704, 832]}
-      sizes={avatarWidth}
-      priority
-      class="avatar h-auto select-none"
-    />
-    <div class="wordmark relative w-full">
-      <Wordmark class="relative w-full text-center" />
-    </div>
-  </div>
+  <Identity avatarWidth={avatarWidth} />
   <p class="social-links flex flex-wrap justify-center gap-x-6 gap-y-2 text-lg text-foreground sm:text-xl">
     {socialLinks.map((link) => (
       <a href={link.url} class="hover:text-cyan">
@@ -40,29 +19,7 @@ const avatarWidth = "min(26rem, 100vw - 3rem, 48svh)";
   </p>
 </header>
 
-<style define:vars={{ "avatar-width": avatarWidth }}>
-  /* Clip geometry, all in proportion to --avatar-width.
-     --overlap: how far the Wordmark rises into the avatar.
-     --wm: the Wordmark font size, chosen so `eugen` spans the Avatar's width
-       (--avatar-width divided by the block's width per em, 2.58 for Anton
-       with 0.02em letter-spacing).
-     --baseline: Anton's baseline as a fraction of a line-height-1 box,
-       0.5 + (ascent - descent) / (2 * upm) from the hhea table
-       (ascent 2409, descent 674, upm 2048 => 0.924). */
-  .hero-stack {
-    --overlap: calc(var(--avatar-width) * 0.27);
-    --wm: calc(var(--avatar-width) / 2.58);
-    --baseline: 0.924;
-    --wm-baseline: calc(var(--wm) * var(--baseline));
-  }
-  .avatar {
-    width: var(--avatar-width);
-    clip-path: inset(0 0 calc(var(--overlap) - var(--wm-baseline)) 0);
-  }
-  .wordmark {
-    font-size: var(--wm);
-    margin-top: calc(-1 * var(--overlap));
-  }
+<style>
   /* The Social Links often land on the rooftops, so they get a dark halo to
      stay legible against the neon. */
   .social-links {
