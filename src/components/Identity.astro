@@ -1,9 +1,10 @@
 ---
 /**
- * The Avatar with the Wordmark beneath it: the Avatar is clipped at the
- * Wordmark's baseline, so `eugen` sits directly beneath it and `codes` below
- * that. Everything scales from `avatarWidth`, the Avatar's rendered width, as a
- * CSS length expression. The Hero and the Open Graph image both compose it.
+ * The Avatar with the Wordmark beneath it: the Wordmark rises into the Avatar,
+ * whose bottom fades out behind it so `eugen` sits directly beneath the
+ * portrait and `codes` below that. Everything scales from `avatarWidth`, the
+ * Avatar's rendered width, as a CSS length expression. The Hero and the Open
+ * Graph image both compose it.
  */
 import { Image } from "astro:assets";
 import avatar from "@/assets/avatar.png";
@@ -32,23 +33,24 @@ const { avatarWidth } = Astro.props;
 </div>
 
 <style define:vars={{ "avatar-width": avatarWidth }}>
-  /* Clip geometry, all in proportion to --avatar-width.
-     --overlap: how far the Wordmark rises into the avatar.
+  /* Geometry, all in proportion to --avatar-width.
+     --overlap: how far the Wordmark rises into the Avatar.
      --wm: the Wordmark font size, chosen so `eugen` spans the Avatar's width
        (--avatar-width divided by the block's width per em, 2.58 for Anton
-       with 0.02em letter-spacing).
-     --baseline: Anton's baseline as a fraction of a line-height-1 box,
-       0.5 + (ascent - descent) / (2 * upm) from the hhea table
-       (ascent 2409, descent 674, upm 2048 => 0.924). */
+       with 0.02em letter-spacing). */
   .identity {
     --overlap: calc(var(--avatar-width) * 0.27);
     --wm: calc(var(--avatar-width) / 2.58);
-    --baseline: 0.924;
-    --wm-baseline: calc(var(--wm) * var(--baseline));
   }
+  /* The Avatar fades out over the overlap, so its hard bottom edge never shows
+     through the Wordmark's cutouts. */
   .avatar {
     width: var(--avatar-width);
-    clip-path: inset(0 0 calc(var(--overlap) - var(--wm-baseline)) 0);
+    mask-image: linear-gradient(
+      to bottom,
+      black calc(100% - var(--overlap)),
+      transparent
+    );
   }
   .wordmark {
     font-size: var(--wm);

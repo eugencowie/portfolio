@@ -25,7 +25,7 @@ The one-sentence summary used for search results and link previews.
 _Avoid_: tagline, bio, summary
 
 **Identity**:
-The Avatar with the Wordmark beneath it, the Avatar clipped at the Wordmark's baseline so `eugen` sits directly under the portrait. The one composition the site is recognised by, sized by the Avatar's width.
+The Avatar with the Wordmark beneath it, the Wordmark rising into the Avatar and the Avatar fading out behind it so `eugen` sits directly under the portrait. The one composition the site is recognised by, sized by the Avatar's width.
 _Avoid_: lockup (that is the Wordmark alone), stack, hero (that adds the Social Links)
 
 **Hero**:
