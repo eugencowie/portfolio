@@ -4,6 +4,7 @@ import { Image } from "astro:assets";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Wordmark from "@/components/Wordmark.astro";
 import avatar from "@/assets/avatar.png";
+import { socialLinks } from "@/site";
 ---
 
 <BaseLayout>
@@ -20,8 +21,9 @@ import avatar from "@/assets/avatar.png";
     <div class="relative flex flex-col gap-16">
       <Wordmark class="text-8xl" />
       <p class="mt-4 text-2xl text-muted">
-        <span class="block">I build things for fun.</span>
-        <span class="block">Some of them work.</span>
+        {socialLinks.map((link) => (
+          <span class="block">{link.printLabel}</span>
+        ))}
       </p>
     </div>
   </div>
