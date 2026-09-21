@@ -5,6 +5,8 @@
  * `codes` is a cyan neon script tilted beneath it. Everything is real text
  * sized in `em`, so the lockup scales with its font size.
  */
+import { wordmark } from "@/site";
+
 interface Props {
   class?: string;
 }
@@ -12,7 +14,7 @@ const { class: className, ...rest } = Astro.props;
 ---
 
 <h1 {...rest} class:list={["leading-none", className]}>
-  <span class="sr-only">eugen.codes</span>
+  <span class="sr-only">{wordmark}</span>
   <span aria-hidden="true" class="flex flex-col items-center">
     <span class="block-word relative inline-block font-display whitespace-nowrap text-magenta">
       <span class="block-fill inline-block">eugen</span>
