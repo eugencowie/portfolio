@@ -2,13 +2,16 @@
 import Identity from "./Identity.astro";
 import { socialLinks } from "@/site";
 
+/** The space between the Hero and the viewport's sides. */
+const gutter = "1.5rem";
+
 /** The Avatar's width, capped by the viewport width and height so the whole
  * Hero, Social Links included, fits on one screen from a landscape phone up to
  * a desktop monitor. */
-const avatarWidth = "min(26rem, 100vw - 3rem, 48svh)";
+const avatarWidth = `min(26rem, 100vw - 2 * ${gutter}, 48svh)`;
 ---
 
-<header class="flex flex-col items-center text-center">
+<header class="hero flex flex-col items-center text-center">
   <Identity avatarWidth={avatarWidth} />
   <p class="social-links flex flex-wrap justify-center gap-x-6 gap-y-2 text-lg text-foreground sm:text-xl">
     {socialLinks.map((link) => (
@@ -19,7 +22,10 @@ const avatarWidth = "min(26rem, 100vw - 3rem, 48svh)";
   </p>
 </header>
 
-<style>
+<style define:vars={{ gutter }}>
+  .hero {
+    padding-inline: var(--gutter);
+  }
   /* The Social Links often land on the rooftops, so they get a dark halo to
      stay legible against the neon. */
   .social-links {

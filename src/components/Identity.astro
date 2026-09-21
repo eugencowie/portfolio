@@ -11,6 +11,8 @@ import avatar from "@/assets/avatar.png";
 import Wordmark from "./Wordmark.astro";
 
 interface Props {
+  /** A CSS length expression that must be valid both as a `sizes` source size
+   * value and as a CSS property value, e.g. `24rem` or `min(26rem, 48svh)`. */
   avatarWidth: string;
 }
 const { avatarWidth } = Astro.props;
