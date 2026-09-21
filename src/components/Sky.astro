@@ -1,9 +1,10 @@
 ---
 /**
- * The starry night behind the Skyline: indigo overhead warming to a magenta
- * glow at the horizon, with stars thinning out towards it. Star positions are
- * drawn once at build time from a fixed seed so every build renders the same
- * sky, and are laid out in viewport units so they spread over any screen.
+ * The starry night the Skyline stands in front of, rendered inside its
+ * wrapper: indigo overhead warming to a magenta glow at the horizon, with
+ * stars thinning out towards it. Star positions are drawn once at build time
+ * from a fixed seed so every build renders the same sky, and are laid out in
+ * viewport units so they spread over any screen.
  */
 function seededRandom(seed: number) {
   return () => {
@@ -31,12 +32,8 @@ const layers = [
 }));
 ---
 
-<div
-  aria-hidden="true"
-  class="pointer-events-none fixed inset-0 -z-10 overflow-hidden select-none"
->
-  <div class="sky absolute inset-0"></div>
-  <div class="stars absolute inset-0">
+<div class="sky absolute inset-0">
+  <div class="sky-stars absolute inset-0">
     {layers.map(({ size, period, shadow }) => (
       <span
         class="star absolute top-0 left-0 rounded-full"
@@ -63,7 +60,7 @@ const layers = [
       );
   }
   /* Stars thin out and vanish into the horizon glow. */
-  .stars {
+  .sky-stars {
     mask-image: linear-gradient(to bottom, black 35%, transparent 88%);
   }
   .star {
