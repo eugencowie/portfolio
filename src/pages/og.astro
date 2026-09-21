@@ -1,11 +1,13 @@
 ---
 // Rendered to public/og.png by `mise run build:assets`. Not indexed: it exists only to be screenshotted.
-import { Image } from "astro:assets";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import Wordmark from "@/components/Wordmark.astro";
+import Identity from "@/components/Identity.astro";
 import Skyline from "@/components/Skyline.astro";
-import avatar from "@/assets/avatar.png";
-import { socialLinks } from "@/site";
+
+/** The Identity is about 1.4 times as tall as the Avatar is wide (see the
+ * Wordmark proportions in Identity.astro), so 24rem fills the 630px frame with
+ * a margin above the hair and below `codes`. */
+const avatarWidth = "24rem";
 ---
 
 <BaseLayout>
@@ -13,27 +15,9 @@ import { socialLinks } from "@/site";
     <meta name="robots" content="noindex" />
   </Fragment>
   <Skyline />
-  <div class="relative flex h-[630px] w-[1200px] items-center justify-center gap-16 overflow-hidden">
-    <Image
-      src={avatar}
-      alt=""
-      width={480}
-      class="avatar relative size-[440px]"
-    />
-    <div class="relative flex flex-col gap-16">
-      <Wordmark class="text-8xl" />
-      <p class="mt-4 text-2xl text-muted">
-        {socialLinks.map((link) => (
-          <span class="block">{link.printLabel}</span>
-        ))}
-      </p>
-    </div>
+  {/* Padded at the bottom to lift the Identity a touch above centre, so
+      `codes` clears the brightest rooftops. */}
+  <div class="relative flex h-[630px] w-[1200px] items-center overflow-hidden pb-12">
+    <Identity avatarWidth={avatarWidth} />
   </div>
 </BaseLayout>
-
-<style>
-  /* The Avatar is cut square at the bottom; fade that edge into the Skyline. */
-  .avatar {
-    mask-image: linear-gradient(to bottom, black 78%, transparent);
-  }
-</style>

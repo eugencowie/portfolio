@@ -13,23 +13,27 @@ A circular crop of the Avatar's face, used wherever the site needs a small squar
 _Avoid_: disc, favicon (that is one use of the Icon, not the concept)
 
 **Wordmark**:
-The `eugen` / `codes` lockup, with `codes` centred beneath the `g`. The site's name as a visual identity.
+The `eugen` / `codes` lockup as a neon sign: `eugen` in heavy magenta block letters with horizontal cutouts creeping in from the bottom, and `codes` in a cyan neon script tilted beneath it. The site's name as a visual identity.
 _Avoid_: logo, title, brand
 
 **Social Links**:
-The line beneath the Wordmark pointing to where Eugen is elsewhere. Links on the home page, plain text in the Open Graph image.
+The line of links beneath the Identity on the home page pointing to where Eugen is elsewhere.
 _Avoid_: tagline, socials, profiles, subtitle
 
 **Description**:
 The one-sentence summary used for search results and link previews.
 _Avoid_: tagline, bio, summary
 
+**Identity**:
+The Avatar with the Wordmark beneath it, the Wordmark rising into the Avatar and the Avatar fading out behind it so `eugen` sits directly under the portrait. The one composition the site is recognised by, sized by the Avatar's width.
+_Avoid_: lockup (that is the Wordmark alone), stack, hero (that adds the Social Links)
+
 **Hero**:
-The home page header composing the Avatar, the Wordmark, and the Social Links, with the Avatar clipped at the Wordmark's baseline.
+The home page header composing the Identity and the Social Links, sized to fit on one screen at any viewport.
 _Avoid_: banner, header, masthead
 
 **Open Graph image**:
-The single site-wide picture shown when a link to the site is previewed elsewhere. One image for every page, composed from the Avatar, the Wordmark, and the Social Links over the Sky and Skyline.
+The single site-wide picture shown when a link to the site is previewed elsewhere. One image for every page: the Identity over the Sky and Skyline, centred and lifted a touch so `codes` clears the rooftops.
 _Avoid_: social image, share card, OG card, og image
 
 **Skyline**:
