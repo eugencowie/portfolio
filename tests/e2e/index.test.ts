@@ -3,24 +3,31 @@ import { describe, expect, it } from "./playwright";
 describe("Index", () => {
   it("presents the site identity and sharing metadata", async ({ page }) => {
     const title = "eugen";
-    const tagline = "I build things for fun. Some of them work.";
+    const description = "Personal website of eugen, who codes.";
     await page.goto("/");
 
     await expect(page).toHaveTitle(title);
     await expect(
       page.getByRole("heading", { level: 1, name: "eugen.codes" }),
     ).toBeVisible();
-    await expect(page.getByText(tagline)).toBeVisible();
+    await expect(page.getByRole("link", { name: "github" })).toHaveAttribute(
+      "href",
+      "https://github.com/eugencowie",
+    );
+    await expect(page.getByRole("link", { name: "twitter" })).toHaveAttribute(
+      "href",
+      "https://x.com/eugencowie",
+    );
 
     const attributes = [
-      ['meta[name="description"]', "content", tagline],
+      ['meta[name="description"]', "content", description],
       ['meta[property="og:type"]', "content", "website"],
       ['meta[property="og:title"]', "content", title],
-      ['meta[property="og:description"]', "content", tagline],
+      ['meta[property="og:description"]', "content", description],
       [
         'meta[property="og:image:alt"]',
         "content",
-        'Illustrated portrait of eugen beside the tagline "I build things for fun. Some of them work."',
+        "Illustrated portrait of eugen beside social links: github.com/eugencowie and x.com/eugencowie",
       ],
       ['meta[property="og:image:width"]', "content", "1200"],
       ['meta[property="og:image:height"]', "content", "630"],

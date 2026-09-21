@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
+import { socialLinks } from "@/site";
 
 interface Props {
   title: string;
@@ -9,7 +10,7 @@ interface Props {
 const { title, description } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
 const openGraphImage = new URL("/og.png", canonical);
-const openGraphImageAlt = `Illustrated portrait of ${title} beside the tagline "${description}"`;
+const openGraphImageAlt = `Illustrated portrait of ${title} beside social links: ${socialLinks.map((link) => link.printLabel).join(" and ")}`;
 ---
 
 <BaseLayout>
