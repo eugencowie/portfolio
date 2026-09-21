@@ -11,9 +11,9 @@ const { tagline } = Astro.props;
 
 <header class="flex flex-col items-center text-center">
   {/*
-    The Avatar is clipped at the Wordmark's baseline and a horizon line runs
-    across the page there, so `eugen` sits on the horizon and `codes` below
-    it. The maths lives in `--overlap`, `--wm` and `--baseline` in <style>.
+    The Avatar is clipped at the Wordmark's baseline, so `eugen` sits directly
+    beneath it and `codes` below that. The maths lives in `--overlap`, `--wm`
+    and `--baseline` in <style>.
   */}
   <div class="hero-stack relative flex w-full flex-col items-center">
     <Image
@@ -27,7 +27,6 @@ const { tagline } = Astro.props;
       class="avatar h-auto w-88 max-w-full select-none sm:w-104"
     />
     <div class="wordmark relative w-full">
-      <div aria-hidden="true" class="horizon absolute inset-x-0 h-px"></div>
       <Wordmark class="relative w-full text-center" />
     </div>
   </div>
@@ -35,7 +34,7 @@ const { tagline } = Astro.props;
 </header>
 
 <style>
-  /* Horizon geometry.
+  /* Clip geometry.
      --overlap: how far the Wordmark rises into the avatar.
      --wm: the Wordmark font size.
      --baseline: Michroma's baseline as a fraction of a line-height-1 box
@@ -44,7 +43,7 @@ const { tagline } = Astro.props;
     --overlap: 5.5rem;
     --wm: 4.5rem;
     --baseline: 0.945;
-    --horizon: calc(var(--wm) * var(--baseline));
+    --wm-baseline: calc(var(--wm) * var(--baseline));
   }
   @media (min-width: 40rem) {
     .hero-stack {
@@ -57,17 +56,6 @@ const { tagline } = Astro.props;
     margin-top: calc(-1 * var(--overlap));
   }
   .avatar {
-    clip-path: inset(0 0 calc(var(--overlap) - var(--horizon)) 0);
-  }
-  .horizon {
-    top: var(--horizon);
-    --line: color-mix(in oklab, var(--muted) 40%, transparent);
-    background: linear-gradient(
-      to right,
-      transparent,
-      var(--line) 12%,
-      var(--line) 88%,
-      transparent
-    );
+    clip-path: inset(0 0 calc(var(--overlap) - var(--wm-baseline)) 0);
   }
 </style>
