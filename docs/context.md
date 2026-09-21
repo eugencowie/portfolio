@@ -29,7 +29,7 @@ The home page header composing the Avatar, the Wordmark, and the Social Links, w
 _Avoid_: banner, header, masthead
 
 **Open Graph image**:
-The single site-wide picture shown when a link to the site is previewed elsewhere. One image for every page, composed from the Avatar, the Wordmark, and the Social Links.
+The single site-wide picture shown when a link to the site is previewed elsewhere. One image for every page, composed from the Avatar, the Wordmark, and the Social Links over the Sky and Skyline.
 _Avoid_: social image, share card, OG card, og image
 
 **Skyline**:

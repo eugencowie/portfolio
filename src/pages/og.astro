@@ -3,6 +3,7 @@
 import { Image } from "astro:assets";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Wordmark from "@/components/Wordmark.astro";
+import Skyline from "@/components/Skyline.astro";
 import avatar from "@/assets/avatar.png";
 import { socialLinks } from "@/site";
 ---
@@ -11,13 +12,14 @@ import { socialLinks } from "@/site";
   <Fragment slot="head">
     <meta name="robots" content="noindex" />
   </Fragment>
+  <Skyline />
   <div class="relative flex h-[630px] w-[1200px] items-center justify-center gap-16 overflow-hidden">
-    <div
-      aria-hidden="true"
-      class="pointer-events-none absolute inset-0 blur-3xl"
-      style="background: radial-gradient(circle at 35% 50%, color-mix(in oklab, var(--magenta) 22%, transparent), transparent 45%), radial-gradient(circle at 60% 50%, color-mix(in oklab, var(--cyan) 22%, transparent), transparent 45%);"
+    <Image
+      src={avatar}
+      alt=""
+      width={480}
+      class="avatar relative size-[440px]"
     />
-    <Image src={avatar} alt="" width={480} class="relative size-[440px]" />
     <div class="relative flex flex-col gap-16">
       <Wordmark class="text-8xl" />
       <p class="mt-4 text-2xl text-muted">
@@ -28,3 +30,10 @@ import { socialLinks } from "@/site";
     </div>
   </div>
 </BaseLayout>
+
+<style>
+  /* The Avatar is cut square at the bottom; fade that edge into the Skyline. */
+  .avatar {
+    mask-image: linear-gradient(to bottom, black 78%, transparent);
+  }
+</style>

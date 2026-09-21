@@ -17,7 +17,7 @@ describe("MainLayout", () => {
 
   it("describes the site-wide Open Graph image", async () => {
     expect(await render()).toContain(
-      '<meta property="og:image:alt" content="Illustrated portrait of Astro beside social links: github.com/eugencowie and x.com/eugencowie">',
+      '<meta property="og:image:alt" content="Illustrated portrait of Astro in front of the Glasgow skyline at night, beside social links: github.com/eugencowie and x.com/eugencowie">',
     );
   });
 
