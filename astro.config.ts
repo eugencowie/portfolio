@@ -19,12 +19,21 @@ export default defineConfig({
     },
     {
       provider: fontProviders.fontsource(),
-      name: "Michroma",
-      cssVariable: "--font-michroma",
+      name: "Anton",
+      cssVariable: "--font-anton",
       weights: [400],
       styles: ["normal"],
       subsets: ["latin"],
       fallbacks: ["sans-serif"],
+    },
+    {
+      provider: fontProviders.fontsource(),
+      name: "Yellowtail",
+      cssVariable: "--font-yellowtail",
+      weights: [400],
+      styles: ["normal"],
+      subsets: ["latin"],
+      fallbacks: ["cursive"],
     },
   ],
 });

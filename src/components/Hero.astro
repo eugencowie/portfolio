@@ -39,18 +39,19 @@ import { socialLinks } from "@/site";
   /* Clip geometry.
      --overlap: how far the Wordmark rises into the avatar.
      --wm: the Wordmark font size.
-     --baseline: Michroma's baseline as a fraction of a line-height-1 box
-       (ascent 2368, descent 544, upm 2048 => 0.945). */
+     --baseline: Anton's baseline as a fraction of a line-height-1 box,
+       0.5 + (ascent - descent) / (2 * upm) from the hhea table
+       (ascent 2409, descent 674, upm 2048 => 0.924). */
   .hero-stack {
     --overlap: 5.5rem;
-    --wm: 4.5rem;
-    --baseline: 0.945;
+    --wm: 6.5rem;
+    --baseline: 0.924;
     --wm-baseline: calc(var(--wm) * var(--baseline));
   }
   @media (min-width: 40rem) {
     .hero-stack {
       --overlap: 7.5rem;
-      --wm: 6rem;
+      --wm: 8.75rem;
     }
   }
   .wordmark {

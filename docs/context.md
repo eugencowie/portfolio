@@ -13,7 +13,7 @@ A circular crop of the Avatar's face, used wherever the site needs a small squar
 _Avoid_: disc, favicon (that is one use of the Icon, not the concept)
 
 **Wordmark**:
-The `eugen` / `codes` lockup, with `codes` centred beneath the `g`. The site's name as a visual identity.
+The `eugen` / `codes` lockup as a neon sign: `eugen` in heavy magenta block letters with horizontal cutouts creeping in from the bottom, and `codes` in a cyan neon script tilted beneath it. The site's name as a visual identity.
 _Avoid_: logo, title, brand
 
 **Social Links**:
