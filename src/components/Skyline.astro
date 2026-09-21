@@ -1,0 +1,43 @@
+---
+/**
+ * The neon skyline pinned to the bottom of the viewport behind every
+ * page, with the Sky behind it in the same layer. It scales with the viewport
+ * width and sinks so only a sliver of the river reflection stays visible; the
+ * rooftops fade into the page background so copy stays readable where the two
+ * overlap on short viewports.
+ */
+import { Image } from "astro:assets";
+import Sky from "./Sky.astro";
+import skyline from "@/assets/skyline.png";
+---
+
+<div
+  aria-hidden="true"
+  class="pointer-events-none fixed inset-0 -z-10 overflow-hidden select-none"
+>
+  <Sky />
+  <Image
+    src={skyline}
+    alt=""
+    widths={[960, 1280, skyline.width]}
+    sizes="(min-width: 48rem) 100vw, 48rem"
+    loading="eager"
+    class="skyline absolute left-1/2 h-auto max-w-none -translate-x-1/2"
+  />
+</div>
+
+<style define:vars={{ aspect: skyline.height / skyline.width }}>
+  /* Image geometry as fractions of its height: sky ends at the tallest tower
+     (0.30), the waterline sits at 0.66 and the reflection fills the rest.
+     --aspect is height over width, taken from the image itself. */
+  .skyline {
+    /* Never narrower than this, so phones get a centred crop rather than a strip. */
+    --width: max(100vw, 48rem);
+    --reflection: calc(var(--width) * var(--aspect) * 0.34);
+    width: var(--width);
+    --reflection-shown: 10svh;
+    bottom: min(0px, calc(var(--reflection-shown) - var(--reflection)));
+    opacity: 0.55;
+    mask-image: linear-gradient(to bottom, transparent 30%, black 66%);
+  }
+</style>
