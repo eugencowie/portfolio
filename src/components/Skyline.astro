@@ -40,4 +40,12 @@ import skyline from "@/assets/skyline.png";
     opacity: 0.55;
     mask-image: linear-gradient(to bottom, transparent 30%, black 66%);
   }
+  /* On short viewports the towers would reach the top of the screen; fade
+     them harder so they stay a horizon behind the hero rather than a wall. */
+  @media (max-height: 35rem) {
+    .skyline {
+      opacity: 0.35;
+      mask-image: linear-gradient(to bottom, transparent 50%, black 75%);
+    }
+  }
 </style>

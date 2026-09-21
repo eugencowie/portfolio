@@ -1,0 +1,61 @@
+---
+/**
+ * The Avatar with the Wordmark beneath it: the Wordmark rises into the Avatar,
+ * whose bottom fades out behind it so `eugen` sits directly beneath the
+ * portrait and `codes` below that. Everything scales from `avatarWidth`, the
+ * Avatar's rendered width, as a CSS length expression. The Hero and the Open
+ * Graph image both compose it.
+ */
+import { Image } from "astro:assets";
+import avatar from "@/assets/avatar.png";
+import Wordmark from "./Wordmark.astro";
+
+interface Props {
+  /** A CSS length expression that must be valid both as a `sizes` source size
+   * value and as a CSS property value, e.g. `24rem` or `min(26rem, 48svh)`. */
+  avatarWidth: string;
+}
+const { avatarWidth } = Astro.props;
+---
+
+<div class="identity relative flex w-full flex-col items-center">
+  <Image
+    src={avatar}
+    alt="Illustrated portrait of Eugen: long hair, beard, aviator sunglasses, lit magenta on one side and cyan on the other."
+    width={416}
+    layout="constrained"
+    widths={[272, 352, 416, 544, 704, 832]}
+    sizes={avatarWidth}
+    priority
+    class="avatar h-auto select-none"
+  />
+  <div class="wordmark relative w-full">
+    <Wordmark class="relative w-full text-center" />
+  </div>
+</div>
+
+<style define:vars={{ "avatar-width": avatarWidth }}>
+  /* Geometry, all in proportion to --avatar-width.
+     --overlap: how far the Wordmark rises into the Avatar.
+     --wm: the Wordmark font size, chosen so `eugen` spans the Avatar's width
+       (--avatar-width divided by the block's width per em, 2.58 for Anton
+       with 0.02em letter-spacing). */
+  .identity {
+    --overlap: calc(var(--avatar-width) * 0.27);
+    --wm: calc(var(--avatar-width) / 2.58);
+  }
+  /* The Avatar fades out over the overlap, so its hard bottom edge never shows
+     through the Wordmark's cutouts. */
+  .avatar {
+    width: var(--avatar-width);
+    mask-image: linear-gradient(
+      to bottom,
+      black calc(100% - var(--overlap)),
+      transparent
+    );
+  }
+  .wordmark {
+    font-size: var(--wm);
+    margin-top: calc(-1 * var(--overlap));
+  }
+</style>

@@ -4,5 +4,5 @@ The Open Graph image must show the real Wordmark in the real fonts with the same
 
 ## Consequences
 
-- Changing the Wordmark, Social Links, Sky, Skyline, or palette requires re-running `mise run build:assets` and committing the regenerated assets.
+- Changing the Identity (Avatar or Wordmark), Sky, Skyline, or palette requires re-running `mise run build:assets` and committing the regenerated assets.
 - The script depends on Playwright's bundled Chromium being installed, which the e2e suite already requires.

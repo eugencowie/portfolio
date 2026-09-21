@@ -1,27 +1,73 @@
 ---
 /**
- * The `eugen` / `codes` identity lockup. `codes` is centred beneath the `g`
- * by giving the `g` its own positioned span, so the alignment holds at any size.
+ * The `eugen` / `codes` identity lockup as a neon sign: `eugen` is a heavy
+ * magenta block with horizontal cutouts creeping in from the bottom, and
+ * `codes` is a cyan neon script tilted beneath it. Everything is real text
+ * sized in `em`, so the lockup scales with its font size.
  */
+import { siteName } from "@/site";
+
 interface Props {
   class?: string;
 }
-const { class: className, ...rest } = Astro.props;
+const { class: className } = Astro.props;
 ---
 
-<h1
-  {...rest}
-  class:list={["font-display leading-none text-foreground", className]}
->
-  <span class="sr-only">eugen.codes</span>
-  <span aria-hidden="true" class="inline-flex whitespace-nowrap">
-    <span>eu</span>
-    <span class="relative inline-block">
-      g
-      <span class="absolute top-full left-1/2 mt-[0.15em] -translate-x-1/2 font-mono text-[0.42em] font-bold tracking-normal text-cyan">
-        codes
-      </span>
+<h1 class:list={["leading-none", className]}>
+  <span class="sr-only">{siteName}</span>
+  <span aria-hidden="true" class="flex flex-col items-center">
+    <span class="block-word relative inline-block font-display whitespace-nowrap text-magenta">
+      <span class="block-fill inline-block">eugen</span>
     </span>
-    <span>en</span>
+    <span class="script-word relative font-script whitespace-nowrap">
+      codes
+    </span>
   </span>
 </h1>
+
+<style>
+  /* The glow is a drop shadow of the already cut-out shape, so the cutouts
+     stay dark instead of filling with magenta haze. */
+  .block-word {
+    letter-spacing: 0.02em;
+    filter: drop-shadow(
+        0 0 0.04em color-mix(in oklab, var(--magenta) 90%, white)
+      )
+      drop-shadow(
+        0 0 0.18em color-mix(in oklab, var(--magenta) 70%, transparent)
+      )
+      drop-shadow(
+        0 0 0.5em color-mix(in oklab, var(--magenta) 45%, transparent)
+      );
+  }
+  /* Solid at the top, horizontal line cutouts creeping in all the way down,
+     descender included. A mask clips to the border box, and Anton's descender
+     hangs 0.33em below the line box, so pad the box down to cover it and pull
+     the padding back out of layout with a negative margin. */
+  .block-fill {
+    padding-bottom: 0.35em;
+    margin-bottom: -0.35em;
+    mask-image:
+      linear-gradient(to bottom, black 0.35em, transparent 0.75em),
+      repeating-linear-gradient(
+        to bottom,
+        black 0 0.05em,
+        transparent 0.05em 0.085em
+      );
+    mask-repeat: no-repeat;
+    mask-composite: add;
+  }
+  .script-word {
+    font-size: 0.6em;
+    line-height: 1;
+    margin-top: 0.05em;
+    padding: 0 0.3em 0.2em;
+    transform: rotate(-5deg);
+    color: color-mix(in oklab, var(--cyan) 55%, white);
+    text-shadow:
+      0 0 0.03em white,
+      0 0 0.08em var(--cyan),
+      0 0 0.25em var(--cyan),
+      0 0 0.7em color-mix(in oklab, var(--cyan) 60%, transparent);
+  }
+</style>
