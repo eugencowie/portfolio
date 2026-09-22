@@ -2,14 +2,12 @@
 import { Image } from "astro:assets";
 import { ArrowUpRight } from "@lucide/astro";
 import type { CardProjectEntry } from "@/lib/projects";
-import GithubIcon from "./GithubIcon.astro";
 
 interface Props {
   project: CardProjectEntry;
 }
 const { project } = Astro.props;
-const { name, tagline, liveUrl, repoUrl, screenshot, featured, href } =
-  project.data;
+const { name, tagline, screenshot, featured, href } = project.data;
 ---
 
 <article
@@ -34,29 +32,17 @@ const { name, tagline, liveUrl, repoUrl, screenshot, featured, href } =
     ]}
   />
   <div class="flex flex-1 flex-col gap-2 p-5">
-    <div class="flex items-start justify-between gap-4">
-      <h3 class:list={["font-bold", featured ? "text-2xl" : "text-lg"]}>
-        <a
-          href={href}
-          class="after:absolute after:inset-0 after:content-[''] card-active:text-magenta"
-        >
-          {name}
-        </a>
-      </h3>
-      {liveUrl && repoUrl && (
-        <a
-          href={repoUrl}
-          aria-label={`${name} on GitHub`}
-          data-secondary
-          class="relative z-10 shrink-0 text-muted hover:text-magenta"
-        >
-          <GithubIcon class="size-5" />
-        </a>
-      )}
-    </div>
+    <h3 class:list={["font-bold", featured ? "text-2xl" : "text-lg"]}>
+      <a
+        href={href}
+        class="after:absolute after:inset-0 after:content-[''] card-active:text-magenta"
+      >
+        {name}
+      </a>
+    </h3>
     <p class="text-sm text-muted">{tagline}</p>
     <p class="mt-auto flex items-center gap-1 pt-3 text-xs text-muted">
-      {liveUrl ? new URL(liveUrl).host : "github.com"}
+      {new URL(href).host}
       <ArrowUpRight class="size-3.5" aria-hidden="true" />
     </p>
   </div>
