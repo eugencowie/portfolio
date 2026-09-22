@@ -14,7 +14,7 @@ const { name, tagline, liveUrl, repoUrl, screenshot, featured, href } =
 
 <article
   class:list={[
-    "group relative flex overflow-hidden rounded-lg border bg-surface transition-colors focus-within:border-magenta hover:border-magenta",
+    "card relative flex overflow-hidden rounded-lg border bg-surface transition-colors card-active:border-magenta",
     featured ? "flex-col sm:col-span-2 md:flex-row" : "flex-col",
   ]}
 >
@@ -28,7 +28,7 @@ const { name, tagline, liveUrl, repoUrl, screenshot, featured, href } =
         : "(min-width: 640px) 440px, 100vw"
     }
     class:list={[
-      "aspect-[16/10] w-full object-cover",
+      "aspect-[16/10] w-full object-cover transition-colors card-active:border-magenta",
       featured && "md:w-3/5 md:border-r",
       !featured && "border-b",
     ]}
@@ -38,7 +38,7 @@ const { name, tagline, liveUrl, repoUrl, screenshot, featured, href } =
       <h3 class:list={["font-bold", featured ? "text-2xl" : "text-lg"]}>
         <a
           href={href}
-          class="group-hover:text-magenta after:absolute after:inset-0 after:content-['']"
+          class="after:absolute after:inset-0 after:content-[''] card-active:text-magenta"
         >
           {name}
         </a>
@@ -47,6 +47,7 @@ const { name, tagline, liveUrl, repoUrl, screenshot, featured, href } =
         <a
           href={repoUrl}
           aria-label={`${name} on GitHub`}
+          data-secondary
           class="relative z-10 shrink-0 text-muted hover:text-magenta"
         >
           <GithubIcon class="size-5" />

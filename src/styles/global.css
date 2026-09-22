@@ -27,6 +27,22 @@
   --color-magenta: var(--magenta);
 }
 
+/* A card is active when hovered or focused, unless the pointer/focus is on a
+   secondary link inside it (marked data-secondary) that goes somewhere else. */
+@custom-variant card-active {
+  &:where(.card):is(:hover, :focus-within):not(
+      :has([data-secondary]:is(:hover, :focus))
+    ) {
+    @slot;
+  }
+  :where(.card):is(:hover, :focus-within):not(
+      :has([data-secondary]:is(:hover, :focus))
+    )
+    & {
+    @slot;
+  }
+}
+
 @layer base {
   html {
     @apply bg-background font-mono text-foreground antialiased;
