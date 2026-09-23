@@ -28,6 +28,15 @@ export default defineConfig({
     },
     {
       provider: fontProviders.fontsource(),
+      name: "Michroma",
+      cssVariable: "--font-michroma",
+      weights: [400],
+      styles: ["normal"],
+      subsets: ["latin"],
+      fallbacks: ["sans-serif"],
+    },
+    {
+      provider: fontProviders.fontsource(),
       name: "Yellowtail",
       cssVariable: "--font-yellowtail",
       weights: [400],

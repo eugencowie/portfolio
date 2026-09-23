@@ -1,7 +1,11 @@
 ---
-import { ArrowUpRight } from "@lucide/astro";
 import type { ProjectEntry } from "@/lib/projects";
 
+/**
+ * One Other Project. Rendered inside a `<ul class="grid">` with a name column
+ * and a tagline column; the row uses subgrid so every name column shares one
+ * width and the taglines line up like a directory listing.
+ */
 interface Props {
   project: ProjectEntry;
 }
@@ -9,8 +13,8 @@ const { project } = Astro.props;
 const { name, tagline, href } = project.data;
 ---
 
-<li class="card relative grid grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-1 border-b py-4 last:border-b-0 sm:grid-cols-[auto_1fr_auto]">
-  <h3 class="font-bold">
+<li class="card relative col-span-full grid grid-cols-subgrid items-baseline gap-x-6 gap-y-1 py-2">
+  <h3 class="font-mono lowercase">
     <a
       href={href}
       class="after:absolute after:inset-0 after:content-[''] card-active:text-magenta"
@@ -18,11 +22,5 @@ const { name, tagline, href } = project.data;
       {name}
     </a>
   </h3>
-  <ArrowUpRight
-    class="size-4 self-center text-muted sm:order-last card-active:text-magenta"
-    aria-hidden="true"
-  />
-  <p class="col-span-2 min-w-0 text-sm text-muted sm:col-span-1 sm:truncate">
-    {tagline}
-  </p>
+  <p class="min-w-0 text-sm text-muted">{tagline}</p>
 </li>

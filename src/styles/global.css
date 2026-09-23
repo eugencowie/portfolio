@@ -21,6 +21,7 @@
 @theme inline {
   --font-mono: var(--font-commit-mono);
   --font-display: var(--font-anton);
+  --font-name: var(--font-michroma);
   --font-script: var(--font-yellowtail);
   --color-background: var(--background);
   --color-surface: var(--surface);

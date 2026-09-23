@@ -8,31 +8,46 @@ interface Props {
 }
 const { project } = Astro.props;
 const { name, tagline, screenshot, featured, href } = project.data;
+
+/**
+ * The two card designs. The Featured Project spans both grid columns of its
+ * Card Section; every other Project shares them.
+ */
+const FEATURED = {
+  article: "gap-5 sm:col-span-2",
+  widths: [640, 960, 1280, 1800],
+  sizes: "(min-width: 56rem) 848px, 100vw",
+  body: "gap-3",
+  name: "text-3xl leading-none sm:text-4xl",
+  tagline: "text-lg",
+  host: "text-sm",
+  icon: "size-4",
+};
+const STANDARD = {
+  article: "gap-4",
+  widths: [480, 800, 1200],
+  sizes:
+    "(min-width: 56rem) 412px, (min-width: 40rem) calc(50vw - 36px), 100vw",
+  body: "gap-2",
+  name: "text-lg",
+  tagline: "text-sm",
+  host: "pt-1 text-xs",
+  icon: "size-3.5",
+};
+const variant = featured ? FEATURED : STANDARD;
 ---
 
-<article
-  class:list={[
-    "card relative flex overflow-hidden rounded-lg border bg-surface transition-colors card-active:border-magenta",
-    featured ? "flex-col sm:col-span-2 md:flex-row" : "flex-col",
-  ]}
->
+<article class:list={["card relative flex flex-col", variant.article]}>
   <Image
     src={screenshot}
     alt={`Screenshot of ${name}`}
-    widths={[480, 800, 1200]}
-    sizes={
-      featured
-        ? "(min-width: 768px) 560px, 100vw"
-        : "(min-width: 640px) 440px, 100vw"
-    }
-    class:list={[
-      "aspect-[16/10] w-full object-cover transition-colors card-active:border-magenta",
-      featured && "md:w-3/5 md:border-r",
-      !featured && "border-b",
-    ]}
+    widths={variant.widths}
+    sizes={variant.sizes}
+    loading="lazy"
+    class="aspect-video w-full object-cover"
   />
-  <div class="flex flex-1 flex-col gap-2 p-5">
-    <h3 class:list={["font-bold", featured ? "text-2xl" : "text-lg"]}>
+  <div class:list={["flex flex-col", variant.body]}>
+    <h3 class:list={["font-name lowercase", variant.name]}>
       <a
         href={href}
         class="after:absolute after:inset-0 after:content-[''] card-active:text-magenta"
@@ -40,10 +55,10 @@ const { name, tagline, screenshot, featured, href } = project.data;
         {name}
       </a>
     </h3>
-    <p class="text-sm text-muted">{tagline}</p>
-    <p class="mt-auto flex items-center gap-1 pt-3 text-xs text-muted">
+    <p class:list={["text-muted", variant.tagline]}>{tagline}</p>
+    <p class:list={["flex items-center gap-1 text-muted", variant.host]}>
       {new URL(href).host}
-      <ArrowUpRight class="size-3.5" aria-hidden="true" />
+      <ArrowUpRight class={variant.icon} aria-hidden="true" />
     </p>
   </div>
 </article>
