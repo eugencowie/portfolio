@@ -51,7 +51,7 @@ The neon waterfront illustration standing at the foot of the Hero and the Open G
 _Avoid_: background (that is the page colour, not the picture), backdrop, wallpaper
 
 **Sky**:
-The CSS night pinned behind every page: an indigo gradient deepening to purple, scattered with stars laid out from a fixed seed at build time. Everything below the Hero scrolls over it.
+The CSS night behind every page, spanning the whole document and scrolling with it: over the first screen an indigo gradient deepening to purple at the fold, scattered with stars laid out from a fixed seed at build time; over the second the same shades receding in reverse, the sky mirrored in the river; then the plain page background.
 _Avoid_: starfield, background gradient
 
 ### Projects
