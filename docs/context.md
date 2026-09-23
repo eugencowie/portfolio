@@ -61,29 +61,33 @@ A thing Eugen built or is building, shown on the homepage with a name, tagline, 
 _Avoid_: Work, piece, case study
 
 **Section**:
-The homepage group a Project belongs to: Building, Games, or Other.
+The one group a Project belongs to on the homepage. Every Project is in exactly one Section: Building, Games, or Other.
+_Avoid_: Status, category, kind, tag
 
 **Card Section**:
 A Building or Games Section. Its Projects are shown as cards with a screenshot, and one of them may be Featured.
 _Avoid_: showcase, grid, featured section
 
 **Building**:
-The Section for Projects Eugen is currently building, shown under "Currently building".
+The Section for Projects Eugen is currently building, shown as cards under "Currently building".
+_Avoid_: Active, current, in progress
 
 **Games**:
-The Section for game Projects.
+The Section for games Eugen has made, shown as cards under "Games". A game is in Games whether or not it is still being worked on.
+_Avoid_: Past games, portfolio pieces
 
 **Other**:
-The Section for Projects shown under "Other projects".
+The Section for every remaining Project, shown as compact rows under "Other projects". Other Projects have no screenshot.
+_Avoid_: Dormant, archived, old, misc
 
 **Live link**:
 The URL of a Project's deployed site. A Project without one links to its Repo link instead.
 _Avoid_: Demo, website, homepage
 
 **Repo link**:
-The URL of a Project's GitHub repository.
+The URL of a Project's public GitHub repository. A Project whose repository is private has no Repo link. Every Project has at least one of a Live link and a Repo link.
 _Avoid_: Source, code link
 
 **Featured**:
-The one Project given extra visual weight within a Building or Games Section. At most one Project per Section is Featured.
+The one Project in a Card Section given extra visual weight at the top of that Section. At most one Project per Section is Featured, and Other never has one.
 _Avoid_: Highlighted, pinned, hero project
