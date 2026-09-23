@@ -4,9 +4,10 @@
  * scrolling with it. The first screen is the sky proper: indigo overhead
  * deepening to purple at the fold, with stars thinning out towards it, where
  * the Skyline stands in front of them in the Hero and dissolves into it.
- * Below the fold the purple recedes through the same shades in reverse over
- * the next screen, the sky mirrored in the river, and the rest of the page
- * scrolls over the plain page background. Star positions are drawn once at
+ * Just below the fold the purple recedes through the same shades in reverse,
+ * a short band of sky mirrored in the river, and reaches the plain page
+ * background before the first Section's cards, so every Section scrolls over
+ * the same ground. Star positions are drawn once at
  * build time from a fixed seed so every build renders the same sky, and are
  * laid out in viewport units so they spread over any screen. The `<body>` is
  * `relative` so the Sky stretches to the full page height.
@@ -52,7 +53,7 @@ const layers = [
 </div>
 
 <style>
-  /* Sky over the first screen, its reflection over the second, page after. */
+  /* Sky over the first screen, a band of reflection below it, page after. */
   .sky {
     background: linear-gradient(
       to bottom,
@@ -60,9 +61,9 @@ const layers = [
       #15123f 40svh,
       #27155e 78svh,
       #451a74 100svh,
-      #27155e 122svh,
-      #15123f 160svh,
-      var(--background) 200svh
+      #27155e 106svh,
+      #15123f 112svh,
+      var(--background) 120svh
     );
   }
   /* Stars thin out and vanish towards the bottom of the first screen. */
