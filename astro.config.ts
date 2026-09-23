@@ -45,4 +45,7 @@ export default defineConfig({
       fallbacks: ["cursive"],
     },
   ],
+  devToolbar: {
+    enabled: false,
+  },
 });
