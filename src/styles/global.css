@@ -4,9 +4,14 @@
 :root {
   color-scheme: dark;
   --background: #090b1a;
+  --surface: #0d1324;
   --foreground: #f2f0f7;
+  --muted: #8b91a4;
+  --border: #1b2940;
   --cyan: #0ad7e6;
   --magenta: #f22c95;
+  /* The space above the Hero and below the footer. */
+  --page-block-inset: clamp(1.5rem, 7svh, 7rem);
 }
 
 @theme inline {
@@ -14,9 +19,22 @@
   --font-display: var(--font-anton);
   --font-script: var(--font-yellowtail);
   --color-background: var(--background);
+  --color-surface: var(--surface);
   --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
   --color-cyan: var(--cyan);
   --color-magenta: var(--magenta);
+}
+
+/* A card is active when hovered or focused. */
+@custom-variant card-active {
+  &:where(.card):is(:hover, :focus-within) {
+    @slot;
+  }
+  :where(.card):is(:hover, :focus-within) & {
+    @slot;
+  }
 }
 
 @layer base {
@@ -24,7 +42,7 @@
     @apply bg-background font-mono text-foreground antialiased;
   }
   :focus-visible {
-    @apply outline-2 outline-offset-2 outline-cyan;
+    @apply outline-2 outline-offset-2 outline-magenta;
   }
   ::selection {
     @apply bg-magenta text-background;

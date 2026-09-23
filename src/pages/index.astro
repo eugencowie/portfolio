@@ -1,11 +1,45 @@
 ---
+import { getCollection } from "astro:content";
 import MainLayout from "@/layouts/MainLayout.astro";
 import Hero from "@/components/Hero.astro";
+import CardSection from "@/components/CardSection.astro";
+import SectionHeading from "@/components/SectionHeading.astro";
+import ProjectRow from "@/components/ProjectRow.astro";
+import Footer from "@/components/Footer.astro";
+import { arrangeProjects } from "@/lib/projects";
 import { description, title } from "@/site";
+
+const entries = await getCollection("projects");
+const { building, games, other } = arrangeProjects(entries);
 ---
 
 <MainLayout title={title} description={description}>
-  <main class="mx-auto max-w-4xl py-[clamp(1.5rem,7svh,7rem)]">
+  <main class="flex flex-col gap-24 pb-(--page-block-inset)">
     <Hero />
+
+    <div class="mx-auto flex w-full max-w-4xl flex-col gap-24">
+      <CardSection id="building" projects={building}>
+        Currently building
+      </CardSection>
+
+      <CardSection id="games" projects={games}>
+        Games
+      </CardSection>
+
+      {other.length > 0 && (
+        <section aria-labelledby="other" class="mx-6 flex flex-col gap-4">
+          <SectionHeading id="other">Other projects</SectionHeading>
+          <ul>
+            {other.map((project) => (
+              <ProjectRow project={project} />
+            ))}
+          </ul>
+        </section>
+      )}
+
+      <div class="mx-6">
+        <Footer />
+      </div>
+    </div>
   </main>
 </MainLayout>
