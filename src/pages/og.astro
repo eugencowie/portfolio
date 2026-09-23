@@ -2,6 +2,7 @@
 // Rendered to public/og.png by `mise run build:assets`. Not indexed: it exists only to be screenshotted.
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Identity from "@/components/Identity.astro";
+import Sky from "@/components/Sky.astro";
 import Skyline from "@/components/Skyline.astro";
 
 /** The Identity is about 1.4 times as tall as the Avatar is wide (see the
@@ -14,10 +15,11 @@ const avatarWidth = "24rem";
   <Fragment slot="head">
     <meta name="robots" content="noindex" />
   </Fragment>
-  <Skyline />
+  <Sky />
   {/* Padded at the bottom to lift the Identity a touch above centre, so
       `codes` clears the brightest rooftops. */}
-  <div class="relative flex h-[630px] w-[1200px] items-center overflow-hidden pb-12">
+  <div class="relative isolate flex h-[630px] w-[1200px] items-center overflow-hidden pb-12">
+    <Skyline />
     <Identity avatarWidth={avatarWidth} />
   </div>
 </BaseLayout>

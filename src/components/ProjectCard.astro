@@ -1,0 +1,49 @@
+---
+import { Image } from "astro:assets";
+import { ArrowUpRight } from "@lucide/astro";
+import type { CardProjectEntry } from "@/lib/projects";
+
+interface Props {
+  project: CardProjectEntry;
+}
+const { project } = Astro.props;
+const { name, tagline, screenshot, featured, href } = project.data;
+---
+
+<article
+  class:list={[
+    "card relative flex overflow-hidden rounded-lg border bg-surface transition-colors card-active:border-magenta",
+    featured ? "flex-col sm:col-span-2 md:flex-row" : "flex-col",
+  ]}
+>
+  <Image
+    src={screenshot}
+    alt={`Screenshot of ${name}`}
+    widths={[480, 800, 1200]}
+    sizes={
+      featured
+        ? "(min-width: 768px) 560px, 100vw"
+        : "(min-width: 640px) 440px, 100vw"
+    }
+    class:list={[
+      "aspect-[16/10] w-full object-cover transition-colors card-active:border-magenta",
+      featured && "md:w-3/5 md:border-r",
+      !featured && "border-b",
+    ]}
+  />
+  <div class="flex flex-1 flex-col gap-2 p-5">
+    <h3 class:list={["font-bold", featured ? "text-2xl" : "text-lg"]}>
+      <a
+        href={href}
+        class="after:absolute after:inset-0 after:content-[''] card-active:text-magenta"
+      >
+        {name}
+      </a>
+    </h3>
+    <p class="text-sm text-muted">{tagline}</p>
+    <p class="mt-auto flex items-center gap-1 pt-3 text-xs text-muted">
+      {new URL(href).host}
+      <ArrowUpRight class="size-3.5" aria-hidden="true" />
+    </p>
+  </div>
+</article>

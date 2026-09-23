@@ -1,10 +1,11 @@
 ---
 /**
- * The starry night the Skyline stands in front of, rendered inside its
- * wrapper: indigo overhead warming to a magenta glow at the horizon, with
- * stars thinning out towards it. Star positions are drawn once at build time
- * from a fixed seed so every build renders the same sky, and are laid out in
- * viewport units so they spread over any screen.
+ * The starry night behind every page, pinned to the viewport: indigo overhead
+ * deepening to purple at the bottom, with stars thinning out towards it. The
+ * Skyline stands in front of it in the Hero and dissolves into it, so the rest
+ * of the page scrolls over plain sky. Star positions are drawn once at build
+ * time from a fixed seed so every build renders the same sky, and are laid out
+ * in viewport units so they spread over any screen.
  */
 function seededRandom(seed: number) {
   return () => {
@@ -32,7 +33,10 @@ const layers = [
 }));
 ---
 
-<div class="sky absolute inset-0">
+<div
+  aria-hidden="true"
+  class="sky pointer-events-none fixed inset-0 -z-10 select-none"
+>
   <div class="sky-stars absolute inset-0">
     {layers.map(({ size, period, shadow }) => (
       <span
@@ -45,21 +49,15 @@ const layers = [
 
 <style>
   .sky {
-    background:
-      radial-gradient(
-        ellipse 90% 45% at 50% 100%,
-        color-mix(in oklab, var(--magenta) 40%, transparent),
-        transparent 70%
-      ),
-      linear-gradient(
-        to bottom,
-        #0d0c2c 0%,
-        #15123f 40%,
-        #27155e 78%,
-        #451a74 100%
-      );
+    background: linear-gradient(
+      to bottom,
+      #0d0c2c 0%,
+      #15123f 40%,
+      #27155e 78%,
+      #451a74 100%
+    );
   }
-  /* Stars thin out and vanish into the horizon glow. */
+  /* Stars thin out and vanish towards the bottom of the screen. */
   .sky-stars {
     mask-image: linear-gradient(to bottom, black 35%, transparent 88%);
   }

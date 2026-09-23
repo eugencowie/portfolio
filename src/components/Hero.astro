@@ -1,5 +1,6 @@
 ---
 import Identity from "./Identity.astro";
+import Skyline from "./Skyline.astro";
 import { socialLinks } from "@/site";
 
 /** The space between the Hero and the viewport's sides. */
@@ -11,11 +12,16 @@ const gutter = "1.5rem";
 const avatarWidth = `min(26rem, 100vw - 2 * ${gutter}, 48svh)`;
 ---
 
-<header class="hero flex flex-col items-center text-center">
+<!--
+  The Hero is the one full-bleed Scene on the home page: it fills the first
+  screen, with the Skyline standing at its foot and scrolling away with it.
+-->
+<header class="hero relative isolate flex min-h-svh flex-col items-center text-center">
+  <Skyline dissolve />
   <Identity avatarWidth={avatarWidth} />
   <p class="social-links flex flex-wrap justify-center gap-x-6 gap-y-2 text-lg text-foreground sm:text-xl">
     {socialLinks.map((link) => (
-      <a href={link.url} class="hover:text-cyan">
+      <a href={link.url} class="hover:text-magenta">
         {link.label}
       </a>
     ))}
@@ -24,6 +30,7 @@ const avatarWidth = `min(26rem, 100vw - 2 * ${gutter}, 48svh)`;
 
 <style define:vars={{ gutter }}>
   .hero {
+    padding-block-start: var(--page-block-inset);
     padding-inline: var(--gutter);
   }
   /* The Social Links often land on the rooftops, so they get a dark halo to

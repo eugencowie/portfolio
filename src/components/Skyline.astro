@@ -1,21 +1,32 @@
 ---
 /**
- * The neon skyline pinned to the bottom of the viewport behind every
- * page, with the Sky behind it in the same layer. It scales with the viewport
- * width and sinks so only a sliver of the river reflection stays visible; the
- * rooftops fade into the page background so copy stays readable where the two
- * overlap on short viewports.
+ * The neon skyline at the foot of the Scene it stands in, the Hero or the
+ * Open Graph image, filling the Scene behind its content. The parent must be
+ * `relative isolate`: the Skyline sits at `-z-10` inside that stacking
+ * context, which keeps it behind the content but in front of the fixed Sky.
+ * It scales with the viewport width and sinks so only a sliver of the river
+ * reflection stays visible. With `dissolve`, that sliver fades into the Sky,
+ * so a page scrolling past the Scene lands on plain sky. The rooftops fade in
+ * from the top so copy stays readable where the two overlap on short
+ * viewports.
  */
 import { Image } from "astro:assets";
-import Sky from "./Sky.astro";
 import skyline from "@/assets/skyline.png";
+
+interface Props {
+  /** Fade the visible river out at the bottom, into the Sky behind. */
+  dissolve?: boolean;
+}
+const { dissolve = false } = Astro.props;
 ---
 
 <div
   aria-hidden="true"
-  class="pointer-events-none fixed inset-0 -z-10 overflow-hidden select-none"
+  class:list={[
+    "scene pointer-events-none absolute inset-0 -z-10 overflow-hidden select-none",
+    { dissolve },
+  ]}
 >
-  <Sky />
   <Image
     src={skyline}
     alt=""
@@ -27,6 +38,23 @@ import skyline from "@/assets/skyline.png";
 </div>
 
 <style define:vars={{ aspect: skyline.height / skyline.width }}>
+  /* The Scene glows magenta at the horizon. */
+  .scene {
+    --reflection-shown: 10svh;
+    background: radial-gradient(
+      ellipse 90% 45% at 50% 100%,
+      color-mix(in oklab, var(--magenta) 40%, transparent),
+      transparent 70%
+    );
+  }
+  /* The visible river, glow included, runs out into the Sky behind it. */
+  .dissolve {
+    mask-image: linear-gradient(
+      to bottom,
+      black calc(100% - var(--reflection-shown)),
+      transparent
+    );
+  }
   /* Image geometry as fractions of its height: sky ends at the tallest tower
      (0.30), the waterline sits at 0.66 and the reflection fills the rest.
      --aspect is height over width, taken from the image itself. */
@@ -35,13 +63,12 @@ import skyline from "@/assets/skyline.png";
     --width: max(100vw, 48rem);
     --reflection: calc(var(--width) * var(--aspect) * 0.34);
     width: var(--width);
-    --reflection-shown: 10svh;
     bottom: min(0px, calc(var(--reflection-shown) - var(--reflection)));
     opacity: 0.55;
     mask-image: linear-gradient(to bottom, transparent 30%, black 66%);
   }
   /* On short viewports the towers would reach the top of the screen; fade
-     them harder so they stay a horizon behind the hero rather than a wall. */
+     them harder so they stay a horizon behind the Identity rather than a wall. */
   @media (max-height: 35rem) {
     .skyline {
       opacity: 0.35;

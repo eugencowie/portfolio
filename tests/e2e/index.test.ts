@@ -10,14 +10,12 @@ describe("Index", () => {
     await expect(
       page.getByRole("heading", { level: 1, name: "eugen.codes" }),
     ).toBeVisible();
-    await expect(page.getByRole("link", { name: "github" })).toHaveAttribute(
-      "href",
-      "https://github.com/eugencowie",
-    );
-    await expect(page.getByRole("link", { name: "twitter" })).toHaveAttribute(
-      "href",
-      "https://x.com/eugencowie",
-    );
+    await expect(
+      page.getByRole("link", { name: "github", exact: true }),
+    ).toHaveAttribute("href", "https://github.com/eugencowie");
+    await expect(
+      page.getByRole("link", { name: "twitter", exact: true }),
+    ).toHaveAttribute("href", "https://x.com/eugencowie");
 
     const attributes = [
       ['meta[name="description"]', "content", description],
