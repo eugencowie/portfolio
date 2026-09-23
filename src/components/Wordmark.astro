@@ -63,11 +63,11 @@ const { class: className } = Astro.props;
     margin-top: 0.05em;
     padding: 0 0.3em 0.2em;
     transform: rotate(-5deg);
-    color: color-mix(in oklab, var(--cyan) 55%, white);
+    color: var(--neon-cyan);
+    /* The outer haze is the Wordmark's alone, so it stays the brightest sign
+       on the page. */
     text-shadow:
-      0 0 0.03em white,
-      0 0 0.08em var(--cyan),
-      0 0 0.25em var(--cyan),
+      var(--neon-cyan-glow),
       0 0 0.7em color-mix(in oklab, var(--cyan) 60%, transparent);
   }
 </style>
