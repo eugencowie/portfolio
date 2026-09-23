@@ -31,19 +31,23 @@ The Avatar with the Wordmark beneath it, the Wordmark rising into the Avatar and
 _Avoid_: lockup (that is the Wordmark alone), stack, hero (that adds the Social Links)
 
 **Hero**:
-The home page header composing the Identity and the Social Links, sized to fit on one screen at any viewport.
+The home page header composing the Identity and the Social Links over the Skyline, filling the first screen at any viewport and scrolling away with the page.
 _Avoid_: banner, header, masthead
 
 **Open Graph image**:
 The single site-wide picture shown when a link to the site is previewed elsewhere. One image for every page: the Identity over the Sky and Skyline, centred and lifted a touch so `codes` clears the rooftops.
 _Avoid_: social image, share card, OG card, og image
 
+**Scene**:
+The composition the Hero and the Open Graph image share: the Skyline standing at the foot of a frame over the Sky, glowing magenta at the horizon. The Hero's Scene dissolves the river into the Sky; the Open Graph image's does not.
+_Avoid_: backdrop, stage, frame
+
 **Skyline**:
-The neon waterfront illustration pinned behind every page, sunk so the river reflection just clears the bottom of the viewport.
+The neon waterfront illustration standing at the foot of the Hero and the Open Graph image, glowing magenta at the horizon and sunk so only a sliver of the river reflection shows. In the Hero that sliver dissolves into the Sky.
 _Avoid_: background (that is the page colour, not the picture), backdrop, wallpaper
 
 **Sky**:
-The CSS night behind the Skyline: an indigo gradient warming to a magenta glow at the horizon, scattered with stars laid out from a fixed seed at build time.
+The CSS night pinned behind every page: an indigo gradient deepening to purple, scattered with stars laid out from a fixed seed at build time. Everything below the Hero scrolls over it.
 _Avoid_: starfield, background gradient
 
 ### Projects

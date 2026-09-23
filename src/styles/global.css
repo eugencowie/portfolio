@@ -10,6 +10,8 @@
   --border: #1b2940;
   --cyan: #0ad7e6;
   --magenta: #f22c95;
+  /* The space above the Hero and below the footer. */
+  --page-block-inset: clamp(1.5rem, 7svh, 7rem);
 }
 
 @theme inline {

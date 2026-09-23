@@ -14,30 +14,32 @@ const { building, games, other } = arrangeProjects(entries);
 ---
 
 <MainLayout title={title} description={description}>
-  <main class="mx-auto flex max-w-4xl flex-col gap-20 py-[clamp(1.5rem,7svh,7rem)]">
+  <main class="flex flex-col gap-24 pb-(--page-block-inset)">
     <Hero />
 
-    <CardSection id="building" projects={building}>
-      Currently building
-    </CardSection>
+    <div class="mx-auto flex w-full max-w-4xl flex-col gap-24">
+      <CardSection id="building" projects={building}>
+        Currently building
+      </CardSection>
 
-    <CardSection id="games" projects={games}>
-      Games
-    </CardSection>
+      <CardSection id="games" projects={games}>
+        Games
+      </CardSection>
 
-    {other.length > 0 && (
-      <section aria-labelledby="other" class="mx-6 flex flex-col gap-4">
-        <SectionHeading id="other">Other projects</SectionHeading>
-        <ul>
-          {other.map((project) => (
-            <ProjectRow project={project} />
-          ))}
-        </ul>
-      </section>
-    )}
+      {other.length > 0 && (
+        <section aria-labelledby="other" class="mx-6 flex flex-col gap-4">
+          <SectionHeading id="other">Other projects</SectionHeading>
+          <ul>
+            {other.map((project) => (
+              <ProjectRow project={project} />
+            ))}
+          </ul>
+        </section>
+      )}
 
-    <div class="mx-6">
-      <Footer />
+      <div class="mx-6">
+        <Footer />
+      </div>
     </div>
   </main>
 </MainLayout>

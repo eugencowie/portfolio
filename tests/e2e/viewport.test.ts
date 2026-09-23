@@ -25,12 +25,14 @@ describe("Hero", () => {
         () => document.documentElement.scrollWidth,
       );
       expect(scrollWidth).toBeLessThanOrEqual(viewport.width);
+      const hero = page.locator("header");
+      await expect(hero).toBeInViewport({ ratio: 1 });
       await expect(
-        page.getByRole("heading", { level: 1, name: "eugen.codes" }),
+        hero.getByRole("heading", { level: 1, name: "eugen.codes" }),
       ).toBeInViewport({ ratio: 1 });
       for (const link of socialLinks) {
         await expect(
-          page.getByRole("link", { name: link.label, exact: true }),
+          hero.getByRole("link", { name: link.label, exact: true }),
         ).toBeInViewport({ ratio: 1 });
       }
     });
