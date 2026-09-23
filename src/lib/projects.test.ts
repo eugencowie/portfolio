@@ -52,8 +52,4 @@ describe("arrangeProjects", () => {
       ]),
     ).toThrow(/one Featured.*building/);
   });
-
-  it("rejects a Featured Project in Other", () => {
-    expect(() => arrangeProjects([p("o1", "other", 1, true)])).toThrow(/Other/);
-  });
 });

@@ -61,9 +61,6 @@ export function arrangeProjects<T extends HasProject>(
       (p): p is InSection<T, typeof section> => p.data.section === section,
     );
     const featured = inSection.filter((p) => p.data.featured);
-    if (featured.length > 0 && !isCardSection(section)) {
-      throw new Error("A Project in Other cannot be Featured");
-    }
     if (featured.length > 1) {
       throw new Error(`At most one Featured Project is allowed in ${section}`);
     }

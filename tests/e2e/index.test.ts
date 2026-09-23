@@ -37,4 +37,20 @@ describe("Index", () => {
       await expect(page.locator(selector)).toHaveAttribute(attribute, value);
     }
   });
+
+  it("uses the intended fonts for Section headings and Project names", async ({
+    page,
+  }) => {
+    await page.goto("/");
+
+    await expect(
+      page.getByRole("heading", { level: 2, name: "Currently building" }),
+    ).toHaveCSS("font-family", /Yellowtail/);
+    await expect(
+      page.getByRole("heading", { level: 3, name: "Gauge" }),
+    ).toHaveCSS("font-family", /Michroma/);
+    await expect(
+      page.getByRole("heading", { level: 3, name: "aptabase-rs" }),
+    ).toHaveCSS("font-family", /Commit Mono/);
+  });
 });

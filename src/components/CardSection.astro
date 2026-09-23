@@ -3,6 +3,11 @@ import type { CardProjectEntry } from "@/lib/projects";
 import SectionHeading from "./SectionHeading.astro";
 import ProjectCard from "./ProjectCard.astro";
 
+/**
+ * A Section rendered as cards: the Featured Project full-width on top, the
+ * rest in a two-column grid. Renders nothing when the Section is empty.
+ * Expects `projects` already arranged, Featured first.
+ */
 interface Props {
   id: string;
   projects: CardProjectEntry[];
@@ -11,11 +16,11 @@ const { id, projects } = Astro.props;
 ---
 
 {projects.length > 0 && (
-  <section aria-labelledby={id} class="mx-6 flex flex-col gap-8">
+  <section aria-labelledby={id} class="mx-6 flex flex-col gap-10">
     <SectionHeading id={id}>
       <slot />
     </SectionHeading>
-    <div class="grid gap-6 sm:grid-cols-2">
+    <div class="grid gap-x-6 gap-y-10 sm:grid-cols-2">
       {projects.map((project) => (
         <ProjectCard project={project} />
       ))}
