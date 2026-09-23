@@ -18,6 +18,10 @@ _Avoid_: disc, favicon (that is one use of the Icon, not the concept)
 The `eugen` / `codes` lockup as a neon sign: `eugen` in heavy magenta block letters with horizontal cutouts creeping in from the bottom, and `codes` in a cyan neon script tilted beneath it. The site's name as a visual identity.
 _Avoid_: logo, title, brand
 
+**Neon**:
+Text lit as a neon tube: a pale core with a tight glow in the tube's colour. Cyan neon is `codes` in the Wordmark and every Section heading; magenta neon is `eugen`. The Wordmark alone adds an outer haze so it stays the brightest sign on the page.
+_Avoid_: glow (that is one layer of the treatment, not the concept), tube, sign (that is the Wordmark)
+
 **Social Links**:
 The line of links beneath the Identity on the home page pointing to where Eugen is elsewhere.
 _Avoid_: tagline, socials, profiles, subtitle
