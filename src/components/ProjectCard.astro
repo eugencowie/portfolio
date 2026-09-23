@@ -47,7 +47,7 @@ const variant = featured ? FEATURED : STANDARD;
     class="aspect-video w-full object-cover"
   />
   <div class:list={["flex flex-col", variant.body]}>
-    <h3 class:list={["font-bold", variant.name]}>
+    <h3 class:list={["font-name lowercase", variant.name]}>
       <a
         href={href}
         class="after:absolute after:inset-0 after:content-[''] card-active:text-magenta"
