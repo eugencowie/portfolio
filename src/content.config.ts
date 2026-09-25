@@ -31,7 +31,7 @@ export const projectSchema = ({ image }: SchemaContext) =>
           .default(false),
         screenshot: z
           .undefined({
-            error: "Only a Project in a Card Section has a screenshot",
+            error: "Only a Building or Games Project has a screenshot",
           })
           .optional(),
       }),

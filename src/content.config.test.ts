@@ -19,7 +19,7 @@ const project = {
 };
 
 describe("projectSchema", () => {
-  it("accepts a Card Section Project with a screenshot", () => {
+  it("accepts a Building or Games Project with a screenshot", () => {
     expect(
       schema.parse({ ...project, section: "building", screenshot: "x.png" }),
     ).toMatchObject({ featured: false, href: "https://example.com" });
@@ -40,7 +40,7 @@ describe("projectSchema", () => {
   it("rejects a screenshot on an Other Project", () => {
     expect(
       messages({ ...project, section: "other", screenshot: "x.png" }),
-    ).toContain("Only a Project in a Card Section has a screenshot");
+    ).toContain("Only a Building or Games Project has a screenshot");
   });
 
   it("rejects a Project with neither a Live link nor a Repo link", () => {

@@ -57,37 +57,33 @@ _Avoid_: starfield, background gradient
 ### Projects
 
 **Project**:
-A thing Eugen built or is building, shown on the homepage with a name, tagline, and link. Projects in the Building and Games sections also have a screenshot.
+A thing Eugen built or is building.
 _Avoid_: Work, piece, case study
 
 **Section**:
-The one group a Project belongs to on the homepage. Every Project is in exactly one Section: Building, Games, or Other.
-_Avoid_: Status, category, kind, tag
-
-**Card Section**:
-A Building or Games Section. Its Projects are shown as cards with a screenshot, and one of them may be Featured.
-_Avoid_: showcase, grid, featured section
+The one group a Project belongs to on the homepage.
+_Avoid_: Status, category, kind, tag, group
 
 **Building**:
-The Section for Projects Eugen is currently building, shown as cards under "Currently building".
+The Section for Projects Eugen is currently building.
 _Avoid_: Active, current, in progress
 
 **Games**:
-The Section for games Eugen has made, shown as cards under "Games". A game is in Games whether or not it is still being worked on.
+The Section for games Eugen has made. A game belongs here whether or not it is still being worked on.
 _Avoid_: Past games, portfolio pieces
 
 **Other**:
-The Section for every remaining Project, shown as compact rows under "Other projects". Other Projects have no screenshot.
+The Section for every remaining Project.
 _Avoid_: Dormant, archived, old, misc
 
 **Live link**:
-The URL of a Project's deployed site. A Project without one links to its Repo link instead.
+The URL of a Project's deployed site.
 _Avoid_: Demo, website, homepage
 
 **Repo link**:
-The URL of a Project's public GitHub repository. A Project whose repository is private has no Repo link. Every Project has at least one of a Live link and a Repo link.
+The URL of a Project's public GitHub repository.
 _Avoid_: Source, code link
 
 **Featured**:
-The one Project in a Card Section given extra visual weight at the top of that Section. At most one Project per Section is Featured, and Other never has one.
+The one Project in a Section singled out for prominence.
 _Avoid_: Highlighted, pinned, hero project
