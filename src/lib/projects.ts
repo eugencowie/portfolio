@@ -3,7 +3,7 @@ import type { CollectionEntry } from "astro:content";
 export const PROJECT_SECTIONS = ["building", "games", "other"] as const;
 export type ProjectSection = (typeof PROJECT_SECTIONS)[number];
 
-/** The Card Sections: the ones whose Projects have a screenshot and may be Featured. */
+/** The Sections rendered as cards: Building and Games. Their Projects have a screenshot and one may be Featured. */
 export const CARD_SECTIONS = [
   "building",
   "games",
