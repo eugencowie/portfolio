@@ -43,11 +43,17 @@
 }
 
 @layer base {
+  * {
+    @apply border-border;
+  }
   html {
     @apply bg-background font-mono text-foreground antialiased;
   }
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-magenta;
+  }
+  a {
+    @apply transition-[color] duration-150;
   }
   ::selection {
     @apply bg-magenta text-background;
