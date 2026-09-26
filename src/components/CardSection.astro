@@ -16,7 +16,7 @@ const { id, projects } = Astro.props;
 ---
 
 {projects.length > 0 && (
-  <section aria-labelledby={id} class="mx-6 flex flex-col gap-10">
+  <section aria-labelledby={id} class="mx-6 flex flex-col gap-7">
     <SectionHeading id={id}>
       <slot />
     </SectionHeading>
