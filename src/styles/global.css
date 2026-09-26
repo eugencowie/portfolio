@@ -43,6 +43,9 @@
 }
 
 @layer base {
+  * {
+    @apply border-border;
+  }
   html {
     @apply bg-background font-mono text-foreground antialiased;
   }
