@@ -35,7 +35,7 @@ The Avatar with the Wordmark beneath it, the Wordmark rising into the Avatar and
 _Avoid_: lockup (that is the Wordmark alone), stack, hero (that adds the Social Links)
 
 **Hero**:
-The home page header composing the Identity and the Social Links over the Skyline, filling the first screen at any viewport and scrolling away with the page.
+The home page header composing the Identity and the Social Links over the Skyline, filling the first screen at any viewport and scrolling away with the page. Rain falls over the Skyline, behind the Identity and the Social Links, and runs on unbroken down the Tenement.
 _Avoid_: banner, header, masthead
 
 **Open Graph image**:

@@ -1,13 +1,19 @@
 ---
 /**
- * Rain over the Tenement: three depths of streaks falling on a gusting wind,
- * drawn on a canvas fixed over the screen. It only falls below the top of
- * its parent, only while the parent is on screen, and not at all when the
- * visitor prefers reduced motion.
+ * Rain: three depths of streaks falling on a gusting wind, drawn on a canvas
+ * fixed over the screen. It only falls within its parent, only while the
+ * parent is on screen, and not at all when the visitor prefers reduced
+ * motion. It falls in front of everything, or `behind` the parent's content
+ * and in front of anything the parent puts at a negative z-index. Rain in
+ * neighbouring parents falls on the same wind, so it runs on unbroken.
  */
+interface Props {
+  behind?: boolean;
+}
+const { behind = false } = Astro.props;
 ---
 
-<canvas class="rain" data-rain aria-hidden="true"></canvas>
+<canvas class:list={["rain", { behind }]} data-rain aria-hidden="true"></canvas>
 
 <style>
   .rain {
@@ -17,6 +23,9 @@
     width: 100%;
     height: 100%;
     pointer-events: none;
+  }
+  .behind {
+    z-index: -1;
   }
   @media (prefers-reduced-motion: reduce) {
     .rain {
@@ -76,12 +85,14 @@
       // In 60 fps frames, so the rain falls at the same speed at any rate.
       const dt = Math.min(3, (now - last) / 16.7 || 1);
       last = now;
-      const top = Math.max(0, area.getBoundingClientRect().top);
+      const { top, bottom } = area.getBoundingClientRect();
+      const from = Math.max(0, top);
+      const to = Math.min(innerHeight, bottom);
       const wind = -0.16 + Math.sin(now / 2600) * 0.07;
       context.clearRect(0, 0, innerWidth, innerHeight);
       context.save();
       context.beginPath();
-      context.rect(0, top, innerWidth, innerHeight - top);
+      context.rect(0, from, innerWidth, to - from);
       context.clip();
       DEPTHS.forEach((depth, i) => {
         context.beginPath();

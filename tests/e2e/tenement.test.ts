@@ -43,6 +43,8 @@ describe("Tenement", () => {
   }) => {
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto("/");
-    await expect(page.locator("canvas[data-rain]")).toBeHidden();
+    const rain = page.locator("canvas[data-rain]");
+    await expect(rain).toHaveCount(2);
+    for (const canvas of await rain.all()) await expect(canvas).toBeHidden();
   });
 });
