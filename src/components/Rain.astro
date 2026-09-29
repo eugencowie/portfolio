@@ -42,9 +42,9 @@ const { behind = false } = Astro.props;
   // Near drops are fewer, longer, faster and brighter. `area` is the screen
   // area in px² per drop.
   const DEPTHS = [
-    { area: 4500, length: [8, 16], speed: [7.5, 11], width: 1, alpha: 0.17 },
-    { area: 10000, length: [16, 30], speed: [13, 18], width: 1.2, alpha: 0.25 },
-    { area: 37500, length: [34, 60], speed: [22, 29], width: 1.8, alpha: 0.32 },
+    { area: 4500, length: [7, 14], speed: [7.5, 11], width: 0.8, alpha: 0.17 },
+    { area: 10000, length: [14, 24], speed: [13, 18], width: 1, alpha: 0.25 },
+    { area: 37500, length: [24, 40], speed: [22, 29], width: 1.3, alpha: 0.32 },
   ] satisfies {
     area: number;
     length: Range;
@@ -52,6 +52,10 @@ const { behind = false } = Astro.props;
     width: number;
     alpha: number;
   }[];
+
+  // A streak fades from the drop at its head to nothing at its tail, drawn
+  // as a run of segments each fainter than the one before.
+  const FADE = [1, 0.6, 0.32, 0.12];
 
   const between = ([min, max]: Range) => min + Math.random() * (max - min);
 
@@ -99,7 +103,7 @@ const { behind = false } = Astro.props;
     last = now;
     const wind = -0.16 + Math.sin(now / 2600) * 0.07;
     const streaks = drops.map((depth) => {
-      const path = new Path2D();
+      const segments = FADE.map(() => new Path2D());
       for (const drop of depth) {
         drop.y += drop.speed * dt;
         drop.x += drop.speed * wind * dt;
@@ -107,10 +111,14 @@ const { behind = false } = Astro.props;
           drop.y = -Math.random() * 80;
           drop.x = Math.random() * innerWidth * 1.2;
         }
-        path.moveTo(drop.x, drop.y);
-        path.lineTo(drop.x - drop.length * wind, drop.y - drop.length);
+        const dy = -drop.length / FADE.length;
+        const dx = dy * wind;
+        segments.forEach((path, i) => {
+          path.moveTo(drop.x + dx * i, drop.y + dy * i);
+          path.lineTo(drop.x + dx * (i + 1), drop.y + dy * (i + 1));
+        });
       }
-      return path;
+      return segments;
     });
     for (const { context, area } of falling) {
       const { top, bottom } = area.getBoundingClientRect();
@@ -123,8 +131,10 @@ const { behind = false } = Astro.props;
       context.clip();
       DEPTHS.forEach((depth, i) => {
         context.lineWidth = depth.width;
-        context.strokeStyle = `rgb(205 200 255 / ${depth.alpha})`;
-        context.stroke(streaks[i]);
+        streaks[i].forEach((path, j) => {
+          context.strokeStyle = `rgb(205 200 255 / ${depth.alpha * FADE[j]})`;
+          context.stroke(path);
+        });
       });
       context.restore();
     }
