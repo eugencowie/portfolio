@@ -21,6 +21,21 @@ describe("Tenement", () => {
     await expect(page.locator("[data-lit]")).toHaveCount(1);
   });
 
+  it("lights a Social Link's Sign only while it is hovered", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    const social = page.locator("[data-hover-lit]").first();
+    // Not even in the middle of the screen.
+    await social.evaluate((el) => el.scrollIntoView({ block: "center" }));
+    await page.mouse.move(0, 0);
+    const lit = social.locator(".lit");
+    await expect(lit).toHaveCSS("opacity", "0");
+
+    await social.hover();
+    await expect(lit).toHaveCSS("opacity", "1");
+  });
+
   it("links a Project's whole window to the Project", async ({ page }) => {
     await page.goto("/");
     const screenshot = page.getByRole("img", {

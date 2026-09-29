@@ -1,10 +1,11 @@
 ---
 /**
  * A name on the Tenement as Neon tubes in `--tube`'s colour: dark glass at
- * rest, flickering on while the nearest `[data-lit]` ancestor has attention.
- * Each letter of the lit layer is its own span, so the Tenement can make one
- * buzz; a `failing` Sign has one letter that keeps cutting out. Both layers
- * share one grid cell and the same words, so they wrap alike.
+ * rest, flickering on while the nearest `[data-lit]` ancestor has attention,
+ * or while a `[data-hover-lit]` ancestor is hovered with a mouse. Each letter
+ * of the lit layer is its own span, so the Tenement can make one buzz; a
+ * `failing` Sign has one letter that keeps cutting out. Both layers share one
+ * grid cell and the same words, so they wrap alike.
  */
 interface Props {
   text: string;
@@ -77,6 +78,13 @@ let at = 0;
     opacity: 1;
     animation: neon-flicker 0.9s linear both;
   }
+  /* With a mouse only: on a touch screen a tapped one would stay lit. */
+  @media (hover: hover) {
+    :global([data-hover-lit]:hover) .lit {
+      opacity: 1;
+      animation: neon-flicker 0.9s linear both;
+    }
+  }
   /* Without scripting, hovering or focusing lights a Sign instead. */
   @media (scripting: none) {
     :global([data-attention]:is(:hover, :focus-within)) .lit {
@@ -140,6 +148,7 @@ let at = 0;
   }
   @media (prefers-reduced-motion: reduce) {
     :global([data-lit]) .lit,
+    :global([data-hover-lit]:hover) .lit,
     :global([data-lit]) [data-failing],
     [data-letter][data-buzz] {
       animation: none;
