@@ -1,22 +1,24 @@
 ---
 import type { HTMLTag, Polymorphic } from "astro/types";
+import { type SashKind, sashLight } from "@/lib/sash";
 import Balcony from "./Balcony.astro";
 import type { BalconyKind } from "./Balcony.astro";
 import SashWindow from "./SashWindow.astro";
-import type { SashKind } from "./SashWindow.astro";
 
 /**
  * One storey of the Tenement: a stone string course along its top, then an
  * end bay, the floor's own content, and another end bay. From 80rem each end
  * bay has an ordinary sash window, so the Tenement reads as a grid of floors
  * even one screen at a time. A balcony, if any, wraps the Tenement's corner:
- * its railing crosses the end bay's window and reaches out over the lane.
+ * its railing crosses the end bay's window and reaches out over the lane, lit
+ * by the room behind that window if it is.
  */
 type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
   bays?: [SashKind, SashKind];
   balcony?: BalconyKind;
 };
 const { as: Tag, bays, balcony, class: className, ...attrs } = Astro.props;
+const balconyLight = bays && sashLight(bays[1]);
 ---
 
 <Tag class:list={["floor", className]} {...attrs}>
@@ -27,7 +29,7 @@ const { as: Tag, bays, balcony, class: className, ...attrs } = Astro.props;
   <div class="bay end">{bays && <SashWindow kind={bays[1]} />}</div>
   {balcony && (
     <div class="balcony">
-      <Balcony kind={balcony} />
+      <Balcony kind={balcony} light={balconyLight} />
     </div>
   )}
 </Tag>

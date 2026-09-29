@@ -3,9 +3,11 @@ import { seededRandom } from "@/lib/random";
 
 /**
  * The wet pavement at the foot of the Tenement: flagstones in perspective,
- * the directory's lamp, the close door, the shop window and the lamp in the
- * lane smeared in the wet, rain
- * rippling the puddles, and the kerb.
+ * whatever stands at street level smeared in the wet beneath it, rain
+ * rippling the puddles, and the kerb. The reflections follow the ground
+ * floor's layout: the directory, the close door and the shop window side by
+ * side from 64rem, only the shop window below that, and always the lamp in
+ * the lane.
  */
 const random = seededRandom(20260927);
 const ripples = Array.from({ length: 14 }, () => ({
@@ -18,9 +20,11 @@ const ripples = Array.from({ length: 14 }, () => ({
 
 <div class="pavement" aria-hidden="true">
   <div class="flags"></div>
-  <div class="reflection directory"></div>
-  <div class="reflection door"></div>
-  <div class="reflection shop"></div>
+  <div class="shopfront">
+    <div class="reflection directory"></div>
+    <div class="reflection door"></div>
+    <div class="reflection shop"></div>
+  </div>
   <div class="reflection lane"></div>
   {ripples.map((r) => (
     <span
@@ -57,9 +61,22 @@ const ripples = Array.from({ length: 14 }, () => ({
       );
     opacity: 0.8;
   }
-  .reflection {
+  /* The ground floor's content column. */
+  .shopfront {
     position: absolute;
-    top: 0;
+    inset: 0 calc(var(--gutter) + var(--bay) + var(--side)) 0
+      calc(var(--gutter) + var(--bay));
+    display: grid;
+    grid-template-areas: "shop";
+  }
+  @media (min-width: 64rem) {
+    .shopfront {
+      grid-template-columns: var(--shopfront-columns);
+      grid-template-areas: "directory door shop";
+      column-gap: var(--shopfront-gap);
+    }
+  }
+  .reflection {
     height: 80%;
     filter: blur(10px);
     opacity: 0.55;
@@ -70,8 +87,8 @@ const ripples = Array.from({ length: 14 }, () => ({
     );
   }
   .directory {
-    left: calc((100% - var(--side)) * 0.08);
-    width: calc((100% - var(--side)) * 0.3);
+    grid-area: directory;
+    display: none;
     background: linear-gradient(
       to bottom,
       rgb(255 210 150 / 0.35),
@@ -79,13 +96,18 @@ const ripples = Array.from({ length: 14 }, () => ({
     );
   }
   .door {
-    left: calc((100% - var(--side)) * 0.47);
-    width: calc((100% - var(--side)) * 0.09);
+    grid-area: door;
+    display: none;
     background: linear-gradient(to bottom, rgb(255 180 110 / 0.5), transparent);
   }
+  @media (min-width: 64rem) {
+    .directory,
+    .door {
+      display: block;
+    }
+  }
   .shop {
-    left: calc((100% - var(--side)) * 0.62);
-    width: calc((100% - var(--side)) * 0.3);
+    grid-area: shop;
     background: linear-gradient(
       to bottom,
       color-mix(in oklab, var(--magenta) 40%, transparent),
@@ -94,6 +116,8 @@ const ripples = Array.from({ length: 14 }, () => ({
     );
   }
   .lane {
+    position: absolute;
+    top: 0;
     left: calc(100% - var(--side) * 0.42 - 1.5rem);
     width: 3rem;
     background: linear-gradient(to bottom, rgb(255 180 90 / 0.5), transparent);

@@ -1,4 +1,6 @@
 ---
+import { type SashKind, sashLight } from "@/lib/sash";
+
 /**
  * One of the Tenement's ordinary sash windows. No screenshot: dark glass, a
  * lamp behind a blind, a television, or a small figure going about their
@@ -6,25 +8,15 @@
  * window must sit in the Tenement's facade, where the light passes under the
  * brick layer.
  */
-export type SashKind =
-  | "dark"
-  | "curtain"
-  | "lamp"
-  | "blind"
-  | "tv"
-  | "person"
-  | "cat"
-  | "desk"
-  | "plant";
 interface Props {
   kind: SashKind;
 }
 const { kind } = Astro.props;
-const lit = kind !== "dark" && kind !== "curtain";
+const light = sashLight(kind);
 ---
 
 <div class="sash" data-kind={kind} aria-hidden="true">
-  {lit && <div class="sash-spill" />}
+  {light && <div class="sash-spill" data-light={light} />}
   <div class="sash-lintel" />
   <div class="sash-opening">
     <div class="sash-room" />
@@ -292,7 +284,7 @@ const lit = kind !== "dark" && kind !== "curtain";
       transparent
     );
   }
-  .sash:is([data-kind="tv"], [data-kind="desk"]) .sash-spill {
+  .sash-spill[data-light="cool"] {
     background: radial-gradient(
       closest-side,
       rgb(110 150 255 / 0.28),

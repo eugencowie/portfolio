@@ -9,7 +9,7 @@ import Pavement from "./Pavement.astro";
 import ProjectFloor from "./ProjectFloor.astro";
 import Rain from "./Rain.astro";
 import SashWindow from "./SashWindow.astro";
-import type { SashKind } from "./SashWindow.astro";
+import type { SashKind } from "@/lib/sash";
 import SectionHeading from "./SectionHeading.astro";
 
 /**
@@ -69,7 +69,7 @@ function brickTile() {
 }
 ---
 
-<div class="tenement" data-tenement>
+<div class="tenement" style={`--bricks: ${brickTile()}`} data-tenement>
   <div class="roof">
     {building.length > 0 && (
       <div class="roof-sign">
@@ -77,14 +77,15 @@ function brickTile() {
         <SectionHeading id="building">Currently building</SectionHeading>
       </div>
     )}
+    <div class="chimney" aria-hidden="true">
+      <span class="pot"></span>
+      <span class="pot"></span>
+      <span class="pot"></span>
+    </div>
   </div>
 
   <div class="facade">
-    <div
-      class="bricks"
-      style={`--bricks: ${brickTile()}`}
-      aria-hidden="true"
-    ></div>
+    <div class="bricks" aria-hidden="true"></div>
     <div class="pipe" aria-hidden="true"></div>
     <div class="parapet" aria-hidden="true"></div>
     <div class="cornice" aria-hidden="true"></div>
@@ -121,8 +122,10 @@ function brickTile() {
     {games.length > 0 && (
       <section aria-labelledby="games">
         <div class="band">
-          <div class="band-glow" aria-hidden="true" />
-          <SectionHeading id="games">Games</SectionHeading>
+          <div class="band-sign">
+            <div class="band-glow" aria-hidden="true" />
+            <SectionHeading id="games">Games</SectionHeading>
+          </div>
         </div>
         <ul class="floors">
           {games.map((project, i) => (
@@ -160,6 +163,10 @@ function brickTile() {
   @media (min-width: 64rem) {
     .tenement {
       --gutter: 2.5rem;
+      /* The shopfront's columns at street level, shared by the ground floor
+         and its reflection in the pavement. */
+      --shopfront-columns: minmax(0, 1.25fr) minmax(0, 0.55fr) minmax(0, 1fr);
+      --shopfront-gap: 2.5rem;
     }
   }
   @media (min-width: 80rem) {
@@ -174,6 +181,7 @@ function brickTile() {
 
   /* ---------- Roof: Currently building on a steel lattice ---------- */
   .roof {
+    position: relative;
     display: flex;
     align-items: flex-end;
     min-height: clamp(10rem, 26svh, 16rem);
@@ -224,6 +232,78 @@ function brickTile() {
     right: 8%;
   }
 
+  /* A chimney stack at the gable end, standing behind the parapet. */
+  .chimney {
+    display: none;
+  }
+  @media (min-width: 64rem) {
+    .chimney {
+      position: absolute;
+      right: calc(var(--side) + var(--gutter));
+      bottom: 0;
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      width: clamp(5.5rem, 7vw, 7rem);
+      height: clamp(3.5rem, 5vw, 4.75rem);
+      background-color: #33193f;
+      background-image:
+        linear-gradient(
+          to right,
+          rgb(5 3 16 / 0.35),
+          transparent 30% 70%,
+          rgb(5 3 16 / 0.5)
+        ),
+        var(--bricks);
+      background-blend-mode: normal, multiply;
+    }
+  }
+  /* The stone cope. */
+  .chimney::before {
+    content: "";
+    position: absolute;
+    top: -0.5rem;
+    left: -0.35rem;
+    right: -0.35rem;
+    height: 0.55rem;
+    background: linear-gradient(
+      to bottom,
+      rgb(230 214 255 / 0.45) 0 1px,
+      #5b5080 1px,
+      #3a3256
+    );
+    box-shadow: 0 0.3rem 0.5rem rgb(5 3 16 / 0.6);
+  }
+  /* Clay pots standing on the cope. */
+  .pot {
+    position: relative;
+    width: 0.95rem;
+    height: 1.7rem;
+    translate: 0 calc(-100% - 0.5rem);
+    background: linear-gradient(
+      to right,
+      #24121a,
+      #6b3a36 35%,
+      #4a2629 65%,
+      #1c0e14
+    );
+  }
+  .pot:nth-child(2) {
+    height: 2.2rem;
+  }
+  .pot:nth-child(3) {
+    height: 1.45rem;
+  }
+  .pot::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -0.12rem;
+    right: -0.12rem;
+    height: 0.3rem;
+    background: linear-gradient(to right, #2c161d, #7d4640 35%, #24121a);
+  }
+
   /* ---------- Facade ----------
      Lights on the bricks (z-index -2) sit under the brick layer (-1), which
      is multiplied over them; everything else stands in front. */
@@ -239,6 +319,10 @@ function brickTile() {
       )
       0 0 / calc(100% - var(--side)) 100% no-repeat;
     --quoin: clamp(0.5rem, 1.4vw, 1.4rem);
+    /* The eaves: the parapet, a band of bricks, and the cornice. */
+    --parapet: 0.9rem;
+    --cornice-drop: 2.2rem;
+    --cornice: 2rem;
   }
   /* The building's corners: stone quoins down both edges. */
   .facade::before,
@@ -274,12 +358,13 @@ function brickTile() {
     background-image: var(--bricks);
     mix-blend-mode: multiply;
   }
-  /* A cast-iron downpipe from the gutter to the street. */
+  /* A cast-iron downpipe from a hopper under the cornice to the street, in
+     front of the string courses. */
   .pipe {
     display: none;
     position: absolute;
-    z-index: 2;
-    top: 1rem;
+    z-index: 3;
+    top: calc(var(--parapet) + var(--cornice-drop) + var(--cornice));
     bottom: 0;
     left: calc(var(--gutter) + var(--bay) - 1.6rem);
     width: 0.65rem;
@@ -292,6 +377,24 @@ function brickTile() {
       linear-gradient(to right, #120e1e, #3c3452 40%, #16111f);
     box-shadow: 0.35rem 0 0.5rem rgb(0 0 0 / 0.5);
   }
+  .pipe::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 1.7rem;
+    height: 1.9rem;
+    translate: -50% 0;
+    clip-path: polygon(0 0, 100% 0, 100% 55%, 70% 100%, 30% 100%, 0 55%);
+    background:
+      linear-gradient(
+        to bottom,
+        transparent 0.3rem,
+        #120e1e 0.3rem calc(0.3rem + 1px),
+        transparent calc(0.3rem + 1px)
+      ),
+      linear-gradient(to right, #120e1e, #463d60 40%, #16111f);
+  }
   @media (min-width: 80rem) {
     .pipe {
       display: block;
@@ -302,7 +405,7 @@ function brickTile() {
     margin-right: var(--side);
   }
   .parapet {
-    height: 0.9rem;
+    height: var(--parapet);
     background: linear-gradient(
       to bottom,
       rgb(230 214 255 / 0.5) 0 1px,
@@ -311,8 +414,8 @@ function brickTile() {
     );
   }
   .cornice {
-    margin-top: 2.2rem;
-    height: 2rem;
+    margin-top: var(--cornice-drop);
+    height: var(--cornice);
     background:
       linear-gradient(
         to bottom,
@@ -355,27 +458,48 @@ function brickTile() {
     align-items: flex-start;
     padding-inline: 0.5rem;
   }
+  /* Fewer windows where they would crowd. */
   @media (max-width: 47.99rem) {
     .residents-row > :global(:nth-child(n + 6)) {
       display: none;
     }
   }
+  @media (max-width: 29.99rem) {
+    .residents-row > :global(:nth-child(5)) {
+      display: none;
+    }
+  }
+  @media (min-width: 80rem) and (max-width: 84.99rem) {
+    .residents-row > :global(:nth-child(8)) {
+      display: none;
+    }
+  }
+  /* Spaced evenly with the end bays' windows. */
+  @media (min-width: 80rem) {
+    .residents-row {
+      --sash-w: 5.5rem;
+      margin-inline: calc(var(--sash-w) - var(--bay));
+      padding-inline: 0;
+      justify-content: space-evenly;
+    }
+  }
 
   /* ---------- Games, mounted on the wall ---------- */
   .band {
-    position: relative;
     padding: clamp(2rem, 6svh, 4rem) calc(var(--gutter) + var(--bay)) 0;
+  }
+  .band-sign {
+    position: relative;
+    width: fit-content;
   }
   .band :global(h2) {
     font-size: clamp(3rem, 6vw, 5rem);
   }
+  /* Its light on the bricks, under the brick layer. */
   .band-glow {
     position: absolute;
     z-index: -2;
-    left: calc(var(--gutter) + var(--bay) - 6rem);
-    top: -2rem;
-    width: min(36rem, 90vw);
-    height: 14rem;
+    inset: -3.5rem -10rem -5.5rem;
     background: radial-gradient(
       closest-side,
       color-mix(in oklab, var(--cyan) 38%, transparent),

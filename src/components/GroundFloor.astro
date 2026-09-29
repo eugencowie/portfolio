@@ -94,9 +94,9 @@ const tubes = ["var(--cyan)", "var(--magenta)"];
   }
   @media (min-width: 64rem) {
     .shopfront {
-      grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.55fr) minmax(0, 1fr);
+      grid-template-columns: var(--shopfront-columns);
       grid-template-areas: "fascia fascia fascia" "directory door shop";
-      column-gap: 2.5rem;
+      column-gap: var(--shopfront-gap);
       row-gap: 3rem;
     }
   }
@@ -203,11 +203,21 @@ const tubes = ["var(--cyan)", "var(--magenta)"];
     color: #a9a3bb;
     font-size: 0.8rem;
   }
-  .listing:is(:hover, :focus-within) h3 {
+  .listing:focus-within h3 {
     color: color-mix(in oklab, var(--magenta) 40%, white);
     text-shadow:
       0 0 0.1em var(--magenta),
       0 0 0.4em var(--magenta);
+  }
+  /* Hovering lights one only with a mouse: on a touch screen a tapped
+     listing would stay lit. */
+  @media (hover: hover) {
+    .listing:hover h3 {
+      color: color-mix(in oklab, var(--magenta) 40%, white);
+      text-shadow:
+        0 0 0.1em var(--magenta),
+        0 0 0.4em var(--magenta);
+    }
   }
   @media (max-width: 40rem) {
     .listings {

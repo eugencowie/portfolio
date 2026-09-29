@@ -1,16 +1,19 @@
 ---
+import type { SashLight } from "@/lib/sash";
+
 /**
  * An iron balcony wrapping the Tenement's corner: a stone slab on an iron
- * bracket, a railing, and whatever the residents keep out there. All but
- * the bike's are lit from the room behind.
+ * bracket, a railing, and whatever the residents keep out there, lit by the
+ * room behind if it is.
  */
 export type BalconyKind =
   "lights" | "plants" | "bike" | "washing" | "person" | "cat" | "table";
 interface Props {
   kind: BalconyKind;
+  /** The light from the room behind. */
+  light?: SashLight;
 }
-const { kind } = Astro.props;
-const lit = kind !== "bike";
+const { kind, light } = Astro.props;
 
 const balusters = Array.from({ length: 14 }, (_, i) => 4 + i * 6.5);
 
@@ -43,7 +46,7 @@ const bulbs = swags
 ---
 
 <div class="balcony" data-kind={kind} aria-hidden="true">
-  {lit && <div class="door-light" />}
+  {light && <div class="door-light" data-light={light} />}
   <svg viewBox="0 0 100 72">
     {kind === "plants" && (
       <>
@@ -192,6 +195,14 @@ const bulbs = swags
       ellipse 80% 70% at 22% 70%,
       rgb(255 186 110 / 0.55),
       rgb(255 160 90 / 0.18) 55%,
+      transparent
+    );
+  }
+  .door-light[data-light="cool"] {
+    background: radial-gradient(
+      ellipse 80% 70% at 22% 70%,
+      rgb(130 160 255 / 0.5),
+      rgb(100 130 255 / 0.16) 55%,
       transparent
     );
   }
