@@ -55,7 +55,7 @@ The CSS night behind every page, spanning the whole document and scrolling with 
 _Avoid_: starfield, background gradient
 
 **Tenement**:
-The brick building on the near bank of the Clyde that holds the Projects below the Hero, descended floor by floor in the rain. Building's heading is the sign on its roof and each of its Projects gets a floor beneath; then a floor of residents in ordinary windows; then Games, its heading mounted on the wall above its floors; and at street level the Other Section as the tenant directory by the close door, beside a shop window holding the Social Links. Each Project's floor has its screenshot in a lit window, spilling its light onto the bricks, and its Sign beside it. The Featured Project's window is arched and wider.
+The brick building on the near bank of the Clyde that holds the Projects below the Hero, descended floor by floor in the rain. Building's heading is the sign on its roof and each of its Projects gets a floor beneath; then a floor of residents in ordinary windows; then Games, its heading mounted on the wall above its floors; and at street level the Other Section as the tenant directory by the close door, beside a shop window holding the Social Links. Each Project's floor has its screenshot in a lit window, spilling its light onto the bricks, and its Sign beside it. The Featured Project's window is arched and wider. The Tenement stops short of the screen's right-hand side: little balconies hang off its side over a lane, and past them the city behind drifts by more slowly as the visitor descends.
 _Avoid_: building (that is a Section), wall, facade, cards
 
 ### Projects

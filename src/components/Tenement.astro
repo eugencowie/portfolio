@@ -1,6 +1,8 @@
 ---
 import type { ArrangedProjects, ProjectEntry } from "@/lib/projects";
 import { seededRandom } from "@/lib/random";
+import { svgUrl } from "@/lib/svg";
+import CityBehind from "./CityBehind.astro";
 import Floor from "./Floor.astro";
 import GroundFloor from "./GroundFloor.astro";
 import Pavement from "./Pavement.astro";
@@ -12,7 +14,9 @@ import SectionHeading from "./SectionHeading.astro";
 
 /**
  * Everything below the Hero on the home page: the Tenement, a brick building
- * on the near bank of the Clyde, descended floor by floor in the rain.
+ * on the near bank of the Clyde, descended floor by floor in the rain. It
+ * stops short of the screen's right-hand side, where its balconies hang over
+ * a lane and the city behind it shows.
  * Currently building is the sign on its roof, with a floor for each of its
  * Projects beneath it. Then a floor of residents, then Games, mounted on the
  * wall above its own floors, and at street level the Other Section and the
@@ -59,8 +63,9 @@ function brickTile() {
       bricks += `<rect x='${column * width + offset + mortar / 2}' y='${row * height + mortar / 2}' width='${width - mortar}' height='${height - mortar}' fill='${fill}'/>`;
     }
   }
-  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='${width * columns}' height='${height * rows}'><rect width='100%' height='100%' fill='rgb(96,84,122)'/>${bricks}</svg>`;
-  return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
+  return svgUrl(
+    `<svg xmlns='http://www.w3.org/2000/svg' width='${width * columns}' height='${height * rows}'><rect width='100%' height='100%' fill='rgb(96,84,122)'/>${bricks}</svg>`,
+  );
 }
 ---
 
@@ -83,6 +88,7 @@ function brickTile() {
     <div class="pipe" aria-hidden="true"></div>
     <div class="parapet" aria-hidden="true"></div>
     <div class="cornice" aria-hidden="true"></div>
+    <CityBehind />
 
     {building.length > 0 && (
       <section aria-labelledby="building">
@@ -101,6 +107,7 @@ function brickTile() {
     <Floor
       as="div"
       bays={["curtain", "lamp"]}
+      balcony="washing"
       class="residents"
       aria-hidden="true"
     >
@@ -140,6 +147,9 @@ function brickTile() {
   .tenement {
     --gutter: 1.25rem;
     --bay: 0px;
+    /* The lane between the Tenement's side and the screen's. */
+    --side: clamp(1.75rem, 10vw, 10rem);
+    --balcony-width: min(8rem, var(--side) * 0.85);
     position: relative;
     overflow: clip;
   }
@@ -159,7 +169,8 @@ function brickTile() {
     display: flex;
     align-items: flex-end;
     min-height: clamp(10rem, 26svh, 16rem);
-    padding-inline: calc(var(--gutter) + var(--bay));
+    padding-inline: calc(var(--gutter) + var(--bay))
+      calc(var(--gutter) + var(--bay) + var(--side));
   }
   .roof-sign {
     position: relative;
@@ -212,12 +223,13 @@ function brickTile() {
     position: relative;
     isolation: isolate;
     background: linear-gradient(
-      to bottom,
-      #3d1f4c,
-      #2c1739 25%,
-      #231231 70%,
-      #1a0d26
-    );
+        to bottom,
+        #3d1f4c,
+        #2c1739 25%,
+        #231231 70%,
+        #1a0d26
+      )
+      0 0 / calc(100% - var(--side)) 100% no-repeat;
     --quoin: clamp(0.5rem, 1.4vw, 1.4rem);
   }
   /* The building's corners: stone quoins down both edges. */
@@ -243,12 +255,12 @@ function brickTile() {
     box-shadow: 0.3rem 0 0.6rem rgb(5 3 15 / 0.6);
   }
   .facade::after {
-    right: 0;
+    right: var(--side);
     box-shadow: -0.3rem 0 0.6rem rgb(5 3 15 / 0.6);
   }
   .bricks {
     position: absolute;
-    inset: 0;
+    inset: 0 var(--side) 0 0;
     z-index: -1;
     pointer-events: none;
     background-image: var(--bricks);
@@ -276,6 +288,10 @@ function brickTile() {
     .pipe {
       display: block;
     }
+  }
+  .parapet,
+  .cornice {
+    margin-right: var(--side);
   }
   .parapet {
     height: 0.9rem;

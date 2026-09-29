@@ -5,6 +5,7 @@ import type { FloorProjectEntry } from "@/lib/projects";
 import { seededRandom } from "@/lib/random";
 import Floor from "./Floor.astro";
 import Sign from "./Sign.astro";
+import type { BalconyKind } from "./Balcony.astro";
 import type { SashKind } from "./SashWindow.astro";
 
 /**
@@ -36,6 +37,17 @@ const BAYS: [SashKind, SashKind][] = [
   ["dark", "blind"],
 ];
 
+// The balcony on the Tenement's side, a pattern repeating every seven floors.
+const BALCONIES: BalconyKind[] = [
+  "lights",
+  "table",
+  "cat",
+  "person",
+  "washing",
+  "bike",
+  "plants",
+];
+
 // A blurred thumbnail is all the light needs.
 const light = await getImage({ src: screenshot, width: 160, format: "webp" });
 const lightImage = `background-image: url(${light.src})`;
@@ -59,6 +71,7 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92];
 <Floor
   as="li"
   bays={BAYS[floor % BAYS.length]}
+  balcony={BALCONIES[floor % BALCONIES.length]}
   class="project"
   data-attention
   data-window={side}
@@ -154,7 +167,9 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92];
     align-items: center;
     border-radius: 0.25rem;
     /* The caption column's width, to fit the name to. */
-    --caption-width: calc(100vw - 2 * var(--gutter) - 2 * var(--bay));
+    --caption-width: calc(
+      100vw - var(--side) - 2 * var(--gutter) - 2 * var(--bay)
+    );
   }
   .body:has(:focus-visible) {
     outline: 2px solid var(--magenta);
@@ -168,7 +183,10 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92];
       grid-template-areas: "window caption";
       gap: var(--gap);
       --caption-width: calc(
-        (100vw - 2 * var(--gutter) - 2 * var(--bay) - var(--gap)) *
+        (
+            100vw - var(--side) - 2 * var(--gutter) - 2 * var(--bay) -
+              var(--gap)
+          ) *
           var(--caption-share)
       );
     }

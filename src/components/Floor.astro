@@ -1,5 +1,7 @@
 ---
 import type { HTMLTag, Polymorphic } from "astro/types";
+import Balcony from "./Balcony.astro";
+import type { BalconyKind } from "./Balcony.astro";
 import SashWindow from "./SashWindow.astro";
 import type { SashKind } from "./SashWindow.astro";
 
@@ -7,20 +9,27 @@ import type { SashKind } from "./SashWindow.astro";
  * One storey of the Tenement: a stone string course along its top, then an
  * end bay, the floor's own content, and another end bay. From 80rem each end
  * bay has an ordinary sash window, so the Tenement reads as a grid of floors
- * even one screen at a time.
+ * even one screen at a time. A balcony, if any, hangs off the Tenement's
+ * side into the lane.
  */
 type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
   bays?: [SashKind, SashKind];
+  balcony?: BalconyKind;
 };
-const { as: Tag, bays, class: className, ...attrs } = Astro.props;
+const { as: Tag, bays, balcony, class: className, ...attrs } = Astro.props;
 ---
 
 <Tag class:list={["floor", className]} {...attrs}>
-  <div class="bay">{bays && <SashWindow kind={bays[0]} />}</div>
+  <div class="bay start">{bays && <SashWindow kind={bays[0]} />}</div>
   <div class="content">
     <slot />
   </div>
-  <div class="bay">{bays && <SashWindow kind={bays[1]} />}</div>
+  <div class="bay end">{bays && <SashWindow kind={bays[1]} />}</div>
+  {balcony && (
+    <div class="balcony">
+      <Balcony kind={balcony} />
+    </div>
+  )}
 </Tag>
 
 <style>
@@ -28,7 +37,7 @@ const { as: Tag, bays, class: className, ...attrs } = Astro.props;
     position: relative;
     display: grid;
     grid-template-columns: var(--bay) minmax(0, 1fr) var(--bay);
-    padding-inline: var(--gutter);
+    padding-inline: var(--gutter) calc(var(--gutter) + var(--side));
     padding-block: clamp(3rem, 9svh, 6.5rem);
   }
   /* The string course. */
@@ -36,7 +45,7 @@ const { as: Tag, bays, class: className, ...attrs } = Astro.props;
     content: "";
     position: absolute;
     z-index: 2;
-    inset: 0 0 auto;
+    inset: 0 var(--side) auto 0;
     height: 0.8rem;
     background: linear-gradient(
       to bottom,
@@ -59,11 +68,18 @@ const { as: Tag, bays, class: className, ...attrs } = Astro.props;
       align-items: flex-start;
       padding-top: 1.2rem;
     }
-    .bay:first-child {
+    .start {
       justify-content: flex-start;
     }
-    .bay:last-child {
+    .end {
       justify-content: flex-end;
     }
+  }
+  /* Its slab a little below the end bays' sills. */
+  .balcony {
+    position: absolute;
+    left: calc(100% - var(--side));
+    top: calc(50% + var(--balcony-width) * 0.3);
+    width: var(--balcony-width);
   }
 </style>

@@ -3,7 +3,8 @@ import { seededRandom } from "@/lib/random";
 
 /**
  * The wet pavement at the foot of the Tenement: flagstones in perspective,
- * the lamp, the close door and the shop window smeared in the wet, rain
+ * the directory's lamp, the close door, the shop window and the lamp in the
+ * lane smeared in the wet, rain
  * rippling the puddles, and the kerb.
  */
 const random = seededRandom(20260927);
@@ -20,6 +21,7 @@ const ripples = Array.from({ length: 14 }, () => ({
   <div class="reflection directory"></div>
   <div class="reflection door"></div>
   <div class="reflection shop"></div>
+  <div class="reflection lane"></div>
   {ripples.map((r) => (
     <span
       class="ripple"
@@ -68,8 +70,8 @@ const ripples = Array.from({ length: 14 }, () => ({
     );
   }
   .directory {
-    left: 8%;
-    width: 30%;
+    left: calc((100% - var(--side)) * 0.08);
+    width: calc((100% - var(--side)) * 0.3);
     background: linear-gradient(
       to bottom,
       rgb(255 210 150 / 0.35),
@@ -77,19 +79,24 @@ const ripples = Array.from({ length: 14 }, () => ({
     );
   }
   .door {
-    left: 47%;
-    width: 9%;
+    left: calc((100% - var(--side)) * 0.47);
+    width: calc((100% - var(--side)) * 0.09);
     background: linear-gradient(to bottom, rgb(255 180 110 / 0.5), transparent);
   }
   .shop {
-    left: 62%;
-    width: 30%;
+    left: calc((100% - var(--side)) * 0.62);
+    width: calc((100% - var(--side)) * 0.3);
     background: linear-gradient(
       to bottom,
       color-mix(in oklab, var(--magenta) 40%, transparent),
       color-mix(in oklab, var(--cyan) 15%, transparent) 40%,
       transparent
     );
+  }
+  .lane {
+    left: calc(100% - var(--side) * 0.42 - 1.5rem);
+    width: 3rem;
+    background: linear-gradient(to bottom, rgb(255 180 90 / 0.5), transparent);
   }
   .ripple {
     position: absolute;
