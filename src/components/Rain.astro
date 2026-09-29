@@ -42,9 +42,9 @@ const { behind = false } = Astro.props;
   // Near drops are fewer, longer, faster and brighter. `area` is the screen
   // area in px² per drop.
   const DEPTHS = [
-    { area: 3600, length: [8, 16], speed: [9, 13], width: 1, alpha: 0.17 },
-    { area: 8000, length: [16, 30], speed: [15, 21], width: 1.2, alpha: 0.25 },
-    { area: 30000, length: [34, 60], speed: [26, 34], width: 1.8, alpha: 0.32 },
+    { area: 4500, length: [8, 16], speed: [7.5, 11], width: 1, alpha: 0.17 },
+    { area: 10000, length: [16, 30], speed: [13, 18], width: 1.2, alpha: 0.25 },
+    { area: 37500, length: [34, 60], speed: [22, 29], width: 1.8, alpha: 0.32 },
   ] satisfies {
     area: number;
     length: Range;
