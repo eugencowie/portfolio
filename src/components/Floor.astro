@@ -7,17 +7,15 @@ import type { SashKind } from "./SashWindow.astro";
  * One storey of the Tenement: a stone string course along its top, then an
  * end bay, the floor's own content, and another end bay. From 80rem each end
  * bay has an ordinary sash window, so the Tenement reads as a grid of floors
- * even one screen at a time. `number` counts from the street up, the way the
- * lift dial reads it.
+ * even one screen at a time.
  */
 type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
-  number: number;
   bays?: [SashKind, SashKind];
 };
-const { as: Tag, number, bays, class: className, ...attrs } = Astro.props;
+const { as: Tag, bays, class: className, ...attrs } = Astro.props;
 ---
 
-<Tag class:list={["floor", className]} data-floor={number} {...attrs}>
+<Tag class:list={["floor", className]} {...attrs}>
   <div class="bay">{bays && <SashWindow kind={bays[0]} />}</div>
   <div class="content">
     <slot />

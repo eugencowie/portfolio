@@ -3,7 +3,6 @@ import type { ArrangedProjects, ProjectEntry } from "@/lib/projects";
 import { seededRandom } from "@/lib/random";
 import Floor from "./Floor.astro";
 import GroundFloor from "./GroundFloor.astro";
-import LiftDial from "./LiftDial.astro";
 import Pavement from "./Pavement.astro";
 import ProjectFloor from "./ProjectFloor.astro";
 import Rain from "./Rain.astro";
@@ -23,9 +22,9 @@ import SectionHeading from "./SectionHeading.astro";
 type Props = ArrangedProjects<ProjectEntry>;
 const { building, games, other } = Astro.props;
 
-// Floors count from the street up; the residents live between the Sections.
-const residentsFloor = games.length + 1;
-const topFloor = residentsFloor + building.length;
+// Floors count from the street up, with the residents' floor between the
+// Sections.
+const topFloor = games.length + 1 + building.length;
 
 const residents: SashKind[] = [
   "dark",
@@ -101,7 +100,6 @@ function brickTile() {
 
     <Floor
       as="div"
-      number={residentsFloor}
       bays={["curtain", "lamp"]}
       class="residents"
       aria-hidden="true"
@@ -136,7 +134,6 @@ function brickTile() {
 
   <Pavement />
   <Rain />
-  <LiftDial top={topFloor} />
 </div>
 
 <style>
