@@ -1,0 +1,71 @@
+---
+import type { HTMLTag, Polymorphic } from "astro/types";
+import SashWindow from "./SashWindow.astro";
+import type { SashKind } from "./SashWindow.astro";
+
+/**
+ * One storey of the Tenement: a stone string course along its top, then an
+ * end bay, the floor's own content, and another end bay. From 80rem each end
+ * bay has an ordinary sash window, so the Tenement reads as a grid of floors
+ * even one screen at a time. `number` counts from the street up, the way the
+ * lift dial reads it.
+ */
+type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
+  number: number;
+  bays?: [SashKind, SashKind];
+};
+const { as: Tag, number, bays, class: className, ...attrs } = Astro.props;
+---
+
+<Tag class:list={["floor", className]} data-floor={number} {...attrs}>
+  <div class="bay">{bays && <SashWindow kind={bays[0]} />}</div>
+  <div class="content">
+    <slot />
+  </div>
+  <div class="bay">{bays && <SashWindow kind={bays[1]} />}</div>
+</Tag>
+
+<style>
+  .floor {
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--bay) minmax(0, 1fr) var(--bay);
+    padding-inline: var(--gutter);
+    padding-block: clamp(3rem, 9svh, 6.5rem);
+  }
+  /* The string course. */
+  .floor::before {
+    content: "";
+    position: absolute;
+    z-index: 2;
+    inset: 0 0 auto;
+    height: 0.8rem;
+    background: linear-gradient(
+      to bottom,
+      rgb(220 206 255 / 0.35) 0 1px,
+      #4d4470 1px,
+      #332b4c
+    );
+    box-shadow: 0 0.5rem 0.9rem rgb(5 3 16 / 0.6);
+  }
+  .content {
+    grid-column: 2;
+  }
+  .bay {
+    display: none;
+  }
+  @media (min-width: 80rem) {
+    .bay {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding-top: 1.2rem;
+    }
+    .bay:first-child {
+      justify-content: flex-start;
+    }
+    .bay:last-child {
+      justify-content: flex-end;
+    }
+  }
+</style>

@@ -14,7 +14,7 @@
   --neon-cyan: color-mix(in oklab, var(--cyan) 55%, white);
   --neon-cyan-glow:
     0 0 0.03em white, 0 0 0.08em var(--cyan), 0 0 0.25em var(--cyan);
-  /* The space above the Hero and below the footer. */
+  /* The space above the Hero. */
   --page-block-inset: clamp(1.5rem, 7svh, 7rem);
 }
 
@@ -32,13 +32,38 @@
   --color-magenta: var(--magenta);
 }
 
-/* A card is active when hovered or focused. */
-@custom-variant card-active {
-  &:where(.card):is(:hover, :focus-within) {
-    @slot;
+/* A Neon tube lighting up: a few stuttering tries, then steady. */
+@keyframes neon-flicker {
+  0% {
+    opacity: 0;
   }
-  :where(.card):is(:hover, :focus-within) & {
-    @slot;
+  6% {
+    opacity: 0.85;
+  }
+  10% {
+    opacity: 0.1;
+  }
+  18% {
+    opacity: 0.7;
+  }
+  21% {
+    opacity: 0.05;
+  }
+  30% {
+    opacity: 0.95;
+  }
+  34% {
+    opacity: 0.35;
+  }
+  44% {
+    opacity: 1;
+  }
+  48% {
+    opacity: 0.75;
+  }
+  54%,
+  100% {
+    opacity: 1;
   }
 }
 

@@ -3,17 +3,17 @@ import type { CollectionEntry } from "astro:content";
 export const PROJECT_SECTIONS = ["building", "games", "other"] as const;
 export type ProjectSection = (typeof PROJECT_SECTIONS)[number];
 
-/** The Sections rendered as cards: Building and Games. Their Projects have a screenshot and one may be Featured. */
-export const CARD_SECTIONS = [
+/** The Sections given floors of the Tenement: Building and Games. Their Projects have a screenshot and one may be Featured. */
+export const FLOOR_SECTIONS = [
   "building",
   "games",
 ] as const satisfies readonly ProjectSection[];
-export type CardSection = (typeof CARD_SECTIONS)[number];
+export type FloorSection = (typeof FLOOR_SECTIONS)[number];
 
-export const isCardSection = (
+export const isFloorSection = (
   section: ProjectSection,
-): section is CardSection =>
-  (CARD_SECTIONS as readonly ProjectSection[]).includes(section);
+): section is FloorSection =>
+  (FLOOR_SECTIONS as readonly ProjectSection[]).includes(section);
 
 export interface ProjectLike {
   section: ProjectSection;
@@ -41,7 +41,7 @@ export type InSection<T extends HasProject, S extends ProjectSection> = T & {
 };
 
 export type ProjectEntry = CollectionEntry<"projects">;
-export type CardProjectEntry = InSection<ProjectEntry, CardSection>;
+export type FloorProjectEntry = InSection<ProjectEntry, FloorSection>;
 
 /** Each Section's Projects, the Featured one first, then by `order`. */
 export type ArrangedProjects<T extends HasProject> = {

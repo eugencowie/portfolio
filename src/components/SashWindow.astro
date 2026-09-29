@@ -1,0 +1,310 @@
+---
+/**
+ * One of the Tenement's ordinary sash windows. No screenshot: dark glass, a
+ * lamp behind a blind, a television, or a small figure going about their
+ * night. Lit ones throw their light on the bricks around them, so a sash
+ * window must sit in the Tenement's facade, where the light passes under the
+ * brick layer.
+ */
+export type SashKind =
+  | "dark"
+  | "curtain"
+  | "lamp"
+  | "blind"
+  | "tv"
+  | "person"
+  | "cat"
+  | "desk"
+  | "plant";
+interface Props {
+  kind: SashKind;
+}
+const { kind } = Astro.props;
+const lit = kind !== "dark" && kind !== "curtain";
+---
+
+<div class="sash" data-kind={kind} aria-hidden="true">
+  {lit && <div class="sash-spill" />}
+  <div class="sash-lintel" />
+  <div class="sash-opening">
+    <div class="sash-room" />
+    {kind === "person" && (
+      <svg
+        class="sash-figure"
+        viewBox="0 0 60 100"
+        preserveAspectRatio="xMidYMax meet"
+      >
+        <circle cx="33" cy="52" r="8.5" />
+        <rect x="30" y="58" width="6" height="8" />
+        <path d="M13 100 C13 78 21 67 33 66 C45 67 53 78 53 100 Z" />
+        <path d="M49 74 C54 70 56 60 55 50 L58 50 C60 62 57 74 52 80 Z" />
+      </svg>
+    )}
+    {kind === "cat" && (
+      <svg
+        class="sash-figure"
+        viewBox="0 0 60 100"
+        preserveAspectRatio="xMidYMax meet"
+      >
+        <ellipse cx="22" cy="91" rx="9" ry="8.5" />
+        <circle cx="22" cy="79" r="5.5" />
+        <path d="M17.3 77 L17.6 70.5 L20.8 75.6 Z M26.7 77 L26.4 70.5 L23.2 75.6 Z" />
+        <path
+          class="sash-tail"
+          d="M30 97 C38 98 40 90 35 85"
+          fill="none"
+          stroke-width="2.6"
+          stroke-linecap="round"
+        />
+      </svg>
+    )}
+    {kind === "desk" && (
+      <svg
+        class="sash-figure"
+        viewBox="0 0 60 100"
+        preserveAspectRatio="xMidYMax meet"
+      >
+        <rect class="sash-screen" x="9" y="55" width="26" height="16" rx="1" />
+        <rect x="0" y="80" width="60" height="3" />
+        <circle cx="40" cy="67" r="7" />
+        <path d="M26 100 C26 84 31 76 40 75 C49 76 54 84 54 100 Z" />
+      </svg>
+    )}
+    {kind === "plant" && (
+      <svg
+        class="sash-figure"
+        viewBox="0 0 60 100"
+        preserveAspectRatio="xMidYMax meet"
+      >
+        <path d="M18 100 L20 88 L40 88 L42 100 Z" />
+        <path d="M30 88 C28 76 20 70 12 68 C20 66 28 72 30 80 C30 70 34 60 44 56 C38 64 33 74 31 88 Z" />
+        <path d="M31 86 C34 76 42 72 50 72 C44 76 36 80 32 88 Z" />
+      </svg>
+    )}
+    <div class="sash-frame" />
+    <div class="sash-glass" />
+  </div>
+  <div class="sash-sill" />
+</div>
+
+<style>
+  .sash {
+    --w: var(--sash-w, 4.75rem);
+    --h: calc(var(--w) * 1.7);
+    position: relative;
+    width: var(--w);
+    flex: none;
+  }
+  .sash-lintel,
+  .sash-opening,
+  .sash-sill {
+    position: relative;
+  }
+
+  /* Stone head and sill, a touch wider than the opening. */
+  .sash-lintel {
+    margin-inline: -0.4rem;
+    height: 0.7rem;
+    background: linear-gradient(
+      to bottom,
+      rgb(210 196 255 / 0.4) 0 1px,
+      #5a4f78 1px,
+      #3b3355
+    );
+    box-shadow: 0 0.2rem 0.4rem rgb(4 2 14 / 0.7);
+  }
+  .sash-sill {
+    margin-inline: -0.55rem;
+    height: 0.55rem;
+    background: linear-gradient(
+      to bottom,
+      rgb(220 206 255 / 0.45) 0 1px,
+      #544a73 1px,
+      #2f2846
+    );
+    box-shadow: 0 0.45rem 0.7rem rgb(4 2 14 / 0.75);
+  }
+  /* Soot run off the sill down the bricks. */
+  .sash-sill::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 12%;
+    right: 12%;
+    height: 3.5rem;
+    background: linear-gradient(to bottom, rgb(6 3 14 / 0.35), transparent);
+  }
+
+  .sash-opening {
+    height: var(--h);
+    overflow: hidden;
+    /* The reveal: the wall is deep, the frame sits back in it. */
+    box-shadow: inset 0.35rem 0.3rem 0.5rem rgb(0 0 0 / 0.7);
+    background: #07061a;
+  }
+  .sash-room,
+  .sash-frame,
+  .sash-glass,
+  .sash-figure {
+    position: absolute;
+    inset: 0;
+  }
+  .sash-room {
+    background: linear-gradient(170deg, #121233, #07071a 70%);
+  }
+  .sash-figure {
+    width: 100%;
+    height: 100%;
+    fill: #0a0613;
+    stroke: #0a0613;
+  }
+  /* Painted timber: two sashes, the upper one in front of the lower. */
+  .sash-frame {
+    border: 0.22rem solid #3c3552;
+    background:
+      linear-gradient(#3c3552, #3c3552) 50% 50% / 100% 0.3rem no-repeat,
+      linear-gradient(#3c3552, #3c3552) 50% 0 / 0.14rem 50% no-repeat,
+      linear-gradient(#3c3552, #3c3552) 50% 100% / 0.14rem 50% no-repeat;
+    box-shadow: inset 0 0 0 1px rgb(150 130 210 / 0.15);
+  }
+  /* The city reflected in dark glass. */
+  .sash-glass {
+    background: linear-gradient(
+      115deg,
+      transparent 30%,
+      rgb(170 150 255 / 0.12) 42%,
+      transparent 48%,
+      transparent 62%,
+      rgb(170 150 255 / 0.07) 68%,
+      transparent 74%
+    );
+  }
+
+  .sash[data-kind="curtain"] .sash-room {
+    background:
+      repeating-linear-gradient(
+        to right,
+        rgb(80 60 120 / 0.25) 0 0.35rem,
+        rgb(20 12 40 / 0.2) 0.35rem 0.7rem
+      ),
+      linear-gradient(170deg, #1c1638, #0b0820);
+  }
+  .sash[data-kind="lamp"] .sash-room,
+  .sash[data-kind="person"] .sash-room,
+  .sash[data-kind="cat"] .sash-room,
+  .sash[data-kind="plant"] .sash-room {
+    background: radial-gradient(
+      circle at 72% 30%,
+      #ffe0a3,
+      #f0a050 22%,
+      #9a4a30 60%,
+      #3a1a26
+    );
+  }
+  .sash[data-kind="blind"] .sash-room {
+    background:
+      linear-gradient(
+        to bottom,
+        #f6c27a 0 58%,
+        #7a3a24 58% 59.5%,
+        transparent 59.5%
+      ),
+      repeating-linear-gradient(
+        to bottom,
+        transparent 0 0.5rem,
+        rgb(120 60 30 / 0.12) 0.5rem 0.55rem
+      ),
+      radial-gradient(circle at 40% 80%, #d98848, #5a2a22);
+  }
+  .sash[data-kind="tv"] .sash-room {
+    background: radial-gradient(
+      circle at 35% 75%,
+      #b8d4ff,
+      #4a74e0 35%,
+      #1a2466 80%
+    );
+    animation: sash-tv 3.3s steps(1) infinite;
+  }
+  .sash[data-kind="desk"] .sash-room {
+    background: radial-gradient(
+      circle at 30% 55%,
+      #6f8cff,
+      #28317a 45%,
+      #0e0f2e
+    );
+  }
+  .sash-screen {
+    fill: #d6e4ff;
+    stroke: none;
+    filter: drop-shadow(0 0 3px #8fb0ff);
+  }
+  .sash-tail {
+    fill: none;
+    transform-origin: 35px 88px;
+    animation: sash-tail 4s ease-in-out infinite;
+  }
+  @keyframes sash-tv {
+    0% {
+      filter: brightness(1);
+    }
+    13% {
+      filter: brightness(0.6) hue-rotate(-20deg);
+    }
+    21% {
+      filter: brightness(1.15);
+    }
+    38% {
+      filter: brightness(0.8) hue-rotate(15deg);
+    }
+    47% {
+      filter: brightness(1.2);
+    }
+    62% {
+      filter: brightness(0.55);
+    }
+    70% {
+      filter: brightness(1) hue-rotate(40deg);
+    }
+    86% {
+      filter: brightness(0.9);
+    }
+  }
+  @keyframes sash-tail {
+    0%,
+    100% {
+      rotate: 0deg;
+    }
+    50% {
+      rotate: -14deg;
+    }
+  }
+
+  /* The light a lit window throws on the bricks, under the brick layer. */
+  .sash-spill {
+    position: absolute;
+    z-index: -2;
+    inset: -45% -110%;
+    pointer-events: none;
+    background: radial-gradient(
+      closest-side,
+      rgb(255 170 90 / 0.28),
+      rgb(255 140 70 / 0.08) 60%,
+      transparent
+    );
+  }
+  .sash:is([data-kind="tv"], [data-kind="desk"]) .sash-spill {
+    background: radial-gradient(
+      closest-side,
+      rgb(110 150 255 / 0.28),
+      rgb(80 110 255 / 0.08) 60%,
+      transparent
+    );
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sash[data-kind="tv"] .sash-room,
+    .sash-tail {
+      animation: none;
+    }
+  }
+</style>

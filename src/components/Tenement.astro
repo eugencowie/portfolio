@@ -1,0 +1,471 @@
+---
+import type { ArrangedProjects, ProjectEntry } from "@/lib/projects";
+import { seededRandom } from "@/lib/random";
+import Floor from "./Floor.astro";
+import GroundFloor from "./GroundFloor.astro";
+import LiftDial from "./LiftDial.astro";
+import Pavement from "./Pavement.astro";
+import ProjectFloor from "./ProjectFloor.astro";
+import Rain from "./Rain.astro";
+import SashWindow from "./SashWindow.astro";
+import type { SashKind } from "./SashWindow.astro";
+import SectionHeading from "./SectionHeading.astro";
+
+/**
+ * Everything below the Hero on the home page: the Tenement, a brick building
+ * on the near bank of the Clyde, descended floor by floor in the rain.
+ * Currently building is the sign on its roof, with a floor for each of its
+ * Projects beneath it. Then a floor of residents, then Games, mounted on the
+ * wall above its own floors, and at street level the Other Section and the
+ * Social Links. One Sign is lit at a time: the one of the Project hovered or
+ * focused, or else the one nearest the middle of the screen.
+ */
+type Props = ArrangedProjects<ProjectEntry>;
+const { building, games, other } = Astro.props;
+
+// Floors count from the street up; the residents live between the Sections.
+const residentsFloor = games.length + 1;
+const topFloor = residentsFloor + building.length;
+
+const residents: SashKind[] = [
+  "dark",
+  "person",
+  "blind",
+  "curtain",
+  "desk",
+  "dark",
+  "cat",
+  "lamp",
+];
+
+// Multiplied over the facade and every light that falls on it: bricks let
+// the light through, mortar eats it. Small bricks make a big building.
+function brickTile() {
+  const random = seededRandom(20260926);
+  const width = 46;
+  const height = 15;
+  const mortar = 2;
+  const columns = 8;
+  const rows = 12;
+  let bricks = "";
+  for (let row = 0; row < rows; row++) {
+    const offset = row % 2 ? -width / 2 : 0;
+    const shades = Array.from({ length: columns }, random);
+    for (let column = 0; column <= columns; column++) {
+      const shade = shades[column % columns];
+      const v = Math.round(200 + shade * 55);
+      // Most bricks grey under the city light, a few still showing red.
+      const warm = shade > 0.72 ? 1 : 0;
+      const fill = `rgb(${v},${v - 28 * warm},${v - 36 * warm})`;
+      bricks += `<rect x='${column * width + offset + mortar / 2}' y='${row * height + mortar / 2}' width='${width - mortar}' height='${height - mortar}' fill='${fill}'/>`;
+    }
+  }
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='${width * columns}' height='${height * rows}'><rect width='100%' height='100%' fill='rgb(96,84,122)'/>${bricks}</svg>`;
+  return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
+}
+---
+
+<div class="tenement" data-tenement>
+  <div class="roof">
+    {building.length > 0 && (
+      <div class="roof-sign">
+        <div class="lattice" aria-hidden="true" />
+        <SectionHeading id="building">Currently building</SectionHeading>
+      </div>
+    )}
+  </div>
+
+  <div class="facade">
+    <div
+      class="bricks"
+      style={`--bricks: ${brickTile()}`}
+      aria-hidden="true"
+    ></div>
+    <div class="pipe" aria-hidden="true"></div>
+    <div class="parapet" aria-hidden="true"></div>
+    <div class="cornice" aria-hidden="true"></div>
+
+    {building.length > 0 && (
+      <section aria-labelledby="building">
+        <ul class="floors">
+          {building.map((project, i) => (
+            <ProjectFloor
+              project={project}
+              floor={topFloor - i}
+              side={i % 2 ? "right" : "left"}
+            />
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <Floor
+      as="div"
+      number={residentsFloor}
+      bays={["curtain", "lamp"]}
+      class="residents"
+      aria-hidden="true"
+    >
+      <div class="residents-row">
+        {residents.map((kind) => (
+          <SashWindow kind={kind} />
+        ))}
+      </div>
+    </Floor>
+
+    {games.length > 0 && (
+      <section aria-labelledby="games">
+        <div class="band">
+          <div class="band-glow" aria-hidden="true" />
+          <SectionHeading id="games">Games</SectionHeading>
+        </div>
+        <ul class="floors">
+          {games.map((project, i) => (
+            <ProjectFloor
+              project={project}
+              floor={games.length - i}
+              side={i % 2 ? "right" : "left"}
+            />
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <GroundFloor projects={other} />
+  </div>
+
+  <Pavement />
+  <Rain />
+  <LiftDial top={topFloor} />
+</div>
+
+<style>
+  .tenement {
+    --gutter: 1.25rem;
+    --bay: 0px;
+    position: relative;
+    overflow: clip;
+  }
+  @media (min-width: 64rem) {
+    .tenement {
+      --gutter: 2.5rem;
+    }
+  }
+  @media (min-width: 80rem) {
+    .tenement {
+      --bay: 8rem;
+    }
+  }
+
+  /* ---------- Roof: Currently building on a steel lattice ---------- */
+  .roof {
+    display: flex;
+    align-items: flex-end;
+    min-height: clamp(10rem, 26svh, 16rem);
+    padding-inline: calc(var(--gutter) + var(--bay));
+  }
+  .roof-sign {
+    position: relative;
+    padding: 0.6rem 2.2rem 1.6rem;
+    margin-bottom: -0.2rem;
+  }
+  .roof-sign :global(h2) {
+    position: relative;
+    font-size: clamp(3.4rem, 8vw, 6.5rem);
+  }
+  .lattice {
+    position: absolute;
+    inset: 12% 0 0;
+    border-block: 0.3rem solid #2a2640;
+    background:
+      repeating-linear-gradient(
+        60deg,
+        transparent 0 1.6rem,
+        #221e36 1.6rem calc(1.6rem + 3px)
+      ),
+      repeating-linear-gradient(
+        -60deg,
+        transparent 0 1.6rem,
+        #221e36 1.6rem calc(1.6rem + 3px)
+      );
+    /* Lit from the tubes in front of it. */
+    box-shadow: 0 -0.3rem 1.2rem -0.4rem
+      color-mix(in oklab, var(--cyan) 40%, transparent);
+  }
+  .lattice::before,
+  .lattice::after {
+    content: "";
+    position: absolute;
+    bottom: -0.3rem;
+    top: -0.3rem;
+    width: 0.45rem;
+    background: #2a2640;
+  }
+  .lattice::before {
+    left: 8%;
+  }
+  .lattice::after {
+    right: 8%;
+  }
+
+  /* ---------- Facade ----------
+     Lights on the bricks (z-index -2) sit under the brick layer (-1), which
+     is multiplied over them; everything else stands in front. */
+  .facade {
+    position: relative;
+    isolation: isolate;
+    background: linear-gradient(
+      to bottom,
+      #3d1f4c,
+      #2c1739 25%,
+      #231231 70%,
+      #1a0d26
+    );
+    --quoin: clamp(0.5rem, 1.4vw, 1.4rem);
+  }
+  /* The building's corners: stone quoins down both edges. */
+  .facade::before,
+  .facade::after {
+    content: "";
+    position: absolute;
+    z-index: 3;
+    top: 0;
+    bottom: 0;
+    width: var(--quoin);
+    background: repeating-linear-gradient(
+      to bottom,
+      #4a4066 0 2.6rem,
+      #1a1428 2.6rem calc(2.6rem + 2px),
+      #3b3354 calc(2.6rem + 2px) 4rem,
+      #1a1428 4rem calc(4rem + 2px)
+    );
+    pointer-events: none;
+  }
+  .facade::before {
+    left: 0;
+    box-shadow: 0.3rem 0 0.6rem rgb(5 3 15 / 0.6);
+  }
+  .facade::after {
+    right: 0;
+    box-shadow: -0.3rem 0 0.6rem rgb(5 3 15 / 0.6);
+  }
+  .bricks {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image: var(--bricks);
+    mix-blend-mode: multiply;
+  }
+  /* A cast-iron downpipe from the gutter to the street. */
+  .pipe {
+    display: none;
+    position: absolute;
+    z-index: 2;
+    top: 1rem;
+    bottom: 0;
+    left: calc(var(--gutter) + var(--bay) - 1.6rem);
+    width: 0.65rem;
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        transparent 0 11rem,
+        #3a3150 11rem 11.6rem
+      ),
+      linear-gradient(to right, #120e1e, #3c3452 40%, #16111f);
+    box-shadow: 0.35rem 0 0.5rem rgb(0 0 0 / 0.5);
+  }
+  @media (min-width: 80rem) {
+    .pipe {
+      display: block;
+    }
+  }
+  .parapet {
+    height: 0.9rem;
+    background: linear-gradient(
+      to bottom,
+      rgb(230 214 255 / 0.5) 0 1px,
+      #5b5080 1px,
+      #3a3256
+    );
+  }
+  .cornice {
+    margin-top: 2.2rem;
+    height: 2rem;
+    background:
+      linear-gradient(
+        to bottom,
+        transparent 55%,
+        rgb(0 0 0 / 0.35) 55% 60%,
+        transparent 60%
+      ),
+      repeating-linear-gradient(
+          to right,
+          transparent 0 0.9rem,
+          rgb(10 6 24 / 0.7) 0.9rem 1.4rem
+        )
+        0 100% / 100% 40% no-repeat,
+      linear-gradient(
+        to bottom,
+        rgb(220 206 255 / 0.4) 0 1px,
+        #544a74 1px,
+        #3b3356 55%,
+        #2a2440
+      );
+    box-shadow: 0 0.9rem 1.4rem rgb(5 3 16 / 0.7);
+  }
+  .floors {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ---------- Residents: a floor of ordinary windows ---------- */
+  .residents {
+    padding-block: clamp(2.5rem, 7svh, 4.5rem) clamp(3rem, 8svh, 5rem);
+  }
+  .residents :global(.bay) {
+    --sash-w: 5.5rem;
+    padding-top: 0;
+  }
+  .residents-row {
+    --sash-w: clamp(3.2rem, 7vw, 5.5rem);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-inline: 0.5rem;
+  }
+  @media (max-width: 47.99rem) {
+    .residents-row > :global(:nth-child(n + 6)) {
+      display: none;
+    }
+  }
+
+  /* ---------- Games, mounted on the wall ---------- */
+  .band {
+    position: relative;
+    padding: clamp(2rem, 6svh, 4rem) calc(var(--gutter) + var(--bay)) 0;
+  }
+  .band :global(h2) {
+    font-size: clamp(3rem, 6vw, 5rem);
+  }
+  .band-glow {
+    position: absolute;
+    z-index: -2;
+    left: calc(var(--gutter) + var(--bay) - 6rem);
+    top: -2rem;
+    width: min(36rem, 90vw);
+    height: 14rem;
+    background: radial-gradient(
+      closest-side,
+      color-mix(in oklab, var(--cyan) 38%, transparent),
+      transparent
+    );
+    pointer-events: none;
+  }
+  /* The heading takes the first floor's string course. */
+  .band + .floors > :global(:first-child)::before {
+    display: none;
+  }
+</style>
+
+<script>
+  function attend(tenement: HTMLElement) {
+    const still = matchMedia("(prefers-reduced-motion: reduce)");
+    const targets = [
+      ...tenement.querySelectorAll<HTMLElement>("[data-attention]"),
+    ];
+    const onScreen = new Set<HTMLElement>();
+    let hovered: HTMLElement | null = null;
+    let focused: HTMLElement | null = null;
+    let centred: HTMLElement | null = null;
+    let lit: HTMLElement | null = null;
+
+    const light = () => {
+      const next = hovered ?? focused ?? centred;
+      if (next === lit) return;
+      lit?.removeAttribute("data-lit");
+      next?.setAttribute("data-lit", "");
+      lit = next;
+    };
+
+    // Nearest the middle of the screen, if it is within 40% of it.
+    let queued = false;
+    const centre = () => {
+      queued = false;
+      const middle = { x: innerWidth / 2, y: innerHeight / 2 };
+      let nearest: HTMLElement | null = null;
+      let nearestDistance = Infinity;
+      for (const target of onScreen) {
+        const r = target.getBoundingClientRect();
+        const dy = Math.abs(r.top + r.height / 2 - middle.y);
+        const dx = Math.abs(r.left + r.width / 2 - middle.x);
+        const distance = dy + dx * 0.25;
+        if (dy < innerHeight * 0.4 && distance < nearestDistance) {
+          nearest = target;
+          nearestDistance = distance;
+        }
+      }
+      centred = nearest;
+      light();
+    };
+    const schedule = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(centre);
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (!(entry.target instanceof HTMLElement)) continue;
+        if (entry.isIntersecting) onScreen.add(entry.target);
+        else onScreen.delete(entry.target);
+      }
+      schedule();
+    });
+    for (const target of targets) {
+      observer.observe(target);
+      target.addEventListener("pointerenter", (event) => {
+        if (event.pointerType !== "mouse") return;
+        hovered = target;
+        light();
+      });
+      target.addEventListener("pointerleave", () => {
+        if (hovered !== target) return;
+        hovered = null;
+        light();
+      });
+      target.addEventListener("focusin", (event) => {
+        if (!(event.target instanceof Element)) return;
+        if (!event.target.matches(":focus-visible")) return;
+        focused = target;
+        light();
+      });
+      target.addEventListener("focusout", () => {
+        if (focused !== target) return;
+        focused = null;
+        light();
+      });
+    }
+    addEventListener("scroll", schedule, { passive: true });
+    addEventListener("resize", schedule);
+
+    // Now and then a letter of the lit Sign buzzes.
+    setInterval(() => {
+      if (still.matches || !lit || Math.random() > 0.45) return;
+      const letters = lit.querySelectorAll<HTMLElement>(
+        "[data-letter]:not([data-failing])",
+      );
+      const letter = letters[Math.floor(Math.random() * letters.length)];
+      if (!letter) return;
+      letter.removeAttribute("data-buzz");
+      void letter.offsetWidth; // Restart the animation.
+      letter.setAttribute("data-buzz", "");
+    }, 1100);
+  }
+
+  for (const tenement of document.querySelectorAll<HTMLElement>(
+    "[data-tenement]",
+  )) {
+    attend(tenement);
+  }
+</script>

@@ -1,6 +1,6 @@
 import { defineCollection, type SchemaContext } from "astro:content";
 import { z } from "astro/zod";
-import { CARD_SECTIONS, PROJECT_SECTIONS } from "@/lib/projects";
+import { FLOOR_SECTIONS, PROJECT_SECTIONS } from "@/lib/projects";
 import { glob } from "astro/loaders";
 
 const project = {
@@ -18,12 +18,12 @@ export const projectSchema = ({ image }: SchemaContext) =>
     .discriminatedUnion("section", [
       z.object({
         ...project,
-        section: z.enum(CARD_SECTIONS),
+        section: z.enum(FLOOR_SECTIONS),
         screenshot: image(),
       }),
       z.object({
         ...project,
-        section: z.enum(PROJECT_SECTIONS).exclude(CARD_SECTIONS),
+        section: z.enum(PROJECT_SECTIONS).exclude(FLOOR_SECTIONS),
         featured: z
           .literal(false, {
             error: "Other Projects cannot be Featured",

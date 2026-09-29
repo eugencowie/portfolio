@@ -19,8 +19,8 @@ The `eugen` / `codes` lockup as a neon sign: `eugen` in heavy magenta block lett
 _Avoid_: logo, title, brand
 
 **Neon**:
-Text lit as a neon tube: a pale core with a tight glow in the tube's colour. Cyan neon is `codes` in the Wordmark and every Section heading; magenta neon is `eugen`. The Wordmark alone adds an outer haze so it stays the brightest sign on the page.
-_Avoid_: glow (that is one layer of the treatment, not the concept), tube, sign (that is the Wordmark)
+Text lit as a neon tube: a pale core with a tight glow in the tube's colour. Cyan neon is `codes` in the Wordmark and every Section heading; magenta neon is `eugen` and every lit Sign. The Wordmark alone adds an outer haze so it stays the brightest sign on the page.
+_Avoid_: glow (that is one layer of the treatment, not the concept), tube, sign (a Sign is a Project's name lit with Neon, not the treatment)
 
 **Social Links**:
 The line of links beneath the Identity on the home page pointing to where Eugen is elsewhere.
@@ -51,8 +51,12 @@ The neon waterfront illustration standing at the foot of the Hero and the Open G
 _Avoid_: background (that is the page colour, not the picture), backdrop, wallpaper
 
 **Sky**:
-The CSS night behind every page, spanning the whole document and scrolling with it: over the first screen an indigo gradient deepening to purple at the fold, scattered with stars laid out from a fixed seed at build time; just below the fold a short band of the same shades receding in reverse, the sky mirrored in the river; then the plain page background before the first Section's cards, so every Section sits on the same ground.
+The CSS night behind every page, spanning the whole document and scrolling with it: over the first screen an indigo gradient deepening to purple at the fold, scattered with stars laid out from a fixed seed at build time; just below the fold a short band of the same shades receding in reverse, the sky mirrored in the river; then the plain page background around the Tenement's roof.
 _Avoid_: starfield, background gradient
+
+**Tenement**:
+The brick building on the near bank of the Clyde that holds the Projects below the Hero, descended floor by floor in the rain. Building's heading is the sign on its roof and each of its Projects gets a floor beneath; then a floor of residents in ordinary windows; then Games, its heading mounted on the wall above its floors; and at street level the Other Section as the tenant directory by the close door, beside a shop window holding the Social Links. Each Project's floor has its screenshot in a lit window, spilling its light onto the bricks, and its Sign beside it. The Featured Project's window is arched and wider.
+_Avoid_: building (that is a Section), wall, facade, cards
 
 ### Projects
 
@@ -87,3 +91,7 @@ _Avoid_: Source, code link
 **Featured**:
 The one Project in a Section singled out for prominence.
 _Avoid_: Highlighted, pinned, hero project
+
+**Sign**:
+A Project's name hung on the Tenement beside its screenshot as magenta Neon tubes: unlit glass at rest, lit while the Project has attention. One Sign is lit at a time: the hovered or focused Project's, or else the one nearest the middle of the screen.
+_Avoid_: title, label, neon sign

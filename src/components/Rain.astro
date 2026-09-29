@@ -1,0 +1,133 @@
+---
+/**
+ * Rain over the Tenement: three depths of streaks falling on a gusting wind,
+ * drawn on a canvas fixed over the screen. It only falls below the top of
+ * its parent, only while the parent is on screen, and not at all when the
+ * visitor prefers reduced motion.
+ */
+---
+
+<canvas class="rain" data-rain aria-hidden="true"></canvas>
+
+<style>
+  .rain {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rain {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  type Range = readonly [min: number, max: number];
+  type Drop = { x: number; y: number; length: number; speed: number };
+
+  // Near drops are fewer, longer, faster and brighter. `area` is the screen
+  // area in px² per drop.
+  const DEPTHS = [
+    { area: 3600, length: [8, 16], speed: [9, 13], width: 1, alpha: 0.17 },
+    { area: 8000, length: [16, 30], speed: [15, 21], width: 1.2, alpha: 0.25 },
+    { area: 30000, length: [34, 60], speed: [26, 34], width: 1.8, alpha: 0.32 },
+  ] satisfies {
+    area: number;
+    length: Range;
+    speed: Range;
+    width: number;
+    alpha: number;
+  }[];
+
+  const between = ([min, max]: Range) => min + Math.random() * (max - min);
+
+  function rain(canvas: HTMLCanvasElement, area: HTMLElement) {
+    const context = canvas.getContext("2d");
+    if (!context) return;
+    const still = matchMedia("(prefers-reduced-motion: reduce)");
+    let drops: Drop[][] = [];
+    let falling = false;
+    let last = 0;
+
+    const resize = () => {
+      const dpr = Math.min(devicePixelRatio, 2);
+      canvas.width = innerWidth * dpr;
+      canvas.height = innerHeight * dpr;
+      context.setTransform(dpr, 0, 0, dpr, 0, 0);
+      drops = DEPTHS.map((depth) =>
+        Array.from(
+          { length: Math.round((innerWidth * innerHeight) / depth.area) },
+          () => ({
+            x: Math.random() * innerWidth * 1.2,
+            y: Math.random() * innerHeight,
+            length: between(depth.length),
+            speed: between(depth.speed),
+          }),
+        ),
+      );
+    };
+
+    const frame = (now: number) => {
+      if (!falling) return;
+      // In 60 fps frames, so the rain falls at the same speed at any rate.
+      const dt = Math.min(3, (now - last) / 16.7 || 1);
+      last = now;
+      const top = Math.max(0, area.getBoundingClientRect().top);
+      const wind = -0.16 + Math.sin(now / 2600) * 0.07;
+      context.clearRect(0, 0, innerWidth, innerHeight);
+      context.save();
+      context.beginPath();
+      context.rect(0, top, innerWidth, innerHeight - top);
+      context.clip();
+      DEPTHS.forEach((depth, i) => {
+        context.beginPath();
+        context.lineWidth = depth.width;
+        context.strokeStyle = `rgb(205 200 255 / ${depth.alpha})`;
+        for (const drop of drops[i]) {
+          drop.y += drop.speed * dt;
+          drop.x += drop.speed * wind * dt;
+          if (drop.y - drop.length > innerHeight) {
+            drop.y = -Math.random() * 80;
+            drop.x = Math.random() * innerWidth * 1.2;
+          }
+          context.moveTo(drop.x, drop.y);
+          context.lineTo(drop.x - drop.length * wind, drop.y - drop.length);
+        }
+        context.stroke();
+      });
+      context.restore();
+      requestAnimationFrame(frame);
+    };
+
+    const fall = (on: boolean) => {
+      on &&= !still.matches;
+      if (on === falling) return;
+      falling = on;
+      if (on) {
+        last = performance.now();
+        requestAnimationFrame(frame);
+      } else {
+        context.clearRect(0, 0, innerWidth, innerHeight);
+      }
+    };
+
+    resize();
+    addEventListener("resize", resize);
+    let inView = false;
+    new IntersectionObserver(([entry]) => {
+      inView = entry.isIntersecting;
+      fall(inView);
+    }).observe(area);
+    still.addEventListener("change", () => fall(inView));
+  }
+
+  for (const canvas of document.querySelectorAll<HTMLCanvasElement>(
+    "canvas[data-rain]",
+  )) {
+    if (canvas.parentElement) rain(canvas, canvas.parentElement);
+  }
+</script>

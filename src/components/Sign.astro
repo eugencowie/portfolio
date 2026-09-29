@@ -1,0 +1,148 @@
+---
+/**
+ * A name on the Tenement as Neon tubes in `--tube`'s colour: dark glass at
+ * rest, flickering on while the nearest `[data-lit]` ancestor has attention.
+ * Each letter of the lit layer is its own span, so the Tenement can make one
+ * buzz; a `failing` Sign has one letter that keeps cutting out. Both layers
+ * share one grid cell and the same words, so they wrap alike.
+ */
+interface Props {
+  text: string;
+  failing?: boolean;
+}
+const { text, failing = false } = Astro.props;
+
+const words = text.split(" ").map((word) => [...word]);
+const failingAt = failing ? Math.floor(words.flat().length * 0.62) : -1;
+let at = 0;
+---
+
+<span class="sign">
+  <span class="tube">
+    {words.map((word, i) => (
+      <>
+        {i > 0 && " "}
+        <span class="word">{word.join("")}</span>
+      </>
+    ))}
+  </span>
+  <span class="lit" aria-hidden="true">
+    {words.map((word, i) => (
+      <>
+        {i > 0 && " "}
+        <span class="word">
+          {word.map((letter) => (
+            <span data-letter data-failing={at++ === failingAt || undefined}>
+              {letter}
+            </span>
+          ))}
+        </span>
+      </>
+    ))}
+  </span>
+</span>
+
+<style>
+  .sign {
+    display: inline-grid;
+  }
+  .tube,
+  .lit {
+    grid-area: 1 / 1;
+  }
+  .word {
+    display: inline-block;
+  }
+  /* Unlit: dark glass. */
+  .tube {
+    color: color-mix(in oklab, var(--tube) 6%, transparent);
+    -webkit-text-stroke: 1px color-mix(in oklab, var(--tube) 55%, transparent);
+    text-shadow: 0.02em 0.05em 0.04em rgb(0 0 0 / 0.6);
+  }
+  /* Lit: a pale core, a tight glow and an outer haze. */
+  .lit {
+    color: color-mix(in oklab, var(--tube) 36%, white);
+    -webkit-text-stroke: 0.012em color-mix(in oklab, var(--tube) 75%, white);
+    text-shadow:
+      0 0 0.02em white,
+      0 0 0.06em var(--tube),
+      0 0 0.14em var(--tube),
+      0 0 0.3em var(--tube),
+      0 0 0.8em color-mix(in oklab, var(--tube) 45%, transparent);
+    opacity: 0;
+    transition: opacity 0.35s ease-out;
+    pointer-events: none;
+  }
+  :global([data-lit]) .lit {
+    opacity: 1;
+    animation: neon-flicker 0.9s linear both;
+  }
+  /* Without scripting, hovering or focusing lights a Sign instead. */
+  @media (scripting: none) {
+    :global([data-attention]:is(:hover, :focus-within)) .lit {
+      opacity: 1;
+    }
+  }
+  :global([data-lit]) [data-failing] {
+    animation: failing 4.7s steps(1) infinite;
+  }
+  [data-letter][data-buzz] {
+    animation: buzz 0.45s steps(1);
+  }
+  @keyframes failing {
+    0% {
+      opacity: 1;
+    }
+    31% {
+      opacity: 0.15;
+    }
+    33% {
+      opacity: 1;
+    }
+    35% {
+      opacity: 0.1;
+    }
+    41% {
+      opacity: 0.9;
+    }
+    72% {
+      opacity: 0.2;
+    }
+    73% {
+      opacity: 1;
+    }
+    88% {
+      opacity: 0.05;
+    }
+    96% {
+      opacity: 1;
+    }
+  }
+  @keyframes buzz {
+    0% {
+      opacity: 0.25;
+    }
+    20% {
+      opacity: 1;
+    }
+    40% {
+      opacity: 0.1;
+    }
+    60% {
+      opacity: 0.8;
+    }
+    80% {
+      opacity: 0.4;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global([data-lit]) .lit,
+    :global([data-lit]) [data-failing],
+    [data-letter][data-buzz] {
+      animation: none;
+    }
+  }
+</style>
