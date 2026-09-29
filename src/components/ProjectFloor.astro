@@ -65,8 +65,14 @@ const drips = Array.from({ length: 7 }, () => ({
   size: `${(2 + random() * 2.5).toFixed(1)}px`,
 }));
 
-// The fanlight's glazing bars, as fractions across its width.
-const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92];
+// The fanlight's glazing bars, fanning out from the foot of its half-ellipse
+// at fractions across its width. Each runs on past the edge, for the glass's
+// clip to cut it off flush with the arch.
+const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
+  const x = 100 * f - 50;
+  const y = 24 * Math.sqrt(1 - (x / 50) ** 2);
+  return { x: 50 + x * 1.2, y: 24 - y * 1.2 };
+});
 ---
 
 <Floor
@@ -89,13 +95,8 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92];
             viewBox="0 0 100 24"
             preserveAspectRatio="none"
           >
-            {bars.map((f) => (
-              <line
-                x1="50"
-                y1="24"
-                x2={f * 100}
-                y2={f === 0.5 ? 0 : 24 - 24 * Math.sin(Math.PI * f) * 1.02}
-              />
+            {bars.map(({ x, y }) => (
+              <line x1="50" y1="24" x2={x} y2={y} />
             ))}
             <path d="M 18 24 A 32 16 0 0 1 82 24" fill="none" />
           </svg>
@@ -359,6 +360,33 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92];
   }
 
   /* ---------- Featured: an arched head with a lit fanlight and a keystone ---------- */
+  /* The arch's stone runs on down the jambs, in the shade of its foot. The
+     sill reaches past them, its ends tucked behind the quoins, or from 80rem
+     behind the downpipe. */
+  [data-featured] .window {
+    --surround: 0.85rem;
+    --sill-reach: 1rem;
+    --jamb: #2c2542;
+  }
+  @media (min-width: 64rem) {
+    [data-featured] .window {
+      --surround: 1.2rem;
+      --sill-reach: 1.7rem;
+    }
+  }
+  @media (min-width: 80rem) {
+    [data-featured] .window {
+      --sill-reach: 1.5rem;
+    }
+  }
+  [data-featured] .pane {
+    box-shadow:
+      calc(-1 * var(--surround)) 0 var(--jamb),
+      var(--surround) 0 var(--jamb);
+  }
+  [data-featured] .sill {
+    margin-inline: calc(-1 * var(--sill-reach));
+  }
   .fanlight {
     position: relative;
     aspect-ratio: 100 / 24;
@@ -367,9 +395,9 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92];
   .fanlight::before {
     content: "";
     position: absolute;
-    inset: -1.4rem -1.4rem 0;
+    inset: calc(-1 * var(--surround)) calc(-1 * var(--surround)) 0;
     clip-path: ellipse(50% 100% at 50% 100%);
-    background: linear-gradient(to bottom, #6a5f90, #3d3558 70%, #2c2542);
+    background: linear-gradient(to bottom, #6a5f90, #3d3558 70%, var(--jamb));
   }
   .fanlight-glass {
     position: absolute;
@@ -403,7 +431,7 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92];
   }
   .keystone {
     position: absolute;
-    top: -1.9rem;
+    top: calc(-1 * var(--surround) - 0.5rem);
     left: 50%;
     width: 3rem;
     height: 3.6rem;
