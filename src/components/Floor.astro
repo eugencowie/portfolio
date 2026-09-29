@@ -9,8 +9,8 @@ import type { SashKind } from "./SashWindow.astro";
  * One storey of the Tenement: a stone string course along its top, then an
  * end bay, the floor's own content, and another end bay. From 80rem each end
  * bay has an ordinary sash window, so the Tenement reads as a grid of floors
- * even one screen at a time. A balcony, if any, hangs off the Tenement's
- * side into the lane.
+ * even one screen at a time. A balcony, if any, wraps the Tenement's corner:
+ * its railing crosses the end bay's window and reaches out over the lane.
  */
 type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
   bays?: [SashKind, SashKind];
@@ -75,11 +75,15 @@ const { as: Tag, bays, balcony, class: className, ...attrs } = Astro.props;
       justify-content: flex-end;
     }
   }
-  /* Its slab a little below the end bays' sills. */
+  /* In front of the quoins, its rail across the lower part of the end bay's
+     window and its slab just below the sill. */
   .balcony {
+    --width: calc(var(--balcony-overlap) + var(--balcony-reach));
     position: absolute;
-    left: calc(100% - var(--side));
-    top: calc(50% + var(--balcony-width) * 0.3);
-    width: var(--balcony-width);
+    z-index: 4;
+    left: calc(100% - var(--side) - var(--balcony-overlap));
+    top: calc(50% - var(--width) * 0.108);
+    width: var(--width);
+    pointer-events: none;
   }
 </style>

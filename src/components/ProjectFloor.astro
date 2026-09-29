@@ -28,16 +28,17 @@ const { name, tagline, href, featured, screenshot } = project.data;
 // The end bays' sash windows, a pattern repeating every eight floors.
 const BAYS: [SashKind, SashKind][] = [
   ["lamp", "dark"],
-  ["dark", "cat"],
+  ["cat", "lamp"],
   ["curtain", "tv"],
-  ["blind", "dark"],
-  ["dark", "person"],
+  ["dark", "blind"],
+  ["person", "dark"],
   ["plant", "curtain"],
   ["tv", "dark"],
   ["dark", "blind"],
 ];
 
-// The balcony on the Tenement's side, a pattern repeating every seven floors.
+// The balcony across the right-hand end bay, a pattern repeating every seven
+// floors.
 const BALCONIES: BalconyKind[] = [
   "lights",
   "table",

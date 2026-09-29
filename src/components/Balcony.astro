@@ -1,8 +1,8 @@
 ---
 /**
- * A little iron balcony on the Tenement's side, seen end-on from the front:
- * a stone slab on an iron bracket, a railing, and whatever the residents
- * keep out there. All but the bike's are lit from the door behind.
+ * An iron balcony wrapping the Tenement's corner: a stone slab on an iron
+ * bracket, a railing, and whatever the residents keep out there. All but
+ * the bike's are lit from the room behind.
  */
 export type BalconyKind =
   "lights" | "plants" | "bike" | "washing" | "person" | "cat" | "table";
@@ -131,6 +131,8 @@ const bulbs = swags
       {balusters.map((x) => (
         <rect x={x} y="24.5" width="1" height="21" />
       ))}
+      <rect x="0" y="20.5" width="3" height="30" />
+      <circle cx="1.5" cy="20" r="2" />
       <rect x="94" y="20.5" width="3" height="30" />
       <circle cx="95.5" cy="20" r="2" />
       <path d="M0 55.5 H46 C30 56 12 62 3 72 H0 Z" />
@@ -179,7 +181,7 @@ const bulbs = swags
     width: 100%;
     overflow: visible;
   }
-  /* Light from the open door on the Tenement's side. */
+  /* Light from the room behind. */
   .door-light {
     position: absolute;
     top: -35%;
@@ -187,7 +189,7 @@ const bulbs = swags
     width: 100%;
     height: 115%;
     background: radial-gradient(
-      ellipse 90% 70% at 0% 70%,
+      ellipse 80% 70% at 22% 70%,
       rgb(255 186 110 / 0.55),
       rgb(255 160 90 / 0.18) 55%,
       transparent

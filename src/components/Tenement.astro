@@ -149,7 +149,11 @@ function brickTile() {
     --bay: 0px;
     /* The lane between the Tenement's side and the screen's. */
     --side: clamp(1.75rem, 10vw, 10rem);
-    --balcony-width: min(8rem, var(--side) * 0.85);
+    /* A balcony reaches most of the way across the lane, and back over the
+       Tenement's front: from 80rem across the end bay's window, below that
+       only across part of the gutter, clear of the screenshots. */
+    --balcony-reach: calc(var(--side) * 0.85);
+    --balcony-overlap: calc(var(--gutter) * 0.5);
     position: relative;
     overflow: clip;
   }
@@ -161,6 +165,10 @@ function brickTile() {
   @media (min-width: 80rem) {
     .tenement {
       --bay: 8rem;
+      --balcony-overlap: calc(var(--gutter) + 5.25rem);
+    }
+    .residents {
+      --balcony-overlap: calc(var(--gutter) + 6rem);
     }
   }
 
