@@ -120,4 +120,22 @@ describe("Highrise", () => {
     await expect(rain).toHaveCount(2);
     for (const canvas of await rain.all()) await expect(canvas).toBeHidden();
   });
+
+  it("drifts the city behind more slowly than the Highrise as the visitor descends", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    // Drawn as backgrounds, so it has no role.
+    const city = page.locator("[data-highrise] .far");
+    const drift = () =>
+      city.evaluate(
+        (el) =>
+          el.getBoundingClientRect().top -
+          (el.parentElement?.getBoundingClientRect().top ?? Number.NaN),
+      );
+    await page.evaluate(() => scrollTo(0, 1000));
+    const higher = await drift();
+    await page.evaluate(() => scrollTo(0, 3000));
+    await expect.poll(drift).toBeGreaterThan(higher);
+  });
 });

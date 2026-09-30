@@ -190,8 +190,12 @@ const switching = Array.from({ length: 12 }, () => {
   }
   @media (prefers-reduced-motion: no-preference) {
     @supports (animation-timeline: view()) {
+      /* Longhands: the minifier folds a timeline into the `animation`
+         shorthand, which browsers then reject. */
       .far {
-        animation: drift auto linear both;
+        animation-name: drift;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
         animation-timeline: --descent;
         animation-range: contain 0% contain 100%;
       }
