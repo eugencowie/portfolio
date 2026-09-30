@@ -176,10 +176,11 @@ const switching = Array.from({ length: 12 }, () => {
     bottom: 0;
     width: var(--lane);
     overflow: clip;
+    /* Clear for a screen's height: opaque before the Skyline stops rising. */
     background: linear-gradient(
       to bottom,
       transparent,
-      #100c24 18%,
+      #100c24 100svh,
       #0e0b20 60%,
       #0b0918 88%,
       #1d1418
