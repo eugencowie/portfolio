@@ -20,7 +20,8 @@ import SectionHeading from "./SectionHeading.astro";
  * Currently building is the heading on its roof, with a floor for each of its
  * Projects beneath it. Then a floor of residents, then Games, mounted on a
  * stone cornice above its own floors, and at street level the Other Section
- * and the Social Links. One Project's Sign is lit at a time: the one of the
+ * and the Social Links. Each Section's floors swap the window's side floor
+ * by floor, the first on the left under the heading. One Project's Sign is lit at a time: the one of the
  * Project hovered or focused, or else the one nearest the middle of the
  * screen. A Social Link's lights only while it is hovered.
  */
@@ -127,6 +128,10 @@ const residents: SashKind[] = [
     --bay: 0px;
     /* The lane between the Tenement's side and the screen's. */
     --lane: clamp(1.75rem, 10vw, 10rem);
+    /* The content's inset from the screen's left edge, past the gutter and
+       the balcony bay, and from its right edge, past the lane as well. */
+    --inset-left: calc(var(--gutter) + var(--bay));
+    --inset-right: calc(var(--inset-left) + var(--lane));
     /* A balcony reaches most of the way across the lane, and back over the
        Tenement's front: from 80rem across the end bay's window, below that
        only across part of the gutter, clear of the screenshots. */
@@ -160,8 +165,7 @@ const residents: SashKind[] = [
     display: flex;
     align-items: flex-end;
     min-height: clamp(10rem, 26svh, 16rem);
-    padding-inline: calc(var(--gutter) + var(--bay))
-      calc(var(--gutter) + var(--bay) + var(--lane));
+    padding-inline: var(--inset-left) var(--inset-right);
   }
   .roof-heading {
     position: relative;
@@ -341,7 +345,7 @@ const residents: SashKind[] = [
     z-index: 3;
     top: calc(var(--parapet) + var(--cornice-drop) + var(--cornice));
     bottom: 0;
-    left: calc(var(--gutter) + var(--bay) - 1.6rem);
+    left: calc(var(--inset-left) - 1.6rem);
     width: 0.65rem;
     background:
       repeating-linear-gradient(
@@ -461,7 +465,7 @@ const residents: SashKind[] = [
 
   /* ---------- Games, mounted on a cornice ---------- */
   .band {
-    padding: clamp(2rem, 6svh, 4rem) calc(var(--gutter) + var(--bay)) 0;
+    padding: clamp(2rem, 6svh, 4rem) var(--inset-left) 0;
   }
   .band-heading {
     position: relative;

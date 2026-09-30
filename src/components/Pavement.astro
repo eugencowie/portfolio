@@ -64,8 +64,7 @@ const ripples = Array.from({ length: 14 }, () => ({
   /* The ground floor's content column. */
   .shopfront {
     position: absolute;
-    inset: 0 calc(var(--gutter) + var(--bay) + var(--lane)) 0
-      calc(var(--gutter) + var(--bay));
+    inset: 0 var(--inset-right) 0 var(--inset-left);
     display: grid;
     grid-template-areas: "shop";
   }

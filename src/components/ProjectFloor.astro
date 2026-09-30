@@ -169,9 +169,7 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
     align-items: center;
     border-radius: 0.25rem;
     /* The caption column's width, to fit the name to. */
-    --caption-width: calc(
-      100vw - var(--lane) - 2 * var(--gutter) - 2 * var(--bay)
-    );
+    --caption-width: calc(100vw - var(--inset-left) - var(--inset-right));
   }
   .body:has(:focus-visible) {
     outline: 2px solid var(--magenta);
@@ -185,10 +183,7 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
       grid-template-areas: "window caption";
       gap: var(--gap);
       --caption-width: calc(
-        (
-            100vw - var(--lane) - 2 * var(--gutter) - 2 * var(--bay) -
-              var(--gap)
-          ) *
+        (100vw - var(--inset-left) - var(--inset-right) - var(--gap)) *
           var(--caption-share)
       );
     }
