@@ -138,4 +138,20 @@ describe("Highrise", () => {
     await page.evaluate(() => scrollTo(0, 3000));
     await expect.poll(drift).toBeGreaterThan(higher);
   });
+
+  it("keeps every Project, its screenshot and the Social Links reachable on a phone", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/");
+    const highrise = page.locator("[data-highrise]");
+    for (const target of [
+      ...(await highrise.getByRole("link").all()),
+      ...(await highrise.getByRole("img").all()),
+    ]) {
+      await target.scrollIntoViewIfNeeded();
+      // Sub-pixel edges keep a whole element's ratio a hair under 1.
+      await expect(target).toBeInViewport({ ratio: 0.99 });
+    }
+  });
 });
