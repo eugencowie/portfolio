@@ -16,6 +16,26 @@ describe("Skyline", () => {
     await expect(skyline).toBeInViewport();
   });
 
+  it("is no longer drawn, nor the Sky behind it, once the Highrise has covered them", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    const skyline = page.locator("header img[src*='skyline']");
+    const sky = page.locator("[data-sky]");
+    await expect(skyline).toBeVisible();
+    await expect(sky).toBeVisible();
+
+    await page
+      .getByRole("heading", { level: 2, name: "Other projects" })
+      .scrollIntoViewIfNeeded();
+    await expect(skyline).toBeHidden();
+    await expect(sky).toBeHidden();
+
+    await page.evaluate(() => scrollTo(0, 0));
+    await expect(skyline).toBeVisible();
+    await expect(sky).toBeVisible();
+  });
+
   it("scrolls away with the Hero for visitors who prefer reduced motion", async ({
     page,
   }) => {

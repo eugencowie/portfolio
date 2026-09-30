@@ -11,6 +11,13 @@ describe("brickTile", () => {
     expect(brickTile()).toBe(brickTile());
   });
 
+  it("shades the wall under it without covering it", () => {
+    for (const { fill } of bricks(brickTile())) {
+      const alpha = Number(/,([\d.]+)\)$/.exec(fill)?.[1]);
+      expect(alpha).toBeLessThan(0.5);
+    }
+  });
+
   it("staggers every other course by half a brick", () => {
     const [first, second] = [0, 1].map(
       (course) =>

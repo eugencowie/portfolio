@@ -12,14 +12,20 @@ import { seededRandom } from "@/lib/random";
  * same shades in reverse, a short band of sky mirrored in the river, and
  * reaches the plain page background around the Highrise's roof. Fixed, the
  * Sky is as tall as the largest viewport, so on a phone whose toolbar has
- * collapsed the head of that band shows beneath the Skyline's foot. Star
- * positions are drawn once at build time from a fixed seed so every build
- * renders the same sky, and are laid out in viewport units so they spread
- * over any screen. The `<body>` is `relative` so the Sky can stretch to the
- * full page height.
+ * collapsed the head of that band shows beneath the Skyline's foot, and it
+ * is not drawn once what follows the Skyline has covered it. Star positions
+ * are drawn once at build time from a fixed seed so every build renders the
+ * same sky, and are laid out in viewport units so they spread over any
+ * screen. The `<body>` is `relative` so the Sky can stretch to the full page
+ * height.
  */
 const random = seededRandom(20260920);
-const percent = () => (random() * 100).toFixed(2);
+
+// Stars thin out down the first screen and are gone before its foot: each is
+// dimmed by how far down it is, and the ones that would not show are left out.
+const FADE = { from: 35, to: 88 };
+const fade = (y: number) =>
+  Math.min(1, Math.max(0, (FADE.to - y) / (FADE.to - FADE.from)));
 
 // Three layers of different sizes twinkle out of step with one another.
 const layers = [
@@ -29,24 +35,31 @@ const layers = [
 ].map((layer) => ({
   ...layer,
   shadow: Array.from({ length: layer.count }, () => {
-    const alpha = (0.5 + random() * 0.5).toFixed(2);
-    return `${percent()}vw ${percent()}vh 0 0 hsl(0 0% 100% / ${alpha})`;
-  }).join(", "),
+    const alpha = 0.5 + random() * 0.5;
+    const x = random() * 100;
+    const y = random() * 100;
+    return { x, y, alpha: alpha * fade(y) };
+  })
+    .filter(({ alpha }) => alpha >= 0.005)
+    .map(
+      ({ x, y, alpha }) =>
+        `${x.toFixed(2)}vw ${y.toFixed(2)}svh 0 0 hsl(0 0% 100% / ${alpha.toFixed(2)})`,
+    )
+    .join(", "),
 }));
 ---
 
 <div
   aria-hidden="true"
   class="sky pointer-events-none absolute inset-0 -z-10 select-none"
+  data-sky
 >
-  <div class="sky-stars absolute inset-x-0 top-0 h-svh">
-    {layers.map(({ size, period, shadow }) => (
-      <span
-        class="star absolute top-0 left-0 rounded-full"
-        style={`--size: ${size}px; --period: ${period}; box-shadow: ${shadow}`}
-      />
-    ))}
-  </div>
+  {layers.map(({ size, period, shadow }) => (
+    <span
+      class="star absolute top-0 left-0 rounded-full"
+      style={`--size: ${size}px; --period: ${period}; box-shadow: ${shadow}`}
+    />
+  ))}
 </div>
 
 <style>
@@ -63,19 +76,21 @@ const layers = [
       var(--background) 120svh
     );
   }
-  /* Fixed wherever the Skyline is held (see Skyline.astro). */
+  /* Fixed wherever the Skyline is held (see Skyline.astro), and like it
+     hidden once covered. */
   @media (prefers-reduced-motion: no-preference) {
     @supports (animation-timeline: scroll()) {
       .sky {
         position: fixed;
         bottom: auto;
         height: 100lvh;
+        animation-name: covered;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: scroll(root);
+        animation-range: 0 var(--held);
       }
     }
-  }
-  /* Stars thin out and vanish towards the bottom of the first screen. */
-  .sky-stars {
-    mask-image: linear-gradient(to bottom, black 35%, transparent 88%);
   }
   .star {
     width: var(--size);

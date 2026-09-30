@@ -17,6 +17,9 @@
   --neon-magenta: color-mix(in oklab, var(--magenta) 36%, white);
   /* The space above the Hero. */
   --page-block-inset: clamp(1.5rem, 7svh, 7rem);
+  /* How far the page scrolls before what follows the Hero has covered the
+     Skyline held behind it, and the Sky behind that. */
+  --held: 240svh;
 }
 
 @theme inline {
@@ -68,6 +71,14 @@
   54%,
   100% {
     opacity: 1;
+  }
+}
+
+/* Something held on screen as the page scrolls, once it is covered: hidden,
+   so it is no longer drawn behind what covers it. */
+@keyframes covered {
+  to {
+    visibility: hidden;
   }
 }
 
