@@ -32,7 +32,7 @@ describe("Hero", () => {
       ).toBeInViewport({ ratio: 1 });
       for (const link of socialLinks) {
         await expect(
-          hero.getByRole("link", { name: link.label, exact: true }),
+          hero.getByRole("link", { name: link.name, exact: true }),
         ).toBeInViewport({ ratio: 1 });
       }
     });
