@@ -65,7 +65,7 @@ const { behind = false } = Astro.props;
   type Canvas = {
     canvas: HTMLCanvasElement;
     context: CanvasRenderingContext2D;
-    area: HTMLElement;
+    parent: HTMLElement;
     falling: boolean;
   };
   const canvases: Canvas[] = [];
@@ -120,8 +120,8 @@ const { behind = false } = Astro.props;
       }
       return segments;
     });
-    for (const { context, area } of falling) {
-      const { top, bottom } = area.getBoundingClientRect();
+    for (const { context, parent } of falling) {
+      const { top, bottom } = parent.getBoundingClientRect();
       const from = Math.max(0, top);
       const to = Math.min(innerHeight, bottom);
       context.clearRect(0, 0, innerWidth, innerHeight);
@@ -156,9 +156,9 @@ const { behind = false } = Astro.props;
     "canvas[data-rain]",
   )) {
     const context = canvas.getContext("2d");
-    const area = canvas.parentElement;
-    if (context && area) {
-      canvases.push({ canvas, context, area, falling: false });
+    const parent = canvas.parentElement;
+    if (context && parent) {
+      canvases.push({ canvas, context, parent, falling: false });
     }
   }
   resize();
@@ -169,10 +169,10 @@ const { behind = false } = Astro.props;
       if (isIntersecting) inView.add(target);
       else inView.delete(target);
     }
-    for (const canvas of canvases) fall(canvas, inView.has(canvas.area));
+    for (const canvas of canvases) fall(canvas, inView.has(canvas.parent));
   });
-  for (const { area } of canvases) observer.observe(area);
+  for (const { parent } of canvases) observer.observe(parent);
   still.addEventListener("change", () => {
-    for (const canvas of canvases) fall(canvas, inView.has(canvas.area));
+    for (const canvas of canvases) fall(canvas, inView.has(canvas.parent));
   });
 </script>

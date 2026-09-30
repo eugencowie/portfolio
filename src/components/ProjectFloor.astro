@@ -6,7 +6,7 @@ import { seededRandom } from "@/lib/random";
 import Floor from "./Floor.astro";
 import Sign from "./Sign.astro";
 import type { BalconyKind } from "./Balcony.astro";
-import type { SashKind } from "@/lib/sash";
+import type { Bays } from "./Floor.astro";
 
 /**
  * A Project's floor of the Tenement. Its screenshot fills a lit window, at
@@ -26,15 +26,15 @@ const { project, floor, side } = Astro.props;
 const { name, tagline, href, featured, screenshot } = project.data;
 
 // The end bays' sash windows, a pattern repeating every eight floors.
-const BAYS: [SashKind, SashKind][] = [
-  ["lamp", "dark"],
-  ["cat", "lamp"],
-  ["curtain", "tv"],
-  ["dark", "blind"],
-  ["person", "dark"],
-  ["plant", "curtain"],
-  ["tv", "dark"],
-  ["dark", "blind"],
+const BAYS: Bays[] = [
+  { left: "lamp", right: "dark" },
+  { left: "cat", right: "lamp" },
+  { left: "curtain", right: "tv" },
+  { left: "dark", right: "blind" },
+  { left: "person", right: "dark" },
+  { left: "plant", right: "curtain" },
+  { left: "tv", right: "dark" },
+  { left: "dark", right: "blind" },
 ];
 
 // The balcony across the right-hand end bay, a pattern repeating every seven
@@ -51,7 +51,7 @@ const BALCONIES: BalconyKind[] = [
 
 // A blurred thumbnail is all the light needs.
 const light = await getImage({ src: screenshot, width: 160, format: "webp" });
-const lightImage = `background-image: url(${light.src})`;
+const lightStyle = `background-image: url(${light.src})`;
 
 // Michroma is about an em a letter: the name's size is capped so its longest
 // word still fits on one line of the Sign's column.
@@ -86,10 +86,10 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
 >
   <div class="body">
     <div class="window">
-      <div class="light" style={lightImage} aria-hidden="true"></div>
+      <div class="light" style={lightStyle} aria-hidden="true"></div>
       {featured ? (
         <div class="fanlight" aria-hidden="true">
-          <div class="fanlight-glass" style={lightImage} />
+          <div class="fanlight-glass" style={lightStyle} />
           <svg
             class="fanlight-bars"
             viewBox="0 0 100 24"

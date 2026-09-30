@@ -13,20 +13,21 @@ import SashWindow from "./SashWindow.astro";
  * its railing crosses the end bay's window and reaches out over the lane, lit
  * by the room behind that window if it is.
  */
+export type Bays = { left: SashKind; right: SashKind };
 type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
-  bays?: [SashKind, SashKind];
+  bays?: Bays;
   balcony?: BalconyKind;
 };
 const { as: Tag, bays, balcony, class: className, ...attrs } = Astro.props;
-const balconyLight = bays && sashLight(bays[1]);
+const balconyLight = bays && sashLight(bays.right);
 ---
 
 <Tag class:list={["floor", className]} {...attrs}>
-  <div class="bay start">{bays && <SashWindow kind={bays[0]} />}</div>
+  <div class="bay start">{bays && <SashWindow kind={bays.left} />}</div>
   <div class="content">
     <slot />
   </div>
-  <div class="bay end">{bays && <SashWindow kind={bays[1]} />}</div>
+  <div class="bay end">{bays && <SashWindow kind={bays.right} />}</div>
   {balcony && (
     <div class="balcony">
       <Balcony kind={balcony} light={balconyLight} />

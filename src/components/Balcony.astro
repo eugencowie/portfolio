@@ -1,5 +1,5 @@
 ---
-import type { SashLight } from "@/lib/sash";
+import { SASH_LIGHT_RGB, type SashLight } from "@/lib/sash";
 
 /**
  * An iron balcony wrapping the Tenement's corner: a stone slab on an iron
@@ -17,6 +17,9 @@ const { kind, light } = Astro.props;
 
 const balusters = Array.from({ length: 14 }, (_, i) => 4 + i * 6.5);
 
+// A chair by the door.
+const chair = "M18 49.5 L20 37 H32 L34 49.5 M20 37 L18 25";
+
 // Fairy lights hang in two swags along the top rail.
 const swags = [
   [
@@ -30,6 +33,11 @@ const swags = [
     [94, 21],
   ],
 ];
+const swagPath = swags
+  .map(([[x0, y0], [x1, y1], [x2, y2]], i) =>
+    i ? `Q${x1} ${y1} ${x2} ${y2}` : `M${x0} ${y0} Q${x1} ${y1} ${x2} ${y2}`,
+  )
+  .join(" ");
 const bulbColours = ["#ffd27a", "#ff7ac0", "#7ae0ff", "#b6ff8f"];
 const bulbs = swags
   .flatMap(([[x0, y0], [x1, y1], [x2, y2]]) =>
@@ -46,7 +54,9 @@ const bulbs = swags
 ---
 
 <div class="balcony" data-kind={kind} aria-hidden="true">
-  {light && <div class="door-light" data-light={light} />}
+  {light && (
+    <div class="door-light" style={`--light: ${SASH_LIGHT_RGB[light]}`} />
+  )}
   <svg viewBox="0 0 100 72">
     {kind === "plants" && (
       <>
@@ -62,9 +72,7 @@ const bulbs = swags
         </g>
       </>
     )}
-    {kind === "lights" && (
-      <path class="stroke" d="M18 49.5 L20 37 H32 L34 49.5 M20 37 L18 25" />
-    )}
+    {kind === "lights" && <path class="stroke" d={chair} />}
     {kind === "bike" && (
       <g class="stroke">
         <circle cx="27" cy="39" r="9.5" />
@@ -115,7 +123,7 @@ const bulbs = swags
     )}
     {kind === "table" && (
       <>
-        <path class="stroke" d="M18 49.5 L20 37 H32 L34 49.5 M20 37 L18 25" />
+        <path class="stroke" d={chair} />
         <circle class="candle-glow" cx="61" cy="27" r="7" />
         <g class="silhouette">
           <rect x="46" y="33" width="22" height="1.6" />
@@ -151,7 +159,7 @@ const bulbs = swags
     )}
     {kind === "lights" && (
       <>
-        <path class="line" d="M1 22 Q24 31 48 22 Q71 31 94 21" />
+        <path class="line" d={swagPath} />
         {bulbs.map(({ x, y, colour, delay }) => (
           <circle
             class="bulb"
@@ -193,16 +201,8 @@ const bulbs = swags
     height: 115%;
     background: radial-gradient(
       ellipse 80% 70% at 22% 70%,
-      rgb(255 186 110 / 0.55),
-      rgb(255 160 90 / 0.18) 55%,
-      transparent
-    );
-  }
-  .door-light[data-light="cool"] {
-    background: radial-gradient(
-      ellipse 80% 70% at 22% 70%,
-      rgb(130 160 255 / 0.5),
-      rgb(100 130 255 / 0.16) 55%,
+      rgb(var(--light) / 0.55),
+      rgb(var(--light) / 0.18) 55%,
       transparent
     );
   }
