@@ -1,5 +1,6 @@
 import type { Page } from "@playwright/test";
 import { describe, expect, it } from "./playwright";
+import { viewports } from "./viewports";
 
 // Decorative, so it has no role; the built asset URL keeps the file's name.
 const skylineOf = (page: Page) => page.locator("header img[src*='skyline']");
@@ -38,6 +39,34 @@ describe("Skyline", () => {
     await expect(skyline).toBeVisible();
     await expect(sky).toBeVisible();
   });
+
+  for (const { name, ...viewport } of viewports) {
+    it(`is still drawn, and the Sky behind it, while any of the Lane is clear on a ${name}`, async ({
+      page,
+    }) => {
+      await page.setViewportSize(viewport);
+      await page.goto("/");
+      const skyline = skylineOf(page);
+      const sky = page.locator("[data-sky]");
+      // The City Behind leaves the Lane clear for a screen's height from its
+      // top. It drifts, so its place is that of what holds it.
+      const clearTo = await page
+        .locator("[data-highrise] [data-drifting]")
+        .evaluate(
+          (el) =>
+            (el.parentElement?.getBoundingClientRect().top ?? Number.NaN) +
+            scrollY +
+            innerHeight,
+        );
+
+      await page.evaluate(() => scrollTo(0, document.body.scrollHeight));
+      await expect(sky).toBeHidden();
+
+      await page.evaluate((y) => scrollTo(0, y), clearTo - 1);
+      await expect(skyline).toBeVisible();
+      await expect(sky).toBeVisible();
+    });
+  }
 
   it("scrolls away with the Hero for visitors who prefer reduced motion", async ({
     page,

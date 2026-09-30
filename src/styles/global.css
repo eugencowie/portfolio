@@ -18,8 +18,10 @@
   /* The space above the Hero. */
   --page-block-inset: clamp(1.5rem, 7svh, 7rem);
   /* How far the page scrolls before what follows the Hero has covered the
-     Skyline held behind it, and the Sky behind that. */
-  --held: 240svh;
+     Skyline held behind it, and the Sky behind that: a screen of Hero, the
+     Highrise's roof at its tallest, and the screen's height the City Behind
+     leaves the Lane clear for. */
+  --covered-after: calc(200svh + 16rem);
 }
 
 @theme inline {

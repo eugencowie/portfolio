@@ -75,7 +75,9 @@ const { dissolve = false, held = false } = Astro.props;
         animation-timing-function: linear;
         animation-fill-mode: both;
         animation-timeline: scroll(root);
-        animation-range: 0 var(--held);
+        animation-range:
+          0 240svh,
+          0 var(--covered-after);
       }
     }
   }
