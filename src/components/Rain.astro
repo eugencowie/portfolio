@@ -79,7 +79,7 @@ const { behind = false } = Astro.props;
     drawn: boolean;
   };
   const canvases: Canvas[] = [];
-  const still = matchMedia("(prefers-reduced-motion: reduce)");
+  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
   let drops: Drop[][] = [];
   let width = 0;
   let running = false;
@@ -162,7 +162,7 @@ const { behind = false } = Astro.props;
   };
 
   const fall = (target: Canvas, on: boolean) => {
-    target.falling = on && !still.matches;
+    target.falling = on && !reducedMotion.matches;
     if (!target.falling) {
       target.context.clearRect(0, 0, innerWidth, innerHeight);
       target.drawn = false;
@@ -193,7 +193,7 @@ const { behind = false } = Astro.props;
     for (const canvas of canvases) fall(canvas, inView.has(canvas.parent));
   });
   for (const { parent } of canvases) observer.observe(parent);
-  still.addEventListener("change", () => {
+  reducedMotion.addEventListener("change", () => {
     for (const canvas of canvases) fall(canvas, inView.has(canvas.parent));
   });
 </script>

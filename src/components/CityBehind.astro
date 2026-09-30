@@ -147,7 +147,7 @@ const switching = Array.from({ length: 12 }, () => {
 ---
 
 <div class="city" aria-hidden="true">
-  <div class="far" data-drifting>
+  <div class="towers" data-drifting>
     <div class="tops" style={`background-image: ${tops}`}></div>
     <div class="body" style={`background-image: ${tile}`}></div>
     <span class="beacon"></span>
@@ -186,7 +186,7 @@ const switching = Array.from({ length: 12 }, () => {
     );
     view-timeline: --descent block;
   }
-  .far {
+  .towers {
     position: absolute;
     inset: 0;
   }
@@ -194,7 +194,7 @@ const switching = Array.from({ length: 12 }, () => {
     @supports (animation-timeline: view()) {
       /* Longhands: the minifier folds a timeline into the `animation`
          shorthand, which browsers then reject. */
-      .far {
+      .towers {
         animation-name: drift;
         animation-timing-function: linear;
         animation-fill-mode: both;

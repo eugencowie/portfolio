@@ -158,11 +158,11 @@ let at = 0;
 </style>
 
 <script>
-  const still = matchMedia("(prefers-reduced-motion: reduce)");
+  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
 
   // Now and then a letter of a lit Sign buzzes.
   setInterval(() => {
-    if (still.matches || Math.random() > 0.45) return;
+    if (reducedMotion.matches || Math.random() > 0.45) return;
     const letters = document.querySelectorAll<HTMLElement>(
       ":is([data-lit], [data-hover-lit]:hover) [data-letter]:not([data-failing])",
     );
