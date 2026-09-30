@@ -6,9 +6,12 @@
  * context, which keeps it behind the content but in front of the Sky.
  * It scales with the viewport width and sinks so only a sliver of the river
  * reflection stays visible. With `dissolve`, that sliver fades into the Sky,
- * so a page scrolling past the Scene lands on plain sky. The rooftops fade in
- * from the top so copy stays readable where the two overlap on short
- * viewports.
+ * so a page scrolling past the Scene lands on plain sky. With `held`, it stays
+ * on screen as the page scrolls, rising at a quarter of the page's speed, so
+ * what follows rises in front of it, except for visitors who prefer reduced
+ * motion and in browsers without scroll-driven animations, where it scrolls
+ * away with its parent. The rooftops fade in from the top so copy stays
+ * readable where the two overlap on short viewports.
  */
 import { Image } from "astro:assets";
 import skyline from "@/assets/skyline.png";
@@ -16,15 +19,17 @@ import skyline from "@/assets/skyline.png";
 interface Props {
   /** Fade the visible river out at the bottom, into the Sky behind. */
   dissolve?: boolean;
+  /** Stay on screen as the page scrolls, rising slowly. */
+  held?: boolean;
 }
-const { dissolve = false } = Astro.props;
+const { dissolve = false, held = false } = Astro.props;
 ---
 
 <div
   aria-hidden="true"
   class:list={[
     "scene pointer-events-none absolute inset-0 -z-10 overflow-hidden select-none",
-    { dissolve },
+    { dissolve, held },
   ]}
 >
   <Image
@@ -54,6 +59,29 @@ const { dissolve = false } = Astro.props;
       black calc(100% - var(--reflection-shown)),
       transparent
     );
+  }
+  /* Held over the first screen as the page scrolls, like the Sky behind,
+     rising for as long as any of it shows past what follows. */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: scroll()) {
+      /* Longhands: the minifier folds a timeline into the `animation`
+         shorthand, which browsers then reject. */
+      .held {
+        position: fixed;
+        bottom: auto;
+        height: 100svh;
+        animation-name: rise;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: scroll(root);
+        animation-range: 0 240svh;
+      }
+    }
+  }
+  @keyframes rise {
+    to {
+      translate: 0 -60svh;
+    }
   }
   /* Image geometry as fractions of its height: sky ends at the tallest tower
      (0.30), the waterline sits at 0.66 and the reflection fills the rest.

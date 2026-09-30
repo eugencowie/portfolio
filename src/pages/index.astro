@@ -2,36 +2,16 @@
 import { getCollection } from "astro:content";
 import MainLayout from "@/layouts/MainLayout.astro";
 import Hero from "@/components/Hero.astro";
-import CardSection from "@/components/CardSection.astro";
-import OtherSection from "@/components/OtherSection.astro";
-import Footer from "@/components/Footer.astro";
+import Highrise from "@/components/Highrise.astro";
 import { arrangeProjects } from "@/lib/projects";
 import { description, title } from "@/site";
 
 const entries = await getCollection("projects");
-const { building, games, other } = arrangeProjects(entries);
 ---
 
 <MainLayout title={title} description={description}>
-  <main class="flex flex-col gap-24 pb-(--page-block-inset)">
+  <main>
     <Hero />
-
-    <div class="mx-auto flex w-full max-w-4xl flex-col gap-24">
-      <CardSection id="building" projects={building}>
-        Currently building
-      </CardSection>
-
-      <CardSection id="games" projects={games}>
-        Games
-      </CardSection>
-
-      <OtherSection id="other" projects={other}>
-        Other projects
-      </OtherSection>
-
-      <div class="mx-6">
-        <Footer />
-      </div>
-    </div>
+    <Highrise {...arrangeProjects(entries)} />
   </main>
 </MainLayout>

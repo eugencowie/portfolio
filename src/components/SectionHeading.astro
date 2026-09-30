@@ -1,4 +1,5 @@
 ---
+/** A Section's heading in cyan Neon, humming: now and then it dips. */
 interface Props {
   id: string;
 }
@@ -16,5 +17,29 @@ const { id } = Astro.props;
   .neon {
     color: var(--neon-cyan);
     text-shadow: var(--neon-cyan-glow);
+    animation: hum 9s steps(1) infinite;
+  }
+  @keyframes hum {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    61% {
+      opacity: 0.55;
+    }
+    61.6% {
+      opacity: 1;
+    }
+    62.4% {
+      opacity: 0.4;
+    }
+    63% {
+      opacity: 1;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .neon {
+      animation: none;
+    }
   }
 </style>

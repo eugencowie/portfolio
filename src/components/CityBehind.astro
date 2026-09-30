@@ -1,0 +1,359 @@
+---
+import { seededRandom } from "@/lib/random";
+import { svgUrl } from "@/lib/svg";
+
+/**
+ * The city behind the Highrise, seen down the lane past its right-hand side:
+ * towers with scattered lit windows, the Finnieston Crane's jib reaching out
+ * from behind the Highrise, a mast with a red aircraft light, and a chip
+ * shop's sign further down. It drifts past more slowly than the Highrise as
+ * the visitor descends. A lamp stands in the lane at street level.
+ *
+ * Drawn in units of 1/160 of 10rem and cropped by the lane's width. Its sky
+ * fades in from clear at the top, so where the Skyline is held behind the
+ * Highrise it shows down the lane past its towers. Below that it is opaque
+ * and must sit in the brickwork after its lights and bricks and before its
+ * floors, so the light spilling past the Highrise's side is hidden.
+ */
+const random = seededRandom(20260928);
+
+// Windows sit on one grid across every tower, so the towers' tops and the
+// repeating tile below them line up.
+const COLUMN = 7;
+const ROW = 9;
+const TOPS = 45 * ROW;
+const TILE = 54 * ROW;
+
+type Tower = {
+  x: number;
+  width: number;
+  top: number;
+  fill: string;
+  unlit: string;
+  /** How much of each lit window's light reaches us. */
+  glow: number;
+};
+const far: Tower = {
+  x: 66,
+  width: 50,
+  top: 72,
+  fill: "#1a1634",
+  unlit: "#221d41",
+  glow: 0.5,
+};
+const right: Tower = {
+  x: 124,
+  width: 36,
+  top: 180,
+  fill: "#16122c",
+  unlit: "#1f1a3a",
+  glow: 0.8,
+};
+const left: Tower = {
+  x: 0,
+  width: 54,
+  top: 252,
+  fill: "#141028",
+  unlit: "#1d1735",
+  glow: 0.9,
+};
+// Furthest first.
+const towers = [far, right, left];
+const LIT = ["#ffcf87", "#ffcf87", "#ffcf87", "#ffd9a8", "#a8c0ff", "#ff8fc8"];
+
+const columns = ({ x, width }: Tower) => {
+  const xs = [];
+  for (let at = x + 4; at + 3.5 <= x + width - 3; at += COLUMN) xs.push(at);
+  return xs;
+};
+const rows = (from: number, to: number) => {
+  const ys = [];
+  for (let at = 4 + ROW * Math.ceil((from - 4) / ROW); at + 5 <= to; at += ROW)
+    ys.push(at);
+  return ys;
+};
+
+// A tower from `top` down to `bottom`, the windows starting a little below
+// its roof unless it continues from above.
+function towerSvg(tower: Tower, i: number, top: number, bottom: number) {
+  const xs = columns(tower);
+  const ys = rows(top === 0 ? 0 : top + 6, bottom);
+  const first = xs[0];
+  const width = xs[xs.length - 1] + 3.5 - first;
+  let svg = `<rect x='${tower.x}' y='${top}' width='${tower.width}' height='${bottom - top}' fill='${tower.fill}'/>`;
+  svg += `<pattern id='w${i}' x='${first}' y='4' width='${COLUMN}' height='${ROW}' patternUnits='userSpaceOnUse'><rect width='3.5' height='5' fill='${tower.unlit}'/></pattern>`;
+  svg += `<rect x='${first}' y='${ys[0]}' width='${width}' height='${bottom - ys[0]}' fill='url(#w${i})'/>`;
+  for (const y of ys) {
+    for (const x of xs) {
+      if (random() > 0.1) continue;
+      const fill = LIT[Math.floor(random() * LIT.length)];
+      svg += `<rect x='${x}' y='${y}' width='3.5' height='5' fill='${fill}' opacity='${tower.glow}'/>`;
+    }
+  }
+  return svg;
+}
+
+const drawing = (height: number, content: string) =>
+  svgUrl(
+    `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 ${height}'>${content}</svg>`,
+  );
+
+// The Finnieston Crane: a lattice tower, the machinery house, and the jib
+// reaching out from behind the Highrise, a hook hanging from its trolley.
+const braces = Array.from(
+  { length: 12 },
+  (_, i) =>
+    `M17 ${120 + i * 14}L31 ${134 + i * 14}M31 ${120 + i * 14}L17 ${134 + i * 14}`,
+).join("");
+const jib = Array.from(
+  { length: 16 },
+  (_, i) => `M${i * 8} 128L${i * 8 + 4} 118L${i * 8 + 8} 128`,
+).join("");
+const crane = `<g fill='#2a2350' stroke='#2a2350'>
+<path fill='none' stroke-width='1.6' d='M17 300V120M31 300V120'/>
+<path fill='none' stroke-width='0.8' d='${braces}'/>
+<path d='M4 100L8 95H36L40 100Z'/><rect x='6' y='100' width='32' height='18'/>
+<path fill='none' stroke-width='1.3' d='M0 118H128M0 128H122L128 118'/>
+<path fill='none' stroke-width='0.7' d='${jib}'/>
+<rect x='96' y='128' width='6' height='3'/><path fill='none' stroke-width='0.5' d='M99 131V156'/><rect x='97' y='156' width='4' height='4'/>
+</g>`;
+
+const tops = drawing(
+  TOPS,
+  towerSvg(far, 0, far.top, TOPS) +
+    `<path fill='none' stroke='${far.fill}' stroke-width='1.4' d='M91 72V26M87 44H95M88 34H94'/>` +
+    crane +
+    towerSvg(right, 1, right.top, TOPS) +
+    `<rect x='132' y='170' width='20' height='10' fill='${right.fill}'/>` +
+    towerSvg(left, 2, left.top, TOPS) +
+    `<g fill='#120e24'><path d='M29 234L37 228L45 234Z'/><rect x='30' y='234' width='14' height='12'/><path stroke='#120e24' d='M32 246V252M42 246V252'/></g>`,
+);
+const tile = drawing(
+  TILE,
+  towers.map((tower, i) => towerSvg(tower, i, 0, TILE)).join(""),
+);
+
+// A few windows where someone is still up, switching their lights on and off.
+const switching = Array.from({ length: 12 }, () => {
+  const tower = towers[1 + Math.floor(random() * 2)];
+  const xs = columns(tower);
+  return {
+    x: xs[Math.floor(random() * xs.length)],
+    y: TOPS + 4 + ROW * Math.floor(random() * 420),
+    period: `${(14 + random() * 26).toFixed(1)}s`,
+    delay: `${(-random() * 40).toFixed(1)}s`,
+  };
+});
+---
+
+<div class="city" aria-hidden="true">
+  <div class="towers" data-drifting>
+    <div class="tops" style={`background-image: ${tops}`}></div>
+    <div class="body" style={`background-image: ${tile}`}></div>
+    <span class="beacon"></span>
+    {switching.map(({ x, y, period, delay }) => (
+      <span
+        class="switching"
+        style={`--x: ${x}; --y: ${y}; --period: ${period}; --delay: ${delay}`}
+      />
+    ))}
+    <div class="chips">
+      {[..."CHIPS"].map((letter) => (
+        <span>{letter}</span>
+      ))}
+    </div>
+  </div>
+  <div class="lamp"></div>
+</div>
+
+<style>
+  .city {
+    --u: calc(10rem / 160);
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: var(--lane);
+    overflow: clip;
+    /* Clear for a screen's height: opaque before the Skyline stops rising. */
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      #100c24 100svh,
+      #0e0b20 60%,
+      #0b0918 88%,
+      #1d1418
+    );
+    view-timeline: --descent block;
+  }
+  .towers {
+    position: absolute;
+    inset: 0;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      /* Longhands: the minifier folds a timeline into the `animation`
+         shorthand, which browsers then reject. */
+      .towers {
+        animation-name: drift;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: --descent;
+        animation-range: contain 0% contain 100%;
+      }
+    }
+  }
+  @keyframes drift {
+    to {
+      translate: 0 25%;
+    }
+  }
+  .tops,
+  .body {
+    position: absolute;
+    left: 0;
+    width: calc(160 * var(--u));
+    background-size: 100% auto;
+  }
+  .tops {
+    top: 0;
+    height: calc(405 * var(--u));
+    background-repeat: no-repeat;
+  }
+  .body {
+    top: calc(405 * var(--u));
+    bottom: 0;
+    background-repeat: repeat-y;
+  }
+
+  /* The aircraft light on the mast. */
+  .beacon {
+    position: absolute;
+    left: calc(89.8 * var(--u));
+    top: calc(24.8 * var(--u));
+    width: calc(2.4 * var(--u));
+    height: calc(2.4 * var(--u));
+    border-radius: 50%;
+    background: #ff4a4a;
+    box-shadow: 0 0 0.4rem 0.15rem rgb(255 60 60 / 0.6);
+    animation: beacon 2.6s steps(1) infinite;
+  }
+  @keyframes beacon {
+    0% {
+      opacity: 1;
+    }
+    40% {
+      opacity: 0.08;
+    }
+  }
+  .switching {
+    position: absolute;
+    left: calc(var(--x) * var(--u));
+    top: calc(var(--y) * var(--u));
+    width: calc(3.5 * var(--u));
+    height: calc(5 * var(--u));
+    background: #ffcf87;
+    opacity: 0;
+    animation: switching var(--period) var(--delay) steps(1) infinite;
+  }
+  @keyframes switching {
+    0% {
+      opacity: 0;
+    }
+    35% {
+      opacity: 0.9;
+    }
+  }
+
+  /* A chip shop's sign on the nearest tower. */
+  .chips {
+    position: absolute;
+    top: 42%;
+    left: calc(50 * var(--u));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: calc(18 * var(--u));
+    padding-block: calc(3.5 * var(--u));
+    background: #120c1a;
+    outline: 1px solid #2c2238;
+    box-shadow: 0 0 1.5rem rgb(255 150 50 / 0.22);
+    font-family: var(--font-display);
+    font-size: calc(13.5 * var(--u));
+    line-height: 1.05;
+    color: #ffe2b0;
+    text-shadow:
+      0 0 2px #ffb347,
+      0 0 6px #ff9a2e,
+      0 0 12px rgb(255 140 40 / 0.6);
+    animation: chips 7s steps(1) infinite;
+  }
+  @keyframes chips {
+    0%,
+    100% {
+      opacity: 0.9;
+    }
+    80% {
+      opacity: 0.3;
+    }
+    81% {
+      opacity: 0.9;
+    }
+    83% {
+      opacity: 0.4;
+    }
+    84% {
+      opacity: 0.9;
+    }
+  }
+
+  /* The lamp in the lane. */
+  .lamp {
+    position: absolute;
+    bottom: 0;
+    left: calc(var(--lane) * 0.58);
+    width: 0.3rem;
+    height: clamp(10rem, 22svh, 15rem);
+    background: linear-gradient(to right, #0c0916, #2a2340 50%, #0c0916);
+  }
+  .lamp::before {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    width: 1.1rem;
+    height: 1.5rem;
+    translate: -50% 0;
+    clip-path: polygon(15% 0, 85% 0, 100% 80%, 0 80%);
+    background: radial-gradient(
+      ellipse at 50% 80%,
+      #fff3d6,
+      #ffc774 45%,
+      #b86a2c
+    );
+  }
+  .lamp::after {
+    content: "";
+    position: absolute;
+    bottom: calc(100% - 6rem);
+    left: 50%;
+    width: 16rem;
+    height: 16rem;
+    translate: -50% 0;
+    background: radial-gradient(
+      closest-side,
+      rgb(255 180 90 / 0.3),
+      rgb(255 160 80 / 0.08) 55%,
+      transparent
+    );
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .beacon,
+    .switching,
+    .chips {
+      animation: none;
+    }
+  }
+</style>

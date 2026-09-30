@@ -1,0 +1,165 @@
+---
+import { seededRandom } from "@/lib/random";
+
+/**
+ * The wet pavement at the foot of the Highrise: flagstones in perspective,
+ * whatever stands at street level smeared in the wet beneath it, rain
+ * rippling the puddles, and the kerb. The reflections follow the ground
+ * floor's layout: the directory, the close door and the shop window side by
+ * side from 64rem, only the shop window below that, and always the lamp in
+ * the lane.
+ */
+const random = seededRandom(20260927);
+const ripples = Array.from({ length: 14 }, () => ({
+  x: `${(2 + random() * 96).toFixed(1)}%`,
+  y: `${(20 + random() * 70).toFixed(1)}%`,
+  delay: `${(-random() * 3).toFixed(2)}s`,
+  duration: `${(1.6 + random() * 1.8).toFixed(2)}s`,
+}));
+---
+
+<div class="pavement" aria-hidden="true">
+  <div class="flags"></div>
+  <div class="shopfront">
+    <div class="reflection directory"></div>
+    <div class="reflection door"></div>
+    <div class="reflection shop"></div>
+  </div>
+  <div class="reflection lane"></div>
+  {ripples.map((r) => (
+    <span
+      class="ripple"
+      style={`--x: ${r.x}; --y: ${r.y}; --delay: ${r.delay}; --duration: ${r.duration}`}
+    />
+  ))}
+  <div class="kerb"></div>
+</div>
+
+<style>
+  .pavement {
+    position: relative;
+    height: clamp(8rem, 20svh, 13rem);
+    background: linear-gradient(to bottom, #120e22, #07060f 80%);
+    border-top: 0.35rem solid var(--stone-deep);
+    overflow: hidden;
+  }
+  .flags {
+    position: absolute;
+    inset: 0 -30%;
+    transform: perspective(28rem) rotateX(62deg);
+    transform-origin: top;
+    background:
+      repeating-linear-gradient(
+        to right,
+        transparent 0 7rem,
+        rgb(0 0 0 / 0.55) 7rem calc(7rem + 2px)
+      ),
+      repeating-linear-gradient(
+        to bottom,
+        transparent 0 5rem,
+        rgb(0 0 0 / 0.55) 5rem calc(5rem + 2px)
+      );
+    opacity: 0.8;
+  }
+  /* The ground floor's content column. */
+  .shopfront {
+    position: absolute;
+    inset: 0 var(--inset-right) 0 var(--inset-left);
+    display: grid;
+    grid-template-areas: "shop";
+  }
+  @media (min-width: 64rem) {
+    .shopfront {
+      grid-template-columns: var(--shopfront-columns);
+      grid-template-areas: "directory door shop";
+      column-gap: var(--shopfront-gap);
+    }
+  }
+  .reflection {
+    height: 80%;
+    filter: blur(10px);
+    opacity: 0.55;
+    mask-image: repeating-linear-gradient(
+      to bottom,
+      black 0 3px,
+      rgb(0 0 0 / 0.35) 3px 6px
+    );
+  }
+  .directory {
+    grid-area: directory;
+    display: none;
+    background: linear-gradient(
+      to bottom,
+      rgb(255 210 150 / 0.35),
+      transparent
+    );
+  }
+  .door {
+    grid-area: door;
+    display: none;
+    background: linear-gradient(to bottom, rgb(255 180 110 / 0.5), transparent);
+  }
+  @media (min-width: 64rem) {
+    .directory,
+    .door {
+      display: block;
+    }
+  }
+  .shop {
+    grid-area: shop;
+    background: linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--magenta) 40%, transparent),
+      color-mix(in oklab, var(--cyan) 15%, transparent) 40%,
+      transparent
+    );
+  }
+  .lane {
+    position: absolute;
+    top: 0;
+    left: calc(100% - var(--lane) * 0.42 - 1.5rem);
+    width: 3rem;
+    background: linear-gradient(to bottom, rgb(255 180 90 / 0.5), transparent);
+  }
+  .ripple {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: 2.4rem;
+    height: 0.7rem;
+    border: 1px solid rgb(200 190 255 / 0.5);
+    border-radius: 50%;
+    opacity: 0;
+    translate: -50% -50%;
+    animation: ripple var(--duration) var(--delay) ease-out infinite;
+  }
+  @keyframes ripple {
+    0% {
+      scale: 0.1;
+      opacity: 0.8;
+    }
+    100% {
+      scale: 1;
+      opacity: 0;
+    }
+  }
+  .kerb {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 12%;
+    height: 0.6rem;
+    background: linear-gradient(
+      to bottom,
+      rgb(200 190 255 / 0.25) 0 1px,
+      #1c1830 1px,
+      #0b0a14
+    );
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ripple {
+      display: none;
+    }
+  }
+</style>
