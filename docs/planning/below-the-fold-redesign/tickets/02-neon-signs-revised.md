@@ -95,14 +95,14 @@ What happened to each item under "Dial back next":
 
 1. **Spill:** the saturation boost is gone and its opacity is down from 0.62 to 0.45, so Roman Reign no longer paints its floor green.
 2. **Lift dial:** removed.
-3. **Rain in front of screenshots:** kept, and the rain dialled back instead: slower, thinner and shorter streaks, each fading to nothing at its tail, so a screenshot reads through it. The drips stay on the glass.
+3. **Rain in front of screenshots:** kept, and the rain dialled back instead: slower, thinner and shorter streaks, though about a fifth more of them, each fading to nothing at its tail, so a screenshot reads through it. The drips stay on the glass.
 4. **Rain canvas on phones:** measured at 390×844 with the CPU slowed 4×, on the dev server with software rasterising. It costs about 3.3 ms of main-thread work a frame mid-Tenement and 3.7 ms at the top of the page, under a 4 ms budget, and about 4.5 ms at the join, where both canvases draw, only while scrolling through it. A canvas with none of its parent on screen no longer draws, and the drops keep falling when the address bar changes the screen's height.
 5. **Games heading:** mounted on a stone cornice across the Tenement, a smaller copy of the roof's.
 
 Also decided while building it, beyond what this ticket asked for:
 
 - Rain falls in the Hero too, behind the Identity and the Social Links, running on unbroken down the Tenement.
-- Balconies wrap the Tenement's corner over a lane down its right-hand side, the city behind drifts by more slowly as the visitor descends, and a chimney stands at the gable end.
+- Balconies wrap the Tenement's corner over a lane down its right-hand side, the city behind drifts by more slowly as the visitor descends, and on desktop a chimney stands at the gable end.
 - The lane stays on phones, at about 39px of a 390px screen: it is much of what makes the Tenement read as a building there.
 - The Social Links in the shop window are magenta Signs, lit only while hovered rather than by attention.
 - The Other Section's fascia sits directly on the tenant directory, the same width, under the lamp.
