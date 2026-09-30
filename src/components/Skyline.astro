@@ -8,10 +8,11 @@
  * reflection stays visible. With `dissolve`, that sliver fades into the Sky,
  * so a page scrolling past the Scene lands on plain sky. With `held`, it stays
  * on screen as the page scrolls, rising at a quarter of the page's speed, so
- * what follows rises in front of it, except for visitors who prefer reduced
- * motion and in browsers without scroll-driven animations, where it scrolls
- * away with its parent. The rooftops fade in from the top so copy stays
- * readable where the two overlap on short viewports.
+ * what follows rises in front of it, and is hidden once that has covered it,
+ * except for visitors who prefer reduced motion and in browsers without
+ * scroll-driven animations, where it scrolls away with its parent. The
+ * rooftops fade in from the top so copy stays readable where the two overlap
+ * on short viewports.
  */
 import { Image } from "astro:assets";
 import skyline from "@/assets/skyline.png";
@@ -61,7 +62,7 @@ const { dissolve = false, held = false } = Astro.props;
     );
   }
   /* Held over the first screen as the page scrolls, like the Sky behind,
-     rising for as long as any of it shows past what follows. */
+     rising for as long as any of it shows past what follows, then hidden. */
   @media (prefers-reduced-motion: no-preference) {
     @supports (animation-timeline: scroll()) {
       /* Longhands: the minifier folds a timeline into the `animation`
@@ -70,11 +71,13 @@ const { dissolve = false, held = false } = Astro.props;
         position: fixed;
         bottom: auto;
         height: 100svh;
-        animation-name: rise;
+        animation-name: rise, covered;
         animation-timing-function: linear;
         animation-fill-mode: both;
         animation-timeline: scroll(root);
-        animation-range: 0 240svh;
+        animation-range:
+          0 240svh,
+          0 var(--covered-after);
       }
     }
   }
