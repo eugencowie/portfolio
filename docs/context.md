@@ -4,6 +4,8 @@ A single-page personal maker homepage showing what Eugen is building now. It exi
 
 ## Language
 
+An entry says what a concept is, not how it looks or behaves. State composition once, in the entry for the thing that contains the others. Rules belong in the code and its tests; rendering belongs in component comments.
+
 ### Core concepts
 
 **Avatar**:
@@ -15,15 +17,15 @@ A circular crop of the Avatar's face, used wherever the site needs a small squar
 _Avoid_: disc, favicon (that is one use of the Icon, not the concept)
 
 **Wordmark**:
-The `eugen` / `codes` lockup as a neon sign: `eugen` in heavy magenta block letters with horizontal cutouts creeping in from the bottom, and `codes` in a cyan neon script tilted beneath it. The site's name as a visual identity.
+The `eugen` / `codes` lockup: the site's name as a visual identity, lit as a Neon sign.
 _Avoid_: logo, title, brand
 
 **Neon**:
-Text lit as a neon tube: a pale core with a tight glow in the tube's colour. Cyan neon is `codes` in the Wordmark and every Section heading; magenta neon is `eugen` and every lit Sign. The Wordmark alone adds an outer haze so it stays the brightest sign on the page.
+The lit-tube text treatment the site's signage uses: magenta for `eugen` and lit Signs, cyan for `codes` and Section headings.
 _Avoid_: glow (that is one layer of the treatment, not the concept), tube, sign (a Sign is a name lit with Neon, not the treatment)
 
 **Social Links**:
-The line of links beneath the Identity on the home page pointing to where Eugen is elsewhere, hung again as Signs in the Highrise's shop window at street level.
+The links pointing to where Eugen is elsewhere, shown beneath the Identity and again on the Ground Floor.
 _Avoid_: tagline, socials, profiles, subtitle
 
 **Description**:
@@ -31,36 +33,28 @@ The one-sentence summary used for search results and link previews.
 _Avoid_: tagline, bio, summary
 
 **Identity**:
-The Avatar with the Wordmark beneath it, the Wordmark rising into the Avatar and the Avatar fading out behind it so `eugen` sits directly under the portrait. The one composition the site is recognised by, sized by the Avatar's width.
+The Avatar with the Wordmark beneath it. The one composition the site is recognised by.
 _Avoid_: lockup (that is the Wordmark alone), stack, hero (that adds the Social Links)
 
 **Hero**:
-The home page header composing the Identity and the Social Links over the Skyline, filling the first screen at any viewport. As the page scrolls, the Identity and the Social Links leave while the Skyline stays behind, and the Highrise's roof rises in front of it: one continuous shot down from the sky. Rain falls over the Skyline, behind the Identity and the Social Links, and runs on unbroken down the Highrise.
+The home page header: the Identity and the Social Links set in the Scene, filling the first screen.
 _Avoid_: banner, header, masthead
 
 **Open Graph image**:
-The single site-wide picture shown when a link to the site is previewed elsewhere. One image for every page: the Identity over the Sky and Skyline, centred and lifted a touch so `codes` clears the rooftops.
+The single site-wide picture shown when a link to the site is previewed elsewhere: the Identity set in the Scene.
 _Avoid_: social image, share card, OG card, og image
 
 **Scene**:
-The composition the Hero and the Open Graph image share: the Skyline standing at the foot of a frame over the Sky, glowing magenta at the horizon. The Hero's Scene dissolves the river into the Sky; the Open Graph image's does not.
+The setting the Hero and the Open Graph image share: the Skyline standing at the foot of the Sky.
 _Avoid_: backdrop, stage, frame
 
 **Skyline**:
-The neon waterfront illustration standing at the foot of the Hero and the Open Graph image, glowing magenta at the horizon and sunk so only a sliver of the river reflection shows. In the Hero that sliver dissolves into the Sky, and the Skyline stays on screen as the page scrolls, rising at a quarter of its speed until the Highrise has covered it.
+The neon waterfront illustration at the foot of the Scene.
 _Avoid_: background (that is the page colour, not the picture), backdrop, wallpaper
 
 **Sky**:
-The CSS night behind every page, fixed to the screen so its stars stay put as the page scrolls: an indigo gradient deepening to purple at the foot of the screen, scattered with stars laid out from a fixed seed at build time. For visitors who prefer reduced motion it spans the whole document and scrolls with it instead: just below the fold a short band of the same shades receding in reverse, the sky mirrored in the river; then the plain page background around the Highrise's roof.
+The starry indigo night behind every page.
 _Avoid_: starfield, background gradient
-
-**Highrise**:
-The brick building on the near bank of the Clyde that holds the Projects below the Hero, descended floor by floor in the rain. Building's heading stands on its roof and each of its Projects gets a floor beneath; then a floor of residents in ordinary windows; then Games, its heading mounted on a stone cornice above its floors; and at street level the Other Section as the tenant directory by the close door, beside a shop window holding the Social Links. Each Project's floor has its screenshot in a lit window, spilling its light onto the bricks, and its Sign beside it. The Featured Project's window is arched and wider. The Highrise stops short of the screen's right-hand side: balconies wrap its corner, reaching out over a lane, and past them the city behind drifts by more slowly as the visitor descends, the Skyline showing down the top of the lane.
-_Avoid_: tenement, building (that is a Section), wall, facade, cards
-
-**Rain**:
-Streaks falling at three depths on a gusting wind: over the Skyline behind the Identity and the Social Links, then down the Highrise in front of it, running on unbroken from one into the other. It falls only while on screen, and not at all for visitors who prefer reduced motion.
-_Avoid_: particles, weather, storm
 
 ### Projects
 
@@ -96,6 +90,28 @@ _Avoid_: Source, code link
 The one Project in a Section singled out for prominence.
 _Avoid_: Highlighted, pinned, hero project
 
+### Highrise
+
+**Highrise**:
+The brick building below the Hero that holds the Projects: a Floor for each Building and Games Project, and the rest on the Ground Floor.
+_Avoid_: tenement, building (that is a Section), wall, facade, cards
+
+**Floor**:
+One storey of the Highrise.
+_Avoid_: row, card, level
+
+**Ground Floor**:
+The Highrise at street level, holding the Other Section and the Social Links.
+_Avoid_: footer, bottom
+
+**Sash Window**:
+An ordinary window of the Highrise, with no screenshot in it.
+_Avoid_: window (ambiguous with a Project's screenshot window), background window
+
 **Sign**:
-A name hung on the Highrise as magenta Neon tubes, unlit glass at rest: a Project's beside its screenshot, or a Social Link's in the shop window. A Project's Sign is lit while the Project has attention, one at a time: the hovered or focused Project's, or else the one nearest the middle of the screen. A Social Link's is lit only while hovered.
+A name hung on the Highrise as Neon tubes, lit while it has attention.
 _Avoid_: title, label, neon sign
+
+**Rain**:
+The rain falling over the Scene and down the Highrise.
+_Avoid_: particles, weather, storm
