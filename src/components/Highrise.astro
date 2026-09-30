@@ -1,5 +1,9 @@
 ---
-import type { ArrangedProjects, ProjectEntry } from "@/lib/projects";
+import type {
+  ArrangedProjects,
+  FloorProjectEntry,
+  ProjectEntry,
+} from "@/lib/projects";
 import { brickTile } from "@/lib/brick";
 import { svgUrl } from "@/lib/svg";
 import CityBehind from "./CityBehind.astro";
@@ -10,6 +14,7 @@ import ProjectFloor from "./ProjectFloor.astro";
 import Rain from "./Rain.astro";
 import SashWindow from "./SashWindow.astro";
 import type { SashKind } from "@/lib/sash";
+import type { ComponentProps } from "astro/types";
 import SectionHeading from "./SectionHeading.astro";
 
 /**
@@ -32,6 +37,13 @@ const { building, games, other } = Astro.props;
 // Floors count from the street up, with the residents' floor between the
 // Sections.
 const topFloor = games.length + 1 + building.length;
+// A Section's Floors from `top` down, the window's side swapping from the left.
+const floors = (projects: FloorProjectEntry[], top: number) =>
+  projects.map((project, i): ComponentProps<typeof ProjectFloor> => ({
+    project,
+    floor: top - i,
+    side: i % 2 ? "right" : "left",
+  }));
 
 const residents: SashKind[] = [
   "dark",
@@ -70,12 +82,8 @@ const residents: SashKind[] = [
     {building.length > 0 && (
       <section aria-labelledby="building">
         <ul class="floors">
-          {building.map((project, i) => (
-            <ProjectFloor
-              project={project}
-              floor={topFloor - i}
-              side={i % 2 ? "right" : "left"}
-            />
+          {floors(building, topFloor).map((floor) => (
+            <ProjectFloor {...floor} />
           ))}
         </ul>
       </section>
@@ -105,12 +113,8 @@ const residents: SashKind[] = [
         </div>
         <div class="cornice band-cornice" aria-hidden="true" />
         <ul class="floors">
-          {games.map((project, i) => (
-            <ProjectFloor
-              project={project}
-              floor={games.length - i}
-              side={i % 2 ? "right" : "left"}
-            />
+          {floors(games, games.length).map((floor) => (
+            <ProjectFloor {...floor} />
           ))}
         </ul>
       </section>
