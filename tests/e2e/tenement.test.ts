@@ -43,6 +43,21 @@ describe("Tenement", () => {
     }
   });
 
+  it("lights the Project whose floor is across the middle of the screen, even near its edge", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    await page.mouse.move(-1, -1);
+    const floor = floorOf(page, "Gauge");
+    // The Featured floor is tall: with its bottom edge just below the middle
+    // of the screen, its centre is far above it.
+    await floor.evaluate((el) => {
+      scrollBy(0, el.getBoundingClientRect().bottom - innerHeight / 2 - 32);
+    });
+    await expect(floor).toHaveAttribute("data-lit");
+    await expect(page.locator("[data-lit]")).toHaveCount(1);
+  });
+
   it("lights the Sign of the Project focused from the keyboard", async ({
     page,
   }) => {

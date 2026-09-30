@@ -516,19 +516,18 @@ const residents: SashKind[] = [
       lit = next;
     };
 
-    // Nearest the middle of the screen, if it is within 40% of it.
+    // The one across the middle of the screen, or else the nearest to it
+    // within 40% of the screen's height.
     let queued = false;
     const centre = () => {
       queued = false;
-      const middle = { x: innerWidth / 2, y: innerHeight / 2 };
+      const middle = innerHeight / 2;
       let nearest: HTMLElement | null = null;
-      let nearestDistance = Infinity;
+      let nearestDistance = innerHeight * 0.4;
       for (const target of onScreen) {
         const r = target.getBoundingClientRect();
-        const dy = Math.abs(r.top + r.height / 2 - middle.y);
-        const dx = Math.abs(r.left + r.width / 2 - middle.x);
-        const distance = dy + dx * 0.25;
-        if (dy < innerHeight * 0.4 && distance < nearestDistance) {
+        const distance = Math.max(0, r.top - middle, middle - r.bottom);
+        if (distance < nearestDistance) {
           nearest = target;
           nearestDistance = distance;
         }
