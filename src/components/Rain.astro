@@ -58,6 +58,15 @@ const { behind = false } = Astro.props;
   const FADE = [1, 0.6, 0.32, 0.12];
 
   const between = ([min, max]: Range) => min + Math.random() * (max - min);
+  type Depth = (typeof DEPTHS)[number];
+  const count = (depth: Depth) =>
+    Math.round((innerWidth * innerHeight) / depth.area);
+  const drop = (depth: Depth): Drop => ({
+    x: Math.random() * innerWidth * 1.2,
+    y: Math.random() * innerHeight,
+    length: between(depth.length),
+    speed: between(depth.speed),
+  });
 
   // One shower for the whole page: every canvas draws the same drops, each
   // clipped to its own parent, so a streak crossing from one parent into the
@@ -67,10 +76,12 @@ const { behind = false } = Astro.props;
     context: CanvasRenderingContext2D;
     parent: HTMLElement;
     falling: boolean;
+    drawn: boolean;
   };
   const canvases: Canvas[] = [];
   const still = matchMedia("(prefers-reduced-motion: reduce)");
   let drops: Drop[][] = [];
+  let width = 0;
   let running = false;
   let last = 0;
 
@@ -81,17 +92,20 @@ const { behind = false } = Astro.props;
       canvas.height = innerHeight * dpr;
       context.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
-    drops = DEPTHS.map((depth) =>
-      Array.from(
-        { length: Math.round((innerWidth * innerHeight) / depth.area) },
-        () => ({
-          x: Math.random() * innerWidth * 1.2,
-          y: Math.random() * innerHeight,
-          length: between(depth.length),
-          speed: between(depth.speed),
-        }),
-      ),
-    );
+    if (innerWidth !== width) {
+      width = innerWidth;
+      drops = DEPTHS.map((depth) =>
+        Array.from({ length: count(depth) }, () => drop(depth)),
+      );
+      return;
+    }
+    // On a phone the address bar changes the screen's height as the visitor
+    // scrolls: keep the drops falling, only thinning them out or topping
+    // them up.
+    DEPTHS.forEach((depth, i) => {
+      drops[i].length = Math.min(drops[i].length, count(depth));
+      while (drops[i].length < count(depth)) drops[i].push(drop(depth));
+    });
   };
 
   const frame = (now: number) => {
@@ -120,11 +134,17 @@ const { behind = false } = Astro.props;
       }
       return segments;
     });
-    for (const { context, parent } of falling) {
+    for (const target of falling) {
+      const { context, parent } = target;
       const { top, bottom } = parent.getBoundingClientRect();
       const from = Math.max(0, top);
       const to = Math.min(innerHeight, bottom);
+      // A parent touching the edge of the screen is in view, but shows none
+      // of its rain.
+      if (to <= from && !target.drawn) continue;
       context.clearRect(0, 0, innerWidth, innerHeight);
+      target.drawn = to > from;
+      if (!target.drawn) continue;
       context.save();
       context.beginPath();
       context.rect(0, from, innerWidth, to - from);
@@ -145,6 +165,7 @@ const { behind = false } = Astro.props;
     target.falling = on && !still.matches;
     if (!target.falling) {
       target.context.clearRect(0, 0, innerWidth, innerHeight);
+      target.drawn = false;
     } else if (!running) {
       running = true;
       last = performance.now();
@@ -158,7 +179,7 @@ const { behind = false } = Astro.props;
     const context = canvas.getContext("2d");
     const parent = canvas.parentElement;
     if (context && parent) {
-      canvases.push({ canvas, context, parent, falling: false });
+      canvases.push({ canvas, context, parent, falling: false, drawn: false });
     }
   }
   resize();
