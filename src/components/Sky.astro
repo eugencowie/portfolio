@@ -2,16 +2,19 @@
 import { seededRandom } from "@/lib/random";
 
 /**
- * The starry night behind every page, spanning the whole document and
- * scrolling with it. The first screen is the sky proper: indigo overhead
- * deepening to purple at the fold, with stars thinning out towards it, where
- * the Skyline stands in front of them in the Hero and dissolves into it.
- * Just below the fold the purple recedes through the same shades in reverse,
- * a short band of sky mirrored in the river, and reaches the plain page
- * background around the Highrise's roof. Star positions are drawn once at
- * build time from a fixed seed so every build renders the same sky, and are
- * laid out in viewport units so they spread over any screen. The `<body>` is
- * `relative` so the Sky stretches to the full page height.
+ * The starry night behind every page, fixed to the screen so the stars stay
+ * put as the page scrolls: indigo overhead deepening to purple at the foot of
+ * the screen, with stars thinning out towards it, where the Skyline stands in
+ * front of them in the Hero and dissolves into it. For visitors who prefer
+ * reduced motion, and in browsers without scroll-driven animations, where the
+ * Skyline scrolls away with the Hero, the Sky spans the whole document and
+ * scrolls with it instead: just below the fold the purple recedes through the
+ * same shades in reverse, a short band of sky mirrored in the river, and
+ * reaches the plain page background around the Highrise's roof. Star
+ * positions are drawn once at build time from a fixed seed so every build
+ * renders the same sky, and are laid out in viewport units so they spread
+ * over any screen. The `<body>` is `relative` so the Sky can stretch to the
+ * full page height.
  */
 const random = seededRandom(20260920);
 const percent = () => (random() * 100).toFixed(2);
@@ -57,6 +60,16 @@ const layers = [
       #15123f 112svh,
       var(--background) 120svh
     );
+  }
+  /* Fixed wherever the Skyline is held (see Skyline.astro). */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: scroll()) {
+      .sky {
+        position: fixed;
+        bottom: auto;
+        height: 100lvh;
+      }
+    }
   }
   /* Stars thin out and vanish towards the bottom of the first screen. */
   .sky-stars {

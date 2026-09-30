@@ -35,7 +35,7 @@ The Avatar with the Wordmark beneath it, the Wordmark rising into the Avatar and
 _Avoid_: lockup (that is the Wordmark alone), stack, hero (that adds the Social Links)
 
 **Hero**:
-The home page header composing the Identity and the Social Links over the Skyline, filling the first screen at any viewport and scrolling away with the page. Rain falls over the Skyline, behind the Identity and the Social Links, and runs on unbroken down the Highrise.
+The home page header composing the Identity and the Social Links over the Skyline, filling the first screen at any viewport. As the page scrolls, the Identity and the Social Links leave while the Skyline stays behind, and the Highrise's roof rises in front of it: one continuous shot down from the sky. Rain falls over the Skyline, behind the Identity and the Social Links, and runs on unbroken down the Highrise.
 _Avoid_: banner, header, masthead
 
 **Open Graph image**:
@@ -47,15 +47,15 @@ The composition the Hero and the Open Graph image share: the Skyline standing at
 _Avoid_: backdrop, stage, frame
 
 **Skyline**:
-The neon waterfront illustration standing at the foot of the Hero and the Open Graph image, glowing magenta at the horizon and sunk so only a sliver of the river reflection shows. In the Hero that sliver dissolves into the Sky.
+The neon waterfront illustration standing at the foot of the Hero and the Open Graph image, glowing magenta at the horizon and sunk so only a sliver of the river reflection shows. In the Hero that sliver dissolves into the Sky, and the Skyline stays on screen as the page scrolls, rising at a quarter of its speed until the Highrise has covered it.
 _Avoid_: background (that is the page colour, not the picture), backdrop, wallpaper
 
 **Sky**:
-The CSS night behind every page, spanning the whole document and scrolling with it: over the first screen an indigo gradient deepening to purple at the fold, scattered with stars laid out from a fixed seed at build time; just below the fold a short band of the same shades receding in reverse, the sky mirrored in the river; then the plain page background around the Highrise's roof.
+The CSS night behind every page, fixed to the screen so its stars stay put as the page scrolls: an indigo gradient deepening to purple at the foot of the screen, scattered with stars laid out from a fixed seed at build time. For visitors who prefer reduced motion it spans the whole document and scrolls with it instead: just below the fold a short band of the same shades receding in reverse, the sky mirrored in the river; then the plain page background around the Highrise's roof.
 _Avoid_: starfield, background gradient
 
 **Highrise**:
-The brick building on the near bank of the Clyde that holds the Projects below the Hero, descended floor by floor in the rain. Building's heading stands on its roof and each of its Projects gets a floor beneath; then a floor of residents in ordinary windows; then Games, its heading mounted on a stone cornice above its floors; and at street level the Other Section as the tenant directory by the close door, beside a shop window holding the Social Links. Each Project's floor has its screenshot in a lit window, spilling its light onto the bricks, and its Sign beside it. The Featured Project's window is arched and wider. The Highrise stops short of the screen's right-hand side: balconies wrap its corner, reaching out over a lane, and past them the city behind drifts by more slowly as the visitor descends.
+The brick building on the near bank of the Clyde that holds the Projects below the Hero, descended floor by floor in the rain. Building's heading stands on its roof and each of its Projects gets a floor beneath; then a floor of residents in ordinary windows; then Games, its heading mounted on a stone cornice above its floors; and at street level the Other Section as the tenant directory by the close door, beside a shop window holding the Social Links. Each Project's floor has its screenshot in a lit window, spilling its light onto the bricks, and its Sign beside it. The Featured Project's window is arched and wider. The Highrise stops short of the screen's right-hand side: balconies wrap its corner, reaching out over a lane, and past them the city behind drifts by more slowly as the visitor descends, the Skyline showing down the top of the lane.
 _Avoid_: tenement, building (that is a Section), wall, facade, cards
 
 **Rain**:

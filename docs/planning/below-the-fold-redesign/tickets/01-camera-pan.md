@@ -65,3 +65,13 @@ What was built:
 3. **The tilt's roof.** It stands against plain dark water with no streaks behind it. If the tilt wins, carry the ripples down to the parapet.
 
 Two e2e tests were changed on this branch only. The Skyline test now runs on `?variant=current`, since the crane is what stops the Skyline scrolling away with the Hero. The rain test counts a third canvas, the tilt passage's.
+
+### Built on `feature/tenement`
+
+The crane is the homepage's join, rebuilt rather than copied from the prototype:
+
+- The Hero's own Skyline is held (`<Skyline held>`) and the Sky is fixed to the screen, instead of a second copy of both in a backdrop.
+- The Skyline rises at a quarter of the scroll speed for the first 240svh, for as long as any of it shows, rather than stopping once the roof has passed the top of the screen.
+- The lane's sky fades in from clear over the same distance as before, rather than staying clear for its first 35svh, so under reduced motion the lane is unchanged.
+- There is no tilt, no variant switcher and no third Rain.
+- The rise is written as animation longhands. The CSS minifier folds a timeline into the `animation` shorthand, which browsers reject, so the prototype's crane only rose on the dev server. The same fault had kept the city behind from drifting in the built site; that was fixed first, in its own commit.
