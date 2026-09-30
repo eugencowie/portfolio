@@ -24,6 +24,10 @@ _Avoid_: logo, title, brand
 The lit-tube text treatment the site's signage uses: magenta for `eugen` and lit Signs, cyan for `codes` and Section headings.
 _Avoid_: glow (that is one layer of the treatment, not the concept), tube, sign (a Sign is a name lit with Neon, not the treatment)
 
+**Spill**:
+The light a lit thing throws onto nearby surfaces.
+_Avoid_: glow, light, cast
+
 **Social Links**:
 The links pointing to where Eugen is elsewhere, shown beneath the Identity and again on the Ground Floor.
 _Avoid_: tagline, socials, profiles, subtitle

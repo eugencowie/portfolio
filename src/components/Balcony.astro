@@ -55,7 +55,7 @@ const bulbs = swags
 
 <div class="balcony" data-kind={kind} aria-hidden="true">
   {light && (
-    <div class="door-light" style={`--light: ${SASH_LIGHT_RGB[light]}`} />
+    <div class="door-spill" style={`--light: ${SASH_LIGHT_RGB[light]}`} />
   )}
   <svg viewBox="0 0 100 72">
     {kind === "plants" && (
@@ -192,8 +192,8 @@ const bulbs = swags
     width: 100%;
     overflow: visible;
   }
-  /* Light from the room behind. */
-  .door-light {
+  /* The Spill of the room behind. */
+  .door-spill {
     position: absolute;
     top: -35%;
     left: 0;

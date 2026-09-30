@@ -99,7 +99,7 @@ const residents: SashKind[] = [
       <section aria-labelledby="games">
         <div class="band">
           <div class="band-heading">
-            <div class="band-glow" aria-hidden="true" />
+            <div class="band-spill" aria-hidden="true" />
             <SectionHeading id="games">Games</SectionHeading>
           </div>
         </div>
@@ -479,8 +479,8 @@ const residents: SashKind[] = [
   .band :global(h2) {
     font-size: clamp(3rem, 6vw, 5rem);
   }
-  /* Its light on the bricks, under the brick layer. */
-  .band-glow {
+  /* Its Spill on the bricks, under the brick layer. */
+  .band-spill {
     position: absolute;
     z-index: -2;
     inset: -3.5rem -10rem -5.5rem;
