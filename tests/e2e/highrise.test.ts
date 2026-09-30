@@ -122,6 +122,20 @@ describe("Highrise", () => {
     for (const canvas of await rain.all()) await expect(canvas).toBeHidden();
   });
 
+  it("lays the rain over the screen only where it falls", async ({ page }) => {
+    await page.goto("/");
+    const overHero = page.locator("header canvas[data-rain]");
+    const overHighrise = page.locator("[data-highrise] canvas[data-rain]");
+    await expect(overHero).toBeVisible();
+    await expect(overHighrise).toBeHidden();
+
+    await page
+      .getByRole("heading", { level: 2, name: "Other projects" })
+      .scrollIntoViewIfNeeded();
+    await expect(overHighrise).toBeVisible();
+    await expect(overHero).toBeHidden();
+  });
+
   it("drifts the city behind more slowly than the Highrise as the visitor descends", async ({
     page,
   }) => {

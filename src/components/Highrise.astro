@@ -244,7 +244,6 @@ const residents: SashKind[] = [
           rgb(5 3 16 / 0.5)
         ),
         var(--bricks);
-      background-blend-mode: normal, multiply;
     }
   }
   /* The stone cope. */
@@ -295,7 +294,7 @@ const residents: SashKind[] = [
 
   /* ---------- Brickwork ----------
      Lights on the bricks (z-index -2) sit under the brick layer (-1), which
-     is multiplied over them; everything else stands in front. */
+     shades them; everything else stands in front. */
   .brickwork {
     position: relative;
     isolation: isolate;
@@ -345,7 +344,6 @@ const residents: SashKind[] = [
     z-index: -1;
     pointer-events: none;
     background-image: var(--bricks);
-    mix-blend-mode: multiply;
   }
   /* A cast-iron downpipe from a hopper under the cornice to the street, in
      front of the string courses. */

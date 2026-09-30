@@ -105,25 +105,27 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
       ) : (
         <div class="lintel" aria-hidden="true" />
       )}
-      <div class="pane">
-        <Image
-          src={screenshot}
-          alt={`Screenshot of ${name}`}
-          widths={[640, 960, 1280, 1600]}
-          sizes="(min-width: 64rem) 50vw, 100vw"
-          loading="lazy"
-          class="screenshot"
-        />
-        <div class="sheen" aria-hidden="true"></div>
-        <div aria-hidden="true">
-          {drips.map((d) => (
-            <span
-              class="drip"
-              style={`--x: ${d.x}; --delay: ${d.delay}; --duration: ${d.duration}; --size: ${d.size}`}
-            >
-              <span class="drop" />
-            </span>
-          ))}
+      <div class="jambs">
+        <div class="pane">
+          <Image
+            src={screenshot}
+            alt={`Screenshot of ${name}`}
+            widths={[640, 960, 1280, 1600]}
+            sizes="(min-width: 64rem) 50vw, 100vw"
+            loading="lazy"
+            class="screenshot"
+          />
+          <div class="sheen" aria-hidden="true"></div>
+          <div aria-hidden="true">
+            {drips.map((d) => (
+              <span
+                class="drip"
+                style={`--x: ${d.x}; --delay: ${d.delay}; --duration: ${d.duration}; --size: ${d.size}`}
+              >
+                <span class="drop" />
+              </span>
+            ))}
+          </div>
         </div>
       </div>
       <div class="sill" aria-hidden="true"></div>
@@ -372,10 +374,16 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
       --sill-reach: 1.5rem;
     }
   }
-  [data-featured] .pane {
-    box-shadow:
-      calc(-1 * var(--surround)) 0 var(--jamb),
-      var(--surround) 0 var(--jamb);
+  /* Drawn beside the pane, not as its shadow: a shadow would have the pane
+     repainted with every drip that runs down it. */
+  [data-featured] .jambs {
+    position: relative;
+  }
+  [data-featured] .jambs::before {
+    content: "";
+    position: absolute;
+    inset: 0 calc(-1 * var(--surround));
+    background: var(--jamb);
   }
   [data-featured] .sill {
     margin-inline: calc(-1 * var(--sill-reach));
