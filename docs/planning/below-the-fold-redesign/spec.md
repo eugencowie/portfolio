@@ -35,7 +35,7 @@ Every scene-based prototype got the same seam wrong: the join between the Hero a
 
 > The Skyline holds still as the Hero scrolls away. The camera tilts down past the river, with a little parallax on the Skyline for depth, and lands on something on the near bank of the Clyde: a road, a building, a wall. The Hero and what follows become one continuous shot.
 
-This is the first thing to prototype, on its own, before choosing what it lands on.
+It lands on the Highrise's roof, prototyped in [ticket 01](tickets/01-camera-pan.md) against a crane down the Highrise's front, the move it already makes below the roof.
 
 ### Present each Project in this order of importance
 

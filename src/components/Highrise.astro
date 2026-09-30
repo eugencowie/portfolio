@@ -21,9 +21,10 @@ import SectionHeading from "./SectionHeading.astro";
  * Projects beneath it. Then a floor of residents, then Games, mounted on a
  * stone cornice above its own floors, and at street level the Other Section
  * and the Social Links. Each Section's floors swap the window's side floor
- * by floor, the first on the left under the heading. One Project's Sign is lit at a time: the one of the
- * Project hovered or focused, or else the one nearest the middle of the
- * screen. A Social Link's lights only while it is hovered.
+ * by floor, the first on the left under the heading. One Project's Sign is
+ * lit at a time: the one of the Project hovered or focused, or else the one
+ * across the middle of the screen or nearest to it. A Social Link's Sign
+ * lights only while it is hovered.
  */
 type Props = ArrangedProjects<ProjectEntry>;
 const { building, games, other } = Astro.props;
