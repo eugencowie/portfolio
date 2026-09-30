@@ -31,12 +31,32 @@ type Tower = {
   /** How much of each lit window's light reaches us. */
   glow: number;
 };
+const far: Tower = {
+  x: 66,
+  width: 50,
+  top: 72,
+  fill: "#1a1634",
+  unlit: "#221d41",
+  glow: 0.5,
+};
+const right: Tower = {
+  x: 124,
+  width: 36,
+  top: 180,
+  fill: "#16122c",
+  unlit: "#1f1a3a",
+  glow: 0.8,
+};
+const left: Tower = {
+  x: 0,
+  width: 54,
+  top: 252,
+  fill: "#141028",
+  unlit: "#1d1735",
+  glow: 0.9,
+};
 // Furthest first.
-const towers: Tower[] = [
-  { x: 66, width: 50, top: 72, fill: "#1a1634", unlit: "#221d41", glow: 0.5 },
-  { x: 124, width: 36, top: 180, fill: "#16122c", unlit: "#1f1a3a", glow: 0.8 },
-  { x: 0, width: 54, top: 252, fill: "#141028", unlit: "#1d1735", glow: 0.9 },
-];
+const towers = [far, right, left];
 const LIT = ["#ffcf87", "#ffcf87", "#ffcf87", "#ffd9a8", "#a8c0ff", "#ff8fc8"];
 
 const columns = ({ x, width }: Tower) => {
@@ -96,7 +116,6 @@ const crane = `<g fill='#2a2350' stroke='#2a2350'>
 <rect x='96' y='128' width='6' height='3'/><path fill='none' stroke-width='0.5' d='M99 131V156'/><rect x='97' y='156' width='4' height='4'/>
 </g>`;
 
-const [far, right, left] = towers;
 const tops = drawing(
   TOPS,
   towerSvg(far, 0, far.top, TOPS) +

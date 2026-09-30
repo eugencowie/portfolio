@@ -23,8 +23,10 @@ export function brickTile(): string {
       const shade = shades[column % columns];
       const v = Math.round(200 + shade * 55);
       // Most bricks grey under the city light, a few still showing red.
-      const warm = shade > 0.72 ? 1 : 0;
-      const fill = `rgb(${v},${v - 28 * warm},${v - 36 * warm})`;
+      const warm = shade > 0.72;
+      const fill = warm
+        ? `rgb(${v},${v - 28},${v - 36})`
+        : `rgb(${v},${v},${v})`;
       bricks += `<rect x='${column * width + offset + mortar / 2}' y='${row * height + mortar / 2}' width='${width - mortar}' height='${height - mortar}' fill='${fill}'/>`;
     }
   }

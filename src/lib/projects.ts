@@ -10,11 +10,6 @@ export const FLOOR_SECTIONS = [
 ] as const satisfies readonly ProjectSection[];
 export type FloorSection = (typeof FLOOR_SECTIONS)[number];
 
-export const isFloorSection = (
-  section: ProjectSection,
-): section is FloorSection =>
-  (FLOOR_SECTIONS as readonly ProjectSection[]).includes(section);
-
 export interface ProjectLike {
   section: ProjectSection;
   order: number;
