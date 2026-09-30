@@ -153,7 +153,7 @@ const switching = Array.from({ length: 12 }, () => {
     top: 0;
     right: 0;
     bottom: 0;
-    width: var(--side);
+    width: var(--lane);
     overflow: clip;
     background: linear-gradient(
       to bottom,
@@ -286,7 +286,7 @@ const switching = Array.from({ length: 12 }, () => {
   .lamp {
     position: absolute;
     bottom: 0;
-    left: calc(var(--side) * 0.58);
+    left: calc(var(--lane) * 0.58);
     width: 0.3rem;
     height: clamp(10rem, 22svh, 15rem);
     background: linear-gradient(to right, #0c0916, #2a2340 50%, #0c0916);

@@ -40,7 +40,7 @@ const balconyLight = bays && sashLight(bays.right);
     position: relative;
     display: grid;
     grid-template-columns: var(--bay) minmax(0, 1fr) var(--bay);
-    padding-inline: var(--gutter) calc(var(--gutter) + var(--side));
+    padding-inline: var(--gutter) calc(var(--gutter) + var(--lane));
     padding-block: clamp(3rem, 9svh, 6.5rem);
   }
   /* The string course. */
@@ -48,7 +48,7 @@ const balconyLight = bays && sashLight(bays.right);
     content: "";
     position: absolute;
     z-index: 2;
-    inset: 0 var(--side) auto 0;
+    inset: 0 var(--lane) auto 0;
     height: 0.8rem;
     background: linear-gradient(
       to bottom,
@@ -84,7 +84,7 @@ const balconyLight = bays && sashLight(bays.right);
     --width: calc(var(--balcony-overlap) + var(--balcony-reach));
     position: absolute;
     z-index: 4;
-    left: calc(100% - var(--side) - var(--balcony-overlap));
+    left: calc(100% - var(--lane) - var(--balcony-overlap));
     top: calc(50% - var(--width) * 0.108);
     width: var(--width);
     pointer-events: none;

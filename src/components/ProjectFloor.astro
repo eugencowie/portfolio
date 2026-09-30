@@ -170,7 +170,7 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
     border-radius: 0.25rem;
     /* The caption column's width, to fit the name to. */
     --caption-width: calc(
-      100vw - var(--side) - 2 * var(--gutter) - 2 * var(--bay)
+      100vw - var(--lane) - 2 * var(--gutter) - 2 * var(--bay)
     );
   }
   .body:has(:focus-visible) {
@@ -186,7 +186,7 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
       gap: var(--gap);
       --caption-width: calc(
         (
-            100vw - var(--side) - 2 * var(--gutter) - 2 * var(--bay) -
+            100vw - var(--lane) - 2 * var(--gutter) - 2 * var(--bay) -
               var(--gap)
           ) *
           var(--caption-share)

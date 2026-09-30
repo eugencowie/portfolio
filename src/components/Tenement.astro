@@ -46,7 +46,7 @@ const residents: SashKind[] = [
 <div class="tenement" style={`--bricks: ${svgUrl(brickTile())}`} data-tenement>
   <div class="roof">
     {building.length > 0 && (
-      <div class="roof-sign">
+      <div class="roof-heading">
         <div class="lattice" aria-hidden="true" />
         <SectionHeading id="building">Currently building</SectionHeading>
       </div>
@@ -96,7 +96,7 @@ const residents: SashKind[] = [
     {games.length > 0 && (
       <section aria-labelledby="games">
         <div class="band">
-          <div class="band-sign">
+          <div class="band-heading">
             <div class="band-glow" aria-hidden="true" />
             <SectionHeading id="games">Games</SectionHeading>
           </div>
@@ -126,11 +126,11 @@ const residents: SashKind[] = [
     --gutter: 1.25rem;
     --bay: 0px;
     /* The lane between the Tenement's side and the screen's. */
-    --side: clamp(1.75rem, 10vw, 10rem);
+    --lane: clamp(1.75rem, 10vw, 10rem);
     /* A balcony reaches most of the way across the lane, and back over the
        Tenement's front: from 80rem across the end bay's window, below that
        only across part of the gutter, clear of the screenshots. */
-    --balcony-reach: calc(var(--side) * 0.85);
+    --balcony-reach: calc(var(--lane) * 0.85);
     --balcony-overlap: calc(var(--gutter) * 0.5);
     position: relative;
     overflow: clip;
@@ -161,14 +161,14 @@ const residents: SashKind[] = [
     align-items: flex-end;
     min-height: clamp(10rem, 26svh, 16rem);
     padding-inline: calc(var(--gutter) + var(--bay))
-      calc(var(--gutter) + var(--bay) + var(--side));
+      calc(var(--gutter) + var(--bay) + var(--lane));
   }
-  .roof-sign {
+  .roof-heading {
     position: relative;
     padding: 0.6rem 2.2rem 1.6rem;
     margin-bottom: -0.2rem;
   }
-  .roof-sign :global(h2) {
+  .roof-heading :global(h2) {
     position: relative;
     font-size: clamp(3.4rem, 8vw, 6.5rem);
   }
@@ -214,7 +214,7 @@ const residents: SashKind[] = [
   @media (min-width: 64rem) {
     .chimney {
       position: absolute;
-      right: calc(var(--side) + var(--gutter));
+      right: calc(var(--lane) + var(--gutter));
       bottom: 0;
       display: flex;
       justify-content: center;
@@ -292,7 +292,7 @@ const residents: SashKind[] = [
         #231231 70%,
         #1a0d26
       )
-      0 0 / calc(100% - var(--side)) 100% no-repeat;
+      0 0 / calc(100% - var(--lane)) 100% no-repeat;
     --quoin: clamp(0.5rem, 1.4vw, 1.4rem);
     /* The eaves: the parapet, a band of bricks, and the cornice. */
     --parapet: 0.9rem;
@@ -322,12 +322,12 @@ const residents: SashKind[] = [
     box-shadow: 0.3rem 0 0.6rem rgb(5 3 15 / 0.6);
   }
   .brickwork::after {
-    right: var(--side);
+    right: var(--lane);
     box-shadow: -0.3rem 0 0.6rem rgb(5 3 15 / 0.6);
   }
   .bricks {
     position: absolute;
-    inset: 0 var(--side) 0 0;
+    inset: 0 var(--lane) 0 0;
     z-index: -1;
     pointer-events: none;
     background-image: var(--bricks);
@@ -377,7 +377,7 @@ const residents: SashKind[] = [
   }
   .parapet,
   .cornice {
-    margin-right: var(--side);
+    margin-right: var(--lane);
   }
   .parapet {
     height: var(--parapet);
@@ -463,7 +463,7 @@ const residents: SashKind[] = [
   .band {
     padding: clamp(2rem, 6svh, 4rem) calc(var(--gutter) + var(--bay)) 0;
   }
-  .band-sign {
+  .band-heading {
     position: relative;
     width: fit-content;
   }
