@@ -15,7 +15,7 @@ const { kind } = Astro.props;
 const light = sashLight(kind);
 ---
 
-<div class="sash" data-kind={kind} aria-hidden="true">
+<div class="sash" data-kind={kind} data-light={light} aria-hidden="true">
   {light && (
     <div class="sash-spill" style={`--light: ${SASH_LIGHT_RGB[light]}`} />
   )}
@@ -180,10 +180,8 @@ const light = sashLight(kind);
       ),
       linear-gradient(170deg, #1c1638, #0b0820);
   }
-  .sash[data-kind="lamp"] .sash-room,
-  .sash[data-kind="person"] .sash-room,
-  .sash[data-kind="cat"] .sash-room,
-  .sash[data-kind="plant"] .sash-room {
+  /* Lamplight, unless the kind paints its own room below. */
+  .sash[data-light="warm"] .sash-room {
     background: radial-gradient(
       circle at 72% 30%,
       #ffe0a3,
