@@ -1,7 +1,7 @@
 # Prototype the camera move from the Hero to the Highrise's roof
 
 Type: prototype
-Status: ready-for-agent
+Status: resolved
 
 ## Question
 
@@ -35,4 +35,33 @@ Judged in the browser, for the Answer: whether each move reads as a camera or as
 
 ## Answer
 
-_(unresolved)_
+Yes, with the crane. Judged in the browser, the crane is good: the stars stay put, the Skyline rises slowly, and the roof rises in front of it at page speed, the same move the Highrise already makes below the roof, so the Hero and the Highrise read as one shot. It adds no scroll before the first Project. The tilt is not pursued. It cost 1.35 screens of scroll before the first Project.
+
+## Comments
+
+### Prototype built (branch `prototype/camera-pan`)
+
+Run `mise run astro dev --background` and open `/`. Flip between `crane` (the default), `tilt` and `current` with the bar at the bottom of the screen or with ← →; each is also reachable directly as `/?variant=<name>`. The bar only renders on the dev server. The code is `src/components/prototype-camera-pan/`, wrapped around the Hero in `src/pages/index.astro`.
+
+What was built:
+
+- **Crane:** the stars and the Sky stay fixed, and the Skyline and its sliver of river rise at about a quarter of the scroll speed until the roof has passed the top of the screen. The roof rises at page speed in front of them, so about 0.6 screens down its Sign stands against the far city with the Skyline behind the parapet. The top of the lane is see-through for its first screen, so the Skyline shows down it, behind the city's towers. It adds no scroll.
+- **Tilt:** the Sky, the stars and the Skyline hold still for 85svh while the Identity and the Social Links leave. Then everything moves up together, the stars lagging at about 0.87× for a little depth against the Skyline. The Skyline's own reflection, hidden below the Hero today, runs on into 50svh of river with its glow at the top and neon streaks shimmering on the water. The roof arrives against the dark water. The rain falls through the whole passage.
+- **Fallback:** under reduced motion, and in browsers without scroll-driven animations, every variant is today's join. Full-page screenshots with reduced motion are pixel-identical to `feature/tenement` at 1440×900 and 390×844.
+
+**The tilt's extra scroll:** the first Project floor moves from 1216px to 2431px on desktop (1440×900) and from 1145px to 2284px on a phone (390×844). That is 1.35 extra screens on both, the 85svh hold plus the 50svh river, before the visitor reaches the first Project. The crane adds none.
+
+**What fights the phone:**
+
+- Neither move was tried on a real phone. The crane's backdrop is fixed and 100lvh tall with the picture in its top 100svh, and the tilt's is sticky. How each behaves when the address bar shows and hides is untested.
+- The Skyline is cropped to the centre 768px, as in the Hero today, so the phone gets the Hydro, the Finnieston Crane and part of the Armadillo. Both moves still read with that crop.
+- In the crane, the lane is 39px wide on a phone, so the Skyline showing down it is barely there.
+- In the tilt, the river is half a screen of water with nothing on it but streaks, and on a phone the whole screen is water for a moment.
+
+**What to dial back, from the stills:**
+
+1. **The tilt's cost.** 1.35 screens before the first Project goes against the spec's rule that the spectacle mustn't get between the tool-finder and the Projects. If the tilt wins, start the tilt before the Social Links have fully left and halve the river.
+2. **The crane's rise speed.** It is set to 0.25×. Faster reads more like layers sliding; slower reads more like the Skyline being fixed.
+3. **The tilt's roof.** It stands against plain dark water with no streaks behind it. If the tilt wins, carry the ripples down to the parapet.
+
+Two e2e tests were changed on this branch only. The Skyline test now runs on `?variant=current`, since the crane is what stops the Skyline scrolling away with the Hero. The rain test counts a third canvas, the tilt passage's.

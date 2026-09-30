@@ -35,7 +35,7 @@ Every scene-based prototype got the same seam wrong: the join between the Hero a
 
 > The Skyline holds still as the Hero scrolls away. The camera tilts down past the river, with a little parallax on the Skyline for depth, and lands on something on the near bank of the Clyde: a road, a building, a wall. The Hero and what follows become one continuous shot.
 
-It lands on the Highrise's roof, prototyped in [ticket 01](tickets/01-camera-pan.md) against a crane down the Highrise's front, the move it already makes below the roof.
+Prototyped on the Highrise in [ticket 01](tickets/01-camera-pan.md), a crane down its front beat this tilt: the stars stay put, the Skyline rises slowly and the roof rises in front of it, the move the Highrise already makes below the roof.
 
 ### Present each Project in this order of importance
 
@@ -56,6 +56,7 @@ Interactivity (reacting to scroll, hover, focus) and ambient motion (rain, flick
 
 - **Palette.** Two colours: every Section heading is cyan Neon and every Sign magenta. Each floor's other colour comes from its screenshot's light. Featured stands out by form instead: an arched window with a lit fanlight.
 - **The direction itself.** Neon Signs revised ([ticket 02](tickets/02-neon-signs-revised.md)), built as the Highrise. Night Drive without the sideways scroll ([ticket 03](tickets/03-night-drive-vertical.md)) and the Clyde tunnel ([ticket 04](tickets/04-clyde-tunnel.md)) were not pursued.
+- **The join.** A crane down the Highrise's front ([ticket 01](tickets/01-camera-pan.md)), adding no scroll before the first Project. The tilt above cost 1.35 screens and was not pursued.
 
 ## Prototypes so far
 
