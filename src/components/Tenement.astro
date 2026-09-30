@@ -1,6 +1,6 @@
 ---
 import type { ArrangedProjects, ProjectEntry } from "@/lib/projects";
-import { seededRandom } from "@/lib/random";
+import { brickTile } from "@/lib/brick";
 import { svgUrl } from "@/lib/svg";
 import CityBehind from "./CityBehind.astro";
 import Floor from "./Floor.astro";
@@ -41,36 +41,9 @@ const residents: SashKind[] = [
   "cat",
   "lamp",
 ];
-
-// Multiplied over the brickwork and every light that falls on it: bricks
-// let the light through, mortar eats it. Small bricks make a tall Tenement.
-function brickTile() {
-  const random = seededRandom(20260926);
-  const width = 46;
-  const height = 15;
-  const mortar = 2;
-  const columns = 8;
-  const rows = 12;
-  let bricks = "";
-  for (let row = 0; row < rows; row++) {
-    const offset = row % 2 ? -width / 2 : 0;
-    const shades = Array.from({ length: columns }, random);
-    for (let column = 0; column <= columns; column++) {
-      const shade = shades[column % columns];
-      const v = Math.round(200 + shade * 55);
-      // Most bricks grey under the city light, a few still showing red.
-      const warm = shade > 0.72 ? 1 : 0;
-      const fill = `rgb(${v},${v - 28 * warm},${v - 36 * warm})`;
-      bricks += `<rect x='${column * width + offset + mortar / 2}' y='${row * height + mortar / 2}' width='${width - mortar}' height='${height - mortar}' fill='${fill}'/>`;
-    }
-  }
-  return svgUrl(
-    `<svg xmlns='http://www.w3.org/2000/svg' width='${width * columns}' height='${height * rows}'><rect width='100%' height='100%' fill='rgb(96,84,122)'/>${bricks}</svg>`,
-  );
-}
 ---
 
-<div class="tenement" style={`--bricks: ${brickTile()}`} data-tenement>
+<div class="tenement" style={`--bricks: ${svgUrl(brickTile())}`} data-tenement>
   <div class="roof">
     {building.length > 0 && (
       <div class="roof-sign">
