@@ -7,9 +7,9 @@ const columns = 8;
 const rows = 12;
 
 /**
- * The Tenement's bricks as one SVG tile, laid in stretcher bond, to multiply
+ * The Highrise's bricks as one SVG tile, laid in stretcher bond, to multiply
  * over the brickwork and every light that falls on it: bricks let the light
- * through, mortar eats it. Small bricks make a tall Tenement. Each course
+ * through, mortar eats it. Small bricks make a tall Highrise. Each course
  * repeats its first brick past the right-hand edge, so the half bricks at
  * the ends of the staggered courses match when the tile repeats.
  */

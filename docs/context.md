@@ -23,7 +23,7 @@ Text lit as a neon tube: a pale core with a tight glow in the tube's colour. Cya
 _Avoid_: glow (that is one layer of the treatment, not the concept), tube, sign (a Sign is a name lit with Neon, not the treatment)
 
 **Social Links**:
-The line of links beneath the Identity on the home page pointing to where Eugen is elsewhere, hung again as Signs in the Tenement's shop window at street level.
+The line of links beneath the Identity on the home page pointing to where Eugen is elsewhere, hung again as Signs in the Highrise's shop window at street level.
 _Avoid_: tagline, socials, profiles, subtitle
 
 **Description**:
@@ -35,7 +35,7 @@ The Avatar with the Wordmark beneath it, the Wordmark rising into the Avatar and
 _Avoid_: lockup (that is the Wordmark alone), stack, hero (that adds the Social Links)
 
 **Hero**:
-The home page header composing the Identity and the Social Links over the Skyline, filling the first screen at any viewport and scrolling away with the page. Rain falls over the Skyline, behind the Identity and the Social Links, and runs on unbroken down the Tenement.
+The home page header composing the Identity and the Social Links over the Skyline, filling the first screen at any viewport and scrolling away with the page. Rain falls over the Skyline, behind the Identity and the Social Links, and runs on unbroken down the Highrise.
 _Avoid_: banner, header, masthead
 
 **Open Graph image**:
@@ -51,15 +51,15 @@ The neon waterfront illustration standing at the foot of the Hero and the Open G
 _Avoid_: background (that is the page colour, not the picture), backdrop, wallpaper
 
 **Sky**:
-The CSS night behind every page, spanning the whole document and scrolling with it: over the first screen an indigo gradient deepening to purple at the fold, scattered with stars laid out from a fixed seed at build time; just below the fold a short band of the same shades receding in reverse, the sky mirrored in the river; then the plain page background around the Tenement's roof.
+The CSS night behind every page, spanning the whole document and scrolling with it: over the first screen an indigo gradient deepening to purple at the fold, scattered with stars laid out from a fixed seed at build time; just below the fold a short band of the same shades receding in reverse, the sky mirrored in the river; then the plain page background around the Highrise's roof.
 _Avoid_: starfield, background gradient
 
-**Tenement**:
-The brick building on the near bank of the Clyde that holds the Projects below the Hero, descended floor by floor in the rain. Building's heading stands on its roof and each of its Projects gets a floor beneath; then a floor of residents in ordinary windows; then Games, its heading mounted on a stone cornice above its floors; and at street level the Other Section as the tenant directory by the close door, beside a shop window holding the Social Links. Each Project's floor has its screenshot in a lit window, spilling its light onto the bricks, and its Sign beside it. The Featured Project's window is arched and wider. The Tenement stops short of the screen's right-hand side: balconies wrap its corner, reaching out over a lane, and past them the city behind drifts by more slowly as the visitor descends.
-_Avoid_: building (that is a Section), wall, facade, cards
+**Highrise**:
+The brick building on the near bank of the Clyde that holds the Projects below the Hero, descended floor by floor in the rain. Building's heading stands on its roof and each of its Projects gets a floor beneath; then a floor of residents in ordinary windows; then Games, its heading mounted on a stone cornice above its floors; and at street level the Other Section as the tenant directory by the close door, beside a shop window holding the Social Links. Each Project's floor has its screenshot in a lit window, spilling its light onto the bricks, and its Sign beside it. The Featured Project's window is arched and wider. The Highrise stops short of the screen's right-hand side: balconies wrap its corner, reaching out over a lane, and past them the city behind drifts by more slowly as the visitor descends.
+_Avoid_: tenement, building (that is a Section), wall, facade, cards
 
 **Rain**:
-Streaks falling at three depths on a gusting wind: over the Skyline behind the Identity and the Social Links, then down the Tenement in front of it, running on unbroken from one into the other. It falls only while on screen, and not at all for visitors who prefer reduced motion.
+Streaks falling at three depths on a gusting wind: over the Skyline behind the Identity and the Social Links, then down the Highrise in front of it, running on unbroken from one into the other. It falls only while on screen, and not at all for visitors who prefer reduced motion.
 _Avoid_: particles, weather, storm
 
 ### Projects
@@ -97,5 +97,5 @@ The one Project in a Section singled out for prominence.
 _Avoid_: Highlighted, pinned, hero project
 
 **Sign**:
-A name hung on the Tenement as magenta Neon tubes, unlit glass at rest: a Project's beside its screenshot, or a Social Link's in the shop window. A Project's Sign is lit while the Project has attention, one at a time: the hovered or focused Project's, or else the one nearest the middle of the screen. A Social Link's is lit only while hovered.
+A name hung on the Highrise as magenta Neon tubes, unlit glass at rest: a Project's beside its screenshot, or a Social Link's in the shop window. A Project's Sign is lit while the Project has attention, one at a time: the hovered or focused Project's, or else the one nearest the middle of the screen. A Social Link's is lit only while hovered.
 _Avoid_: title, label, neon sign

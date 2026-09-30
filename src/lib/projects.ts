@@ -3,7 +3,7 @@ import type { CollectionEntry } from "astro:content";
 export const PROJECT_SECTIONS = ["building", "games", "other"] as const;
 export type ProjectSection = (typeof PROJECT_SECTIONS)[number];
 
-/** The Sections given floors of the Tenement: Building and Games. Their Projects have a screenshot and one may be Featured. */
+/** The Sections given floors of the Highrise: Building and Games. Their Projects have a screenshot and one may be Featured. */
 export const FLOOR_SECTIONS = [
   "building",
   "games",

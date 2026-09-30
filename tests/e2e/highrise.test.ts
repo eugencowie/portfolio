@@ -6,13 +6,13 @@ const floorOf = (page: Page, name: string) =>
     .getByRole("listitem")
     .filter({ has: page.getByRole("heading", { level: 3, name }) });
 
-describe("Tenement", () => {
+describe("Highrise", () => {
   it("descends from Building on the roof through Games to Other at street level", async ({
     page,
   }) => {
     await page.goto("/");
     const headings = page
-      .locator("[data-tenement]")
+      .locator("[data-highrise]")
       .getByRole("heading", { level: 2 });
     await expect(headings).toHaveText([
       "Currently building",

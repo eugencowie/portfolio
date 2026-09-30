@@ -32,4 +32,4 @@ A throwaway branch off `main` (or off the branch from ticket 01 if it has landed
 
 ## Answer
 
-Not pursued: Neon Signs revised ([ticket 02](02-neon-signs-revised.md)) became the homepage as the Tenement.
+Not pursued: Neon Signs revised ([ticket 02](02-neon-signs-revised.md)) became the homepage as the Highrise.

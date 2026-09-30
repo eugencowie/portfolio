@@ -2,7 +2,7 @@
 import { getCollection } from "astro:content";
 import MainLayout from "@/layouts/MainLayout.astro";
 import Hero from "@/components/Hero.astro";
-import Tenement from "@/components/Tenement.astro";
+import Highrise from "@/components/Highrise.astro";
 import { arrangeProjects } from "@/lib/projects";
 import { description, title } from "@/site";
 
@@ -12,6 +12,6 @@ const entries = await getCollection("projects");
 <MainLayout title={title} description={description}>
   <main>
     <Hero />
-    <Tenement {...arrangeProjects(entries)} />
+    <Highrise {...arrangeProjects(entries)} />
   </main>
 </MainLayout>

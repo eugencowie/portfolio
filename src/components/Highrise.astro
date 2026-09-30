@@ -13,7 +13,7 @@ import type { SashKind } from "@/lib/sash";
 import SectionHeading from "./SectionHeading.astro";
 
 /**
- * Everything below the Hero on the home page: the Tenement, a brick building
+ * Everything below the Hero on the home page: the Highrise, a brick building
  * on the near bank of the Clyde, descended floor by floor in the rain. It
  * stops short of the screen's right-hand side, where its balconies hang over
  * a lane and the city behind it shows.
@@ -44,7 +44,7 @@ const residents: SashKind[] = [
 ];
 ---
 
-<div class="tenement" style={`--bricks: ${svgUrl(brickTile())}`} data-tenement>
+<div class="highrise" style={`--bricks: ${svgUrl(brickTile())}`} data-highrise>
   <div class="roof">
     {building.length > 0 && (
       <div class="roof-heading">
@@ -123,17 +123,17 @@ const residents: SashKind[] = [
 </div>
 
 <style>
-  .tenement {
+  .highrise {
     --gutter: 1.25rem;
     --bay: 0px;
-    /* The lane between the Tenement's side and the screen's. */
+    /* The lane between the Highrise's side and the screen's. */
     --lane: clamp(1.75rem, 10vw, 10rem);
     /* The content's inset from the screen's left edge, past the gutter and
        the balcony bay, and from its right edge, past the lane as well. */
     --inset-left: calc(var(--gutter) + var(--bay));
     --inset-right: calc(var(--inset-left) + var(--lane));
     /* A balcony reaches most of the way across the lane, and back over the
-       Tenement's front: from 80rem across the end bay's window, below that
+       Highrise's front: from 80rem across the end bay's window, below that
        only across part of the gutter, clear of the screenshots. */
     --balcony-reach: calc(var(--lane) * 0.85);
     --balcony-overlap: calc(var(--gutter) * 0.5);
@@ -141,7 +141,7 @@ const residents: SashKind[] = [
     overflow: clip;
   }
   @media (min-width: 64rem) {
-    .tenement {
+    .highrise {
       --gutter: 2.5rem;
       /* The shopfront's columns at street level, shared by the ground floor
          and its reflection in the pavement. */
@@ -150,7 +150,7 @@ const residents: SashKind[] = [
     }
   }
   @media (min-width: 80rem) {
-    .tenement {
+    .highrise {
       --bay: 8rem;
       --balcony-overlap: calc(var(--gutter) + 5.25rem);
     }
@@ -303,7 +303,7 @@ const residents: SashKind[] = [
     --cornice-drop: 2.2rem;
     --cornice: 2rem;
   }
-  /* The Tenement's corners: stone quoins down both edges. */
+  /* The Highrise's corners: stone quoins down both edges. */
   .brickwork::before,
   .brickwork::after {
     content: "";
@@ -498,9 +498,9 @@ const residents: SashKind[] = [
 </style>
 
 <script>
-  function attend(tenement: HTMLElement) {
+  function attend(highrise: HTMLElement) {
     const targets = [
-      ...tenement.querySelectorAll<HTMLElement>("[data-attention]"),
+      ...highrise.querySelectorAll<HTMLElement>("[data-attention]"),
     ];
     const onScreen = new Set<HTMLElement>();
     let hovered: HTMLElement | null = null;
@@ -577,9 +577,9 @@ const residents: SashKind[] = [
     addEventListener("resize", schedule);
   }
 
-  for (const tenement of document.querySelectorAll<HTMLElement>(
-    "[data-tenement]",
+  for (const highrise of document.querySelectorAll<HTMLElement>(
+    "[data-highrise]",
   )) {
-    attend(tenement);
+    attend(highrise);
   }
 </script>

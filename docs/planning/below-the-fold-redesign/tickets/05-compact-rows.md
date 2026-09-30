@@ -5,9 +5,9 @@ Status: needs-triage
 
 ## Question
 
-The [spec](../spec.md#three-tiers-of-project) asks for "one Featured Project, then normal Projects, then compact rows if a Section ever grows past three". The Tenement gives every Building and Games Project a floor of its own, and has no compact tier. Nothing needs one yet: Building and Games have three Projects each.
+The [spec](../spec.md#three-tiers-of-project) asks for "one Featured Project, then normal Projects, then compact rows if a Section ever grows past three". The Highrise gives every Building and Games Project a floor of its own, and has no compact tier. Nothing needs one yet: Building and Games have three Projects each.
 
-How should a Section's fourth Project onwards appear on the Tenement?
+How should a Section's fourth Project onwards appear on the Highrise?
 
 ## What to build
 

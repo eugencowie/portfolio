@@ -55,7 +55,7 @@ Interactivity (reacting to scroll, hover, focus) and ambient motion (rain, flick
 ## Decided
 
 - **Palette.** Two colours: every Section heading is cyan Neon and every Sign magenta. Each floor's other colour comes from its screenshot's light. Featured stands out by form instead: an arched window with a lit fanlight.
-- **The direction itself.** Neon Signs revised ([ticket 02](tickets/02-neon-signs-revised.md)), built as the Tenement. Night Drive without the sideways scroll ([ticket 03](tickets/03-night-drive-vertical.md)) and the Clyde tunnel ([ticket 04](tickets/04-clyde-tunnel.md)) were not pursued.
+- **The direction itself.** Neon Signs revised ([ticket 02](tickets/02-neon-signs-revised.md)), built as the Highrise. Night Drive without the sideways scroll ([ticket 03](tickets/03-night-drive-vertical.md)) and the Clyde tunnel ([ticket 04](tickets/04-clyde-tunnel.md)) were not pursued.
 
 ## Prototypes so far
 

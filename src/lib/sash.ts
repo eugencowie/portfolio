@@ -1,4 +1,4 @@
-/** What shows through one of the Tenement's ordinary sash windows. */
+/** What shows through one of the Highrise's ordinary sash windows. */
 export type SashKind =
   | "dark"
   | "curtain"
