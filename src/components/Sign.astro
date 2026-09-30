@@ -3,9 +3,9 @@
  * A name on the Tenement as Neon tubes in `--tube`'s colour: dark glass at
  * rest, flickering on while the nearest `[data-lit]` ancestor has attention,
  * or while a `[data-hover-lit]` ancestor is hovered with a mouse. Each letter
- * of the lit layer is its own span, so the Tenement can make one buzz; a
- * `failing` Sign has one letter that keeps cutting out. Both layers share one
- * grid cell and the same words, so they wrap alike.
+ * of the lit layer is its own span, and now and then one of a lit Sign
+ * buzzes; a `failing` Sign has one letter that keeps cutting out. Both
+ * layers share one grid cell and the same words, so they wrap alike.
  */
 interface Props {
   text: string;
@@ -155,3 +155,20 @@ let at = 0;
     }
   }
 </style>
+
+<script>
+  const still = matchMedia("(prefers-reduced-motion: reduce)");
+
+  // Now and then a letter of a lit Sign buzzes.
+  setInterval(() => {
+    if (still.matches || Math.random() > 0.45) return;
+    const letters = document.querySelectorAll<HTMLElement>(
+      ":is([data-lit], [data-hover-lit]:hover) [data-letter]:not([data-failing])",
+    );
+    const letter = letters[Math.floor(Math.random() * letters.length)];
+    if (!letter) return;
+    letter.removeAttribute("data-buzz");
+    void letter.offsetWidth; // Restart the animation.
+    letter.setAttribute("data-buzz", "");
+  }, 1100);
+</script>

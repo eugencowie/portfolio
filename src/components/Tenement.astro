@@ -522,7 +522,6 @@ function brickTile() {
 
 <script>
   function attend(tenement: HTMLElement) {
-    const still = matchMedia("(prefers-reduced-motion: reduce)");
     const targets = [
       ...tenement.querySelectorAll<HTMLElement>("[data-attention]"),
     ];
@@ -600,19 +599,6 @@ function brickTile() {
     }
     addEventListener("scroll", schedule, { passive: true });
     addEventListener("resize", schedule);
-
-    // Now and then a letter of the lit Sign buzzes.
-    setInterval(() => {
-      if (still.matches || !lit || Math.random() > 0.45) return;
-      const letters = lit.querySelectorAll<HTMLElement>(
-        "[data-letter]:not([data-failing])",
-      );
-      const letter = letters[Math.floor(Math.random() * letters.length)];
-      if (!letter) return;
-      letter.removeAttribute("data-buzz");
-      void letter.offsetWidth; // Restart the animation.
-      letter.setAttribute("data-buzz", "");
-    }, 1100);
   }
 
   for (const tenement of document.querySelectorAll<HTMLElement>(
