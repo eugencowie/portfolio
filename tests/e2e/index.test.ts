@@ -3,7 +3,8 @@ import { describe, expect, it } from "./playwright";
 describe("Index", () => {
   it("presents the site identity and sharing metadata", async ({ page }) => {
     const title = "eugen";
-    const description = "Personal website of eugen, who codes.";
+    const description =
+      "Personal website of eugen, who codes: a portfolio of software projects, past and present.";
     await page.goto("/");
 
     await expect(page).toHaveTitle(title);
@@ -36,6 +37,23 @@ describe("Index", () => {
     for (const [selector, attribute, value] of attributes) {
       await expect(page.locator(selector)).toHaveAttribute(attribute, value);
     }
+
+    // The site URL is a deploy-time setting, so the resolved URL is not pinned
+    // here; the MainLayout tests cover it.
+    const structuredData = await page
+      .locator('script[type="application/ld+json"]')
+      .textContent();
+    expect(JSON.parse(structuredData ?? "null")).toEqual({
+      "@context": "https://schema.org",
+      "@type": "ProfilePage",
+      description,
+      mainEntity: {
+        "@type": "Person",
+        name: title,
+        url: expect.any(String),
+        sameAs: ["https://github.com/eugencowie", "https://x.com/eugencowie"],
+      },
+    });
   });
 
   it("uses the intended fonts for Section headings and Project names", async ({

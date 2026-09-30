@@ -3,7 +3,8 @@ export const title = "eugen";
 
 export const siteName = "eugen.codes";
 
-export const description = "Personal website of eugen, who codes.";
+export const description =
+  "Personal website of eugen, who codes: a portfolio of software projects, past and present.";
 
 export const socialLinks = [
   {
