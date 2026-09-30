@@ -17,11 +17,12 @@ import SectionHeading from "./SectionHeading.astro";
  * on the near bank of the Clyde, descended floor by floor in the rain. It
  * stops short of the screen's right-hand side, where its balconies hang over
  * a lane and the city behind it shows.
- * Currently building is the sign on its roof, with a floor for each of its
+ * Currently building is the heading on its roof, with a floor for each of its
  * Projects beneath it. Then a floor of residents, then Games, mounted on a
  * stone cornice above its own floors, and at street level the Other Section
- * and the Social Links. One Sign is lit at a time: the one of the Project hovered or
- * focused, or else the one nearest the middle of the screen.
+ * and the Social Links. One Project's Sign is lit at a time: the one of the
+ * Project hovered or focused, or else the one nearest the middle of the
+ * screen. A Social Link's lights only while it is hovered.
  */
 type Props = ArrangedProjects<ProjectEntry>;
 const { building, games, other } = Astro.props;
@@ -41,8 +42,8 @@ const residents: SashKind[] = [
   "lamp",
 ];
 
-// Multiplied over the facade and every light that falls on it: bricks let
-// the light through, mortar eats it. Small bricks make a big building.
+// Multiplied over the brickwork and every light that falls on it: bricks
+// let the light through, mortar eats it. Small bricks make a tall Tenement.
 function brickTile() {
   const random = seededRandom(20260926);
   const width = 46;
@@ -84,7 +85,7 @@ function brickTile() {
     </div>
   </div>
 
-  <div class="facade">
+  <div class="brickwork">
     <div class="bricks" aria-hidden="true"></div>
     <div class="pipe" aria-hidden="true"></div>
     <div class="parapet" aria-hidden="true"></div>
@@ -305,10 +306,10 @@ function brickTile() {
     background: linear-gradient(to right, #2c161d, #7d4640 35%, #24121a);
   }
 
-  /* ---------- Facade ----------
+  /* ---------- Brickwork ----------
      Lights on the bricks (z-index -2) sit under the brick layer (-1), which
      is multiplied over them; everything else stands in front. */
-  .facade {
+  .brickwork {
     position: relative;
     isolation: isolate;
     background: linear-gradient(
@@ -325,9 +326,9 @@ function brickTile() {
     --cornice-drop: 2.2rem;
     --cornice: 2rem;
   }
-  /* The building's corners: stone quoins down both edges. */
-  .facade::before,
-  .facade::after {
+  /* The Tenement's corners: stone quoins down both edges. */
+  .brickwork::before,
+  .brickwork::after {
     content: "";
     position: absolute;
     z-index: 3;
@@ -343,11 +344,11 @@ function brickTile() {
     );
     pointer-events: none;
   }
-  .facade::before {
+  .brickwork::before {
     left: 0;
     box-shadow: 0.3rem 0 0.6rem rgb(5 3 15 / 0.6);
   }
-  .facade::after {
+  .brickwork::after {
     right: var(--side);
     box-shadow: -0.3rem 0 0.6rem rgb(5 3 15 / 0.6);
   }

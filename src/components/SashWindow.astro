@@ -5,7 +5,7 @@ import { type SashKind, sashLight } from "@/lib/sash";
  * One of the Tenement's ordinary sash windows. No screenshot: dark glass, a
  * lamp behind a blind, a television, or a small figure going about their
  * night. Lit ones throw their light on the bricks around them, so a sash
- * window must sit in the Tenement's facade, where the light passes under the
+ * window must sit in the Tenement's brickwork, where the light passes under the
  * brick layer.
  */
 interface Props {
@@ -130,7 +130,7 @@ const light = sashLight(kind);
   .sash-opening {
     height: var(--h);
     overflow: hidden;
-    /* The reveal: the wall is deep, the frame sits back in it. */
+    /* The reveal: the brickwork is deep, the frame sits back in it. */
     box-shadow: inset 0.35rem 0.3rem 0.5rem rgb(0 0 0 / 0.7);
     background: #07061a;
   }

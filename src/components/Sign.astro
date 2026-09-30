@@ -19,7 +19,7 @@ let at = 0;
 ---
 
 <span class="sign">
-  <span class="tube">
+  <span class="unlit">
     {words.map((word, i) => (
       <>
         {i > 0 && " "}
@@ -47,7 +47,7 @@ let at = 0;
   .sign {
     display: inline-grid;
   }
-  .tube,
+  .unlit,
   .lit {
     grid-area: 1 / 1;
   }
@@ -55,7 +55,7 @@ let at = 0;
     display: inline-block;
   }
   /* Unlit: dark glass. */
-  .tube {
+  .unlit {
     color: color-mix(in oklab, var(--tube) 6%, transparent);
     -webkit-text-stroke: 1px color-mix(in oklab, var(--tube) 55%, transparent);
     text-shadow: 0.02em 0.05em 0.04em rgb(0 0 0 / 0.6);

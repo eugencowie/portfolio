@@ -20,10 +20,10 @@ _Avoid_: logo, title, brand
 
 **Neon**:
 Text lit as a neon tube: a pale core with a tight glow in the tube's colour. Cyan neon is `codes` in the Wordmark and every Section heading; magenta neon is `eugen` and every lit Sign. The Wordmark alone adds an outer haze so it stays the brightest sign on the page.
-_Avoid_: glow (that is one layer of the treatment, not the concept), tube, sign (a Sign is a Project's name lit with Neon, not the treatment)
+_Avoid_: glow (that is one layer of the treatment, not the concept), tube, sign (a Sign is a name lit with Neon, not the treatment)
 
 **Social Links**:
-The line of links beneath the Identity on the home page pointing to where Eugen is elsewhere.
+The line of links beneath the Identity on the home page pointing to where Eugen is elsewhere, hung again as Signs in the Tenement's shop window at street level.
 _Avoid_: tagline, socials, profiles, subtitle
 
 **Description**:
@@ -55,8 +55,12 @@ The CSS night behind every page, spanning the whole document and scrolling with 
 _Avoid_: starfield, background gradient
 
 **Tenement**:
-The brick building on the near bank of the Clyde that holds the Projects below the Hero, descended floor by floor in the rain. Building's heading is the sign on its roof and each of its Projects gets a floor beneath; then a floor of residents in ordinary windows; then Games, its heading mounted on a stone cornice above its floors; and at street level the Other Section as the tenant directory by the close door, beside a shop window holding the Social Links. Each Project's floor has its screenshot in a lit window, spilling its light onto the bricks, and its Sign beside it. The Featured Project's window is arched and wider. The Tenement stops short of the screen's right-hand side: balconies wrap its corner, reaching out over a lane, and past them the city behind drifts by more slowly as the visitor descends.
+The brick building on the near bank of the Clyde that holds the Projects below the Hero, descended floor by floor in the rain. Building's heading stands on its roof and each of its Projects gets a floor beneath; then a floor of residents in ordinary windows; then Games, its heading mounted on a stone cornice above its floors; and at street level the Other Section as the tenant directory by the close door, beside a shop window holding the Social Links. Each Project's floor has its screenshot in a lit window, spilling its light onto the bricks, and its Sign beside it. The Featured Project's window is arched and wider. The Tenement stops short of the screen's right-hand side: balconies wrap its corner, reaching out over a lane, and past them the city behind drifts by more slowly as the visitor descends.
 _Avoid_: building (that is a Section), wall, facade, cards
+
+**Rain**:
+Streaks falling at three depths on a gusting wind: over the Skyline behind the Identity and the Social Links, then down the Tenement in front of it, running on unbroken from one into the other. It falls only while on screen, and not at all for visitors who prefer reduced motion.
+_Avoid_: particles, weather, storm
 
 ### Projects
 
@@ -93,5 +97,5 @@ The one Project in a Section singled out for prominence.
 _Avoid_: Highlighted, pinned, hero project
 
 **Sign**:
-A Project's name hung on the Tenement beside its screenshot as magenta Neon tubes: unlit glass at rest, lit while the Project has attention. One Sign is lit at a time: the hovered or focused Project's, or else the one nearest the middle of the screen.
+A name hung on the Tenement as magenta Neon tubes, unlit glass at rest: a Project's beside its screenshot, or a Social Link's in the shop window. A Project's Sign is lit while the Project has attention, one at a time: the hovered or focused Project's, or else the one nearest the middle of the screen. A Social Link's is lit only while hovered.
 _Avoid_: title, label, neon sign

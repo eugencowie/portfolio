@@ -58,7 +58,7 @@ const { projects } = Astro.props;
     </div>
 
     <footer class="shop-window">
-      <ul class="socials">
+      <ul class="social-links">
         {socialLinks.map((link) => (
           <li class="social" data-hover-lit>
             <a href={link.url} class="social-link">
@@ -301,7 +301,7 @@ const { projects } = Astro.props;
       #0a0816;
     box-shadow: inset 0 0 2rem rgb(0 0 0 / 0.8);
   }
-  .socials {
+  .social-links {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
