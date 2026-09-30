@@ -1,0 +1,92 @@
+---
+import type { HTMLTag, Polymorphic } from "astro/types";
+import { type SashKind, sashLight } from "@/lib/sash";
+import Balcony from "./Balcony.astro";
+import type { BalconyKind } from "./Balcony.astro";
+import SashWindow from "./SashWindow.astro";
+
+/**
+ * One storey of the Highrise: a stone string course along its top, then an
+ * end bay, the floor's own content, and another end bay. From 80rem each end
+ * bay has an ordinary sash window, so the Highrise reads as a grid of floors
+ * even one screen at a time. A balcony, if any, wraps the Highrise's corner:
+ * its railing crosses the end bay's window and reaches out over the lane, lit
+ * by the room behind that window if it is.
+ */
+export type Bays = { left: SashKind; right: SashKind };
+type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
+  bays?: Bays;
+  balcony?: BalconyKind;
+};
+const { as: Tag, bays, balcony, class: className, ...attrs } = Astro.props;
+const balconyLight = bays && sashLight(bays.right);
+---
+
+<Tag class:list={["floor", className]} {...attrs}>
+  <div class="bay start">{bays && <SashWindow kind={bays.left} />}</div>
+  <div class="content">
+    <slot />
+  </div>
+  <div class="bay end">{bays && <SashWindow kind={bays.right} />}</div>
+  {balcony && (
+    <div class="balcony">
+      <Balcony kind={balcony} light={balconyLight} />
+    </div>
+  )}
+</Tag>
+
+<style>
+  .floor {
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--bay) minmax(0, 1fr) var(--bay);
+    padding-inline: var(--gutter) calc(var(--gutter) + var(--lane));
+    padding-block: clamp(3rem, 9svh, 6.5rem);
+  }
+  /* The string course. */
+  .floor::before {
+    content: "";
+    position: absolute;
+    z-index: 2;
+    inset: 0 var(--lane) auto 0;
+    height: 0.8rem;
+    background: linear-gradient(
+      to bottom,
+      var(--stone-edge) 0 1px,
+      var(--stone) 1px,
+      var(--stone-shade)
+    );
+    box-shadow: 0 0.5rem 0.9rem rgb(5 3 16 / 0.6);
+  }
+  .content {
+    grid-column: 2;
+  }
+  .bay {
+    display: none;
+  }
+  @media (min-width: 80rem) {
+    .bay {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding-top: 1.2rem;
+    }
+    .start {
+      justify-content: flex-start;
+    }
+    .end {
+      justify-content: flex-end;
+    }
+  }
+  /* In front of the quoins, its rail across the lower part of the end bay's
+     window and its slab just below the sill. */
+  .balcony {
+    --width: calc(var(--balcony-overlap) + var(--balcony-reach));
+    position: absolute;
+    z-index: 4;
+    left: calc(100% - var(--lane) - var(--balcony-overlap));
+    top: calc(50% - var(--width) * 0.108);
+    width: var(--width);
+    pointer-events: none;
+  }
+</style>

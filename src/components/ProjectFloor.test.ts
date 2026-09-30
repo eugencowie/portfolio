@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
-import type { CardProjectEntry } from "@/lib/projects";
-import ProjectCard from "./ProjectCard.astro";
+import type { FloorProjectEntry } from "@/lib/projects";
+import ProjectFloor from "./ProjectFloor.astro";
 import screenshot from "@/content/projects/gauge/screenshot.png";
 
-type ProjectData = CardProjectEntry["data"];
+type ProjectData = FloorProjectEntry["data"];
 
 const base = {
   name: "Gauge",
@@ -17,14 +17,18 @@ const base = {
 
 async function render(data: ProjectData) {
   const container = await AstroContainer.create();
-  return container.renderToString(ProjectCard, {
-    props: { project: { id: "gauge", collection: "projects", data } },
+  return container.renderToString(ProjectFloor, {
+    props: {
+      project: { id: "gauge", collection: "projects", data },
+      floor: 1,
+      side: "left",
+    },
   });
 }
 
 const links = (html: string) => html.match(/<a\s/g)?.length ?? 0;
 
-describe("ProjectCard", () => {
+describe("ProjectFloor", () => {
   it("links only to the Live link when a Project has both", async () => {
     const html = await render({
       ...base,
@@ -47,5 +51,16 @@ describe("ProjectCard", () => {
     expect(links(html)).toBe(1);
     expect(html).toContain('href="https://github.com/example/gauge"');
     expect(html).toContain("github.com<svg");
+  });
+
+  it("gives only the Featured Project an arched window", async () => {
+    const featured = await render({
+      ...base,
+      featured: true,
+      href: "https://app.example.com",
+    });
+    const normal = await render({ ...base, href: "https://app.example.com" });
+    expect(featured).toContain("data-fanlight");
+    expect(normal).not.toContain("data-fanlight");
   });
 });

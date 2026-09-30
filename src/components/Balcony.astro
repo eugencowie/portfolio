@@ -1,0 +1,347 @@
+---
+import { SASH_LIGHT_RGB, type SashLight } from "@/lib/sash";
+
+/**
+ * An iron balcony wrapping the Highrise's corner: a stone slab on an iron
+ * bracket, a railing, and whatever the residents keep out there, lit by the
+ * room behind if it is.
+ */
+export type BalconyKind =
+  "lights" | "plants" | "bike" | "washing" | "person" | "cat" | "table";
+interface Props {
+  kind: BalconyKind;
+  /** The light from the room behind. */
+  light?: SashLight;
+}
+const { kind, light } = Astro.props;
+
+const balusters = Array.from({ length: 14 }, (_, i) => 4 + i * 6.5);
+
+// A chair by the door.
+const chair = "M18 49.5 L20 37 H32 L34 49.5 M20 37 L18 25";
+
+// Fairy lights hang in two swags along the top rail.
+const swags = [
+  [
+    [1, 22],
+    [24, 31],
+    [48, 22],
+  ],
+  [
+    [48, 22],
+    [71, 31],
+    [94, 21],
+  ],
+];
+const swagPath = swags
+  .map(([[x0, y0], [x1, y1], [x2, y2]], i) =>
+    i ? `Q${x1} ${y1} ${x2} ${y2}` : `M${x0} ${y0} Q${x1} ${y1} ${x2} ${y2}`,
+  )
+  .join(" ");
+const bulbColours = ["#ffd27a", "#ff7ac0", "#7ae0ff", "#b6ff8f"];
+const bulbs = swags
+  .flatMap(([[x0, y0], [x1, y1], [x2, y2]]) =>
+    [0.1, 0.3, 0.5, 0.7, 0.9].map((t) => ({
+      x: (1 - t) ** 2 * x0 + 2 * (1 - t) * t * x1 + t ** 2 * x2,
+      y: (1 - t) ** 2 * y0 + 2 * (1 - t) * t * y1 + t ** 2 * y2 + 1.2,
+    })),
+  )
+  .map((bulb, i) => ({
+    ...bulb,
+    colour: bulbColours[i % bulbColours.length],
+    delay: `${-((i * 0.77) % 3).toFixed(2)}s`,
+  }));
+---
+
+<div class="balcony" data-kind={kind} aria-hidden="true">
+  {light && (
+    <div class="door-spill" style={`--light: ${SASH_LIGHT_RGB[light]}`} />
+  )}
+  <svg viewBox="0 0 100 72">
+    {kind === "plants" && (
+      <>
+        <g class="leaf">
+          <path d="M13 41 C9 33 4 31 1 24 C7 27 11 31 13 35 C12 26 16 18 22 14 C19 23 16 31 15 41 Z" />
+          <path d="M65 43 C62 35 57 30 51 28 C57 28 61 31 63 35 C62 25 67 13 74 9 C70 19 67 30 67 43 Z" />
+          <path d="M40 44 C36 38 30 38 27 34 C33 34 37 37 40 41 C41 35 45 31 50 30 C46 34 43 38 42 44 Z" />
+        </g>
+        <g class="pot">
+          <path d="M6 49.5 L8 41 H21 L23 49.5 Z" />
+          <path d="M58 49.5 L60 43 H71 L73 49.5 Z" />
+          <path d="M35 49.5 L36 44 H46 L47 49.5 Z" />
+        </g>
+      </>
+    )}
+    {kind === "lights" && <path class="stroke" d={chair} />}
+    {kind === "bike" && (
+      <g class="stroke">
+        <circle cx="27" cy="39" r="9.5" />
+        <circle cx="67" cy="39" r="9.5" />
+        <path d="M27 39 L44 40 L39 25 Z M39 25 L60 25 L44 40 M60 25 L67 39 M60 25 L59 21 H64 M36 24 H43" />
+      </g>
+    )}
+    {kind === "washing" && (
+      <>
+        <path class="stroke" d="M91 49.5 V2" />
+        <path class="line" d="M0 4 Q46 10 91 3" />
+        <path
+          class="shirt"
+          d="M9 6.4 L14 5.8 C15 7.6 18 7.6 19 5.8 L24 6.4 L26 11 L23 12 L22.6 21 L10.8 21.6 L10.6 12.6 L7.6 12 Z"
+        />
+        <path
+          class="sock"
+          d="M32 7.6 H35 V15 L37.5 16.6 L36.6 18 L32 15.6 Z M38 7.8 H41 V15 L43.5 16.6 L42.6 18 L38 15.6 Z"
+        />
+        <path class="towel" d="M52 8.8 L67 8.2 L67.4 26 L52.4 26.4 Z" />
+        <path
+          class="stripe"
+          d="M52.2 21.6 L67.3 21.2 L67.3 22.8 L52.2 23.2 Z"
+        />
+        <circle class="drip" cx="60" cy="27.5" r="0.7" />
+      </>
+    )}
+    {kind === "person" && (
+      <>
+        <circle class="silhouette" cx="37" cy="9.5" r="5" />
+        <path
+          class="silhouette"
+          d="M22 49.5 C22 36 24 22 28 18 C31 15.5 34 15 37 15 C41 15 44 16.5 46 19 L56 21 L56 24 L44 24 C42 30 40 40 40 49.5 Z"
+        />
+        <rect class="mug" x="54" y="16.5" width="4" height="5" rx="0.6" />
+        <path class="steam" d="M55.5 15 C54 12 57.5 10 55.8 6.5" />
+        <path class="steam late" d="M57 15 C58.5 12 55.5 10 57.2 6" />
+      </>
+    )}
+    {kind === "cat" && (
+      <g>
+        <path class="pot" d="M68 49.5 L70 42 H82 L84 49.5 Z" />
+        <path
+          class="leaf"
+          d="M76 42 C72 36 68 35 65 30 C70 31 74 34 76 38 C76 31 79 26 84 24 C81 30 78 36 77 42 Z"
+        />
+      </g>
+    )}
+    {kind === "table" && (
+      <>
+        <path class="stroke" d={chair} />
+        <circle class="candle-glow" cx="61" cy="27" r="7" />
+        <g class="silhouette">
+          <rect x="46" y="33" width="22" height="1.6" />
+          <rect x="56.2" y="34.6" width="1.6" height="15" />
+          <rect x="51" y="48.5" width="12" height="1" />
+          <path d="M49 33 V27.5 C49 26.5 49.8 26 50 25 V21.5 H51.4 V25 C51.6 26 52.4 26.5 52.4 27.5 V33 Z" />
+        </g>
+        <rect class="wax" x="60" y="28.5" width="1.8" height="4.5" />
+        <ellipse class="flame" cx="60.9" cy="26.8" rx="0.9" ry="1.7" />
+      </>
+    )}
+
+    <g class="iron">
+      <rect x="0" y="22.5" width="97" height="2.2" />
+      <rect x="0" y="45.5" width="97" height="1.4" />
+      {balusters.map((x) => (
+        <rect x={x} y="24.5" width="1" height="21" />
+      ))}
+      <rect x="0" y="20.5" width="3" height="30" />
+      <circle cx="1.5" cy="20" r="2" />
+      <rect x="94" y="20.5" width="3" height="30" />
+      <circle cx="95.5" cy="20" r="2" />
+      <path d="M0 55.5 H46 C30 56 12 62 3 72 H0 Z" />
+    </g>
+    <rect class="slab" x="0" y="49.5" width="99" height="6" />
+    <rect class="slab-edge" x="0" y="49.5" width="99" height="1" />
+
+    {kind === "plants" && (
+      <path
+        class="leaf"
+        d="M78 22 C80 28 76 33 79 40 C80 36 83 32 82 27 C84 30 86 28 85 22 Z"
+      />
+    )}
+    {kind === "lights" && (
+      <>
+        <path class="line" d={swagPath} />
+        {bulbs.map(({ x, y, colour, delay }) => (
+          <circle
+            class="bulb"
+            cx={x.toFixed(2)}
+            cy={y.toFixed(2)}
+            r="1.3"
+            style={`--colour: ${colour}; --delay: ${delay}`}
+          />
+        ))}
+      </>
+    )}
+    {kind === "cat" && (
+      <g class="silhouette">
+        <path d="M36 22.5 C35 16 37 11 41 10 C45 9 48 13 48 22.5 Z" />
+        <circle cx="44" cy="8" r="3.6" />
+        <path d="M41.2 6.5 L41.8 2.8 L43.6 5.4 Z M46.8 6.5 L46.2 2.8 L44.4 5.4 Z" />
+        <path class="tail" d="M37 21 C34 26 36 31 33 36" />
+      </g>
+    )}
+  </svg>
+</div>
+
+<style>
+  .balcony {
+    position: relative;
+  }
+  svg {
+    position: relative;
+    display: block;
+    width: 100%;
+    overflow: visible;
+  }
+  /* The Spill of the room behind. */
+  .door-spill {
+    position: absolute;
+    top: -35%;
+    left: 0;
+    width: 100%;
+    height: 115%;
+    background: radial-gradient(
+      ellipse 80% 70% at 22% 70%,
+      rgb(var(--light) / 0.55),
+      rgb(var(--light) / 0.18) 55%,
+      transparent
+    );
+  }
+  .iron,
+  .silhouette {
+    fill: #0c0816;
+  }
+  .stroke,
+  .line,
+  .tail {
+    fill: none;
+    stroke: #0c0816;
+    stroke-width: 1.4;
+    stroke-linecap: round;
+  }
+  .line {
+    stroke: #2d2638;
+    stroke-width: 0.5;
+  }
+  .slab {
+    fill: #3f3660;
+  }
+  .slab-edge {
+    fill: rgb(220 206 255 / 0.45);
+  }
+  .leaf {
+    fill: #24452f;
+  }
+  .pot {
+    fill: #6a3528;
+  }
+  .shirt {
+    fill: #7c3452;
+  }
+  .sock {
+    fill: #3a5288;
+  }
+  .towel {
+    fill: #8c7442;
+  }
+  .stripe {
+    fill: #a58b52;
+  }
+  .mug {
+    fill: #cbb9a5;
+  }
+  .wax {
+    fill: #e8dcc8;
+  }
+
+  .bulb {
+    fill: var(--colour);
+    filter: drop-shadow(0 0 1.5px var(--colour));
+    animation: balcony-twinkle 3s var(--delay) ease-in-out infinite alternate;
+  }
+  @keyframes balcony-twinkle {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0.35;
+    }
+  }
+  .flame {
+    fill: #ffcf6a;
+    filter: drop-shadow(0 0 1.5px #ffb347);
+    transform-box: fill-box;
+    transform-origin: bottom;
+    animation: flame 1.3s ease-in-out infinite alternate;
+  }
+  @keyframes flame {
+    from {
+      scale: 1 1;
+    }
+    to {
+      scale: 0.8 1.2;
+    }
+  }
+  .candle-glow {
+    fill: rgb(255 190 110 / 0.3);
+    filter: blur(2px);
+  }
+  .steam {
+    fill: none;
+    stroke: rgb(230 225 245 / 0.5);
+    stroke-width: 0.7;
+    stroke-linecap: round;
+    animation: steam 3.2s ease-out infinite;
+  }
+  .steam.late {
+    animation-delay: -1.6s;
+  }
+  @keyframes steam {
+    from {
+      opacity: 0.8;
+      translate: 0 1px;
+    }
+    to {
+      opacity: 0;
+      translate: 0 -4px;
+    }
+  }
+  .tail {
+    transform-box: view-box;
+    transform-origin: 37px 21px;
+    animation: tail 4s ease-in-out infinite;
+  }
+  @keyframes tail {
+    0%,
+    100% {
+      rotate: 0deg;
+    }
+    50% {
+      rotate: 12deg;
+    }
+  }
+  .drip {
+    fill: rgb(200 210 255 / 0.8);
+    animation: balcony-drip 2.6s ease-in infinite;
+  }
+  @keyframes balcony-drip {
+    0%,
+    60% {
+      opacity: 1;
+      translate: 0 0;
+    }
+    100% {
+      opacity: 0;
+      translate: 0 22px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bulb,
+    .flame,
+    .steam,
+    .tail,
+    .drip {
+      animation: none;
+    }
+  }
+</style>

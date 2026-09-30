@@ -1,0 +1,335 @@
+---
+import type { ProjectEntry } from "@/lib/projects";
+import { socialLinks } from "@/site";
+import Floor from "./Floor.astro";
+import SectionHeading from "./SectionHeading.astro";
+import Sign from "./Sign.astro";
+
+/**
+ * The Highrise at street level. The Other Section is a shop fascia under a
+ * lamp, over the tenant directory: names and taglines pressed into black
+ * felt, lined up like a directory listing. Beside it the close door, with
+ * someone sheltering from the rain, and a shop window with the Social Links
+ * hung in it as small Signs, lit only while hovered. Renders no Other Section
+ * when it has no Projects.
+ */
+interface Props {
+  projects: ProjectEntry[];
+}
+const { projects } = Astro.props;
+---
+
+<Floor as="div" class="ground">
+  <div class="shopfront">
+    {projects.length > 0 && (
+      <section aria-labelledby="other" class="other">
+        <div class="lamp" aria-hidden="true" />
+        <div class="fascia">
+          <SectionHeading id="other">Other projects</SectionHeading>
+        </div>
+        <div class="directory">
+          <ul class="listings">
+            {projects.map(({ data: { name, tagline, href } }) => (
+              <li class="listing">
+                <h3>
+                  <a href={href}>{name}</a>
+                </h3>
+                <p class="listing-tagline">{tagline}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )}
+
+    <div class="door" aria-hidden="true">
+      <div class="door-fanlight"></div>
+      <div class="door-leaf"></div>
+      <svg
+        class="smoker"
+        viewBox="0 0 40 100"
+        preserveAspectRatio="xMidYMax meet"
+      >
+        <circle cx="20" cy="22" r="7"></circle>
+        <path d="M6 100 L7 44 C8 34 13 31 20 31 C27 31 32 34 33 44 L34 100 Z"></path>
+        <path d="M27 40 C33 38 33 30 28 27 L30 25 C37 30 36 41 29 44 Z"></path>
+        <circle class="ember" cx="28.5" cy="26" r="1.3"></circle>
+      </svg>
+    </div>
+
+    <footer class="shop-window">
+      <ul class="social-links">
+        {socialLinks.map((link) => (
+          <li class="social" data-hover-lit>
+            <a href={link.url} class="social-link">
+              <span class="social-name font-name lowercase">
+                <Sign text={link.name} />
+              </span>
+              <span class="social-url">{link.displayUrl}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </footer>
+  </div>
+</Floor>
+
+<style>
+  /* The shopfront stands on the pavement. */
+  .ground {
+    padding-bottom: 0;
+  }
+  .shopfront {
+    display: grid;
+    grid-template-areas: "other" "door" "shop";
+    gap: 1.5rem;
+  }
+  @media (min-width: 64rem) {
+    .shopfront {
+      grid-template-columns: var(--shopfront-columns);
+      grid-template-areas: "other door shop";
+      column-gap: var(--shopfront-gap);
+    }
+  }
+  .other {
+    grid-area: other;
+    position: relative;
+    align-self: end;
+  }
+
+  /* A painted fascia board over the directory, lit from the lamp above it. */
+  .fascia {
+    container-type: inline-size;
+    padding: 1.1rem 1.5rem 1.4rem;
+    background:
+      linear-gradient(to bottom, rgb(220 206 255 / 0.3) 0 1px, transparent 1px),
+      radial-gradient(
+        ellipse 70% 90% at 50% 0%,
+        rgb(255 214 160 / 0.14),
+        transparent
+      ),
+      linear-gradient(to bottom, #1a1430, #110d22);
+    border: 0.35rem solid #3a3256;
+    box-shadow:
+      0 0.8rem 1.2rem rgb(4 2 14 / 0.7),
+      0 0 3rem -0.5rem color-mix(in oklab, var(--cyan) 35%, transparent);
+  }
+  /* Shrunk to the board's width, so it fits on one line. */
+  .fascia :global(h2) {
+    font-size: min(clamp(2.6rem, 5vw, 4rem), 20cqi);
+  }
+
+  /* The tenant directory: white letters pressed into black felt. */
+  .directory {
+    position: relative;
+    padding: 1.3rem 1.4rem 1.5rem;
+    border: 0.5rem solid #3c3452;
+    outline: 1px solid rgb(200 180 255 / 0.2);
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        transparent 0 0.42rem,
+        rgb(0 0 0 / 0.45) 0.42rem 0.5rem
+      ),
+      #120f1b;
+    box-shadow:
+      inset 0 0 1.5rem rgb(0 0 0 / 0.8),
+      0 1rem 1.6rem rgb(4 2 14 / 0.6);
+  }
+  .lamp {
+    position: absolute;
+    top: -1.6rem;
+    left: 50%;
+    width: 5rem;
+    height: 0.9rem;
+    translate: -50% 0;
+    border-radius: 0 0 50% 50% / 0 0 100% 100%;
+    background: #2c2640;
+    box-shadow: 0 0.4rem 1.2rem rgb(255 200 140 / 0.45);
+  }
+  .lamp::after {
+    content: "";
+    position: absolute;
+    left: 15%;
+    right: 15%;
+    bottom: -2px;
+    height: 3px;
+    border-radius: 2px;
+    background: #ffe6bf;
+    box-shadow: 0 0 0.6rem #ffc98a;
+  }
+  /* Every listing shares one name column, so the taglines line up. */
+  .listings {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 1.5rem;
+  }
+  .listing {
+    position: relative;
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: subgrid;
+    align-items: baseline;
+    padding-block: 0.35rem;
+    color: #ece8f4;
+    font-size: 0.875rem;
+    text-shadow: 0 1px 0 rgb(0 0 0 / 0.8);
+  }
+  /* Pressed in by hand. */
+  .listing:nth-child(3n + 2) {
+    translate: 0.1rem 0.05rem;
+  }
+  .listing:nth-child(3n) {
+    rotate: -0.4deg;
+  }
+  .listing a::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+  .listing-tagline {
+    color: #a9a3bb;
+    font-size: 0.8rem;
+  }
+  .listing:focus-within h3 {
+    color: color-mix(in oklab, var(--magenta) 36%, white);
+    text-shadow:
+      0 0 0.1em var(--magenta),
+      0 0 0.4em var(--magenta);
+  }
+  /* Hovering lights one only with a mouse: on a touch screen a tapped
+     listing would stay lit. */
+  @media (hover: hover) {
+    .listing:hover h3 {
+      color: color-mix(in oklab, var(--magenta) 36%, white);
+      text-shadow:
+        0 0 0.1em var(--magenta),
+        0 0 0.4em var(--magenta);
+    }
+  }
+  @media (max-width: 40rem) {
+    .listings {
+      grid-template-columns: 1fr;
+    }
+    .listing {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+  }
+
+  /* The close door: a lit fanlight, and someone sheltering from the rain. */
+  .door {
+    grid-area: door;
+    position: relative;
+    display: none;
+    align-self: end;
+    height: clamp(16rem, 34svh, 22rem);
+    border: 0.9rem solid #3f3760;
+    border-bottom: 0;
+    background: #06050c;
+    box-shadow: inset 0.8rem 0 1.2rem rgb(0 0 0 / 0.8);
+  }
+  @media (min-width: 64rem) {
+    .door {
+      display: block;
+    }
+  }
+  .door-fanlight {
+    height: 22%;
+    background:
+      linear-gradient(
+        to right,
+        transparent 32%,
+        #140f1f 32% 34%,
+        transparent 34% 66%,
+        #140f1f 66% 68%,
+        transparent 68%
+      ),
+      radial-gradient(ellipse at 50% 100%, #ffe0a8, #d88a44 60%, #7a3a24);
+    border-bottom: 0.4rem solid #140f1f;
+  }
+  .door-leaf {
+    position: absolute;
+    top: 22%;
+    bottom: 0;
+    left: 14%;
+    right: 14%;
+    background:
+      linear-gradient(#0b0a14, #0b0a14) 50% 18% / 70% 30% no-repeat,
+      linear-gradient(#0b0a14, #0b0a14) 50% 78% / 70% 36% no-repeat,
+      #171327;
+    box-shadow: inset 0 1rem 1.4rem rgb(255 190 120 / 0.1);
+  }
+  .smoker {
+    position: absolute;
+    left: 4%;
+    bottom: 0;
+    height: 70%;
+    fill: #04030a;
+  }
+  .ember {
+    fill: #ff7a2a;
+    filter: drop-shadow(0 0 2px #ff8a3a);
+    animation: ember 4s ease-in-out infinite;
+  }
+  @keyframes ember {
+    0%,
+    55%,
+    100% {
+      opacity: 0.55;
+    }
+    65% {
+      opacity: 1;
+    }
+  }
+
+  /* The shop window, with the Social Links hung in it. */
+  .shop-window {
+    grid-area: shop;
+    align-self: end;
+    padding: 2rem 1.5rem 2.2rem;
+    border: 0.6rem solid #3c3452;
+    border-bottom-width: 2.5rem;
+    background:
+      linear-gradient(
+        115deg,
+        transparent 30%,
+        rgb(170 150 255 / 0.08) 42%,
+        transparent 50%
+      ),
+      #0a0816;
+    box-shadow: inset 0 0 2rem rgb(0 0 0 / 0.8);
+  }
+  .social-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 1.5rem 2rem;
+  }
+  .social-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .social-name {
+    font-size: clamp(1.3rem, 2.2vw, 1.9rem);
+    line-height: 1.1;
+  }
+  .social-url {
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+  @media (hover: hover) {
+    .social:hover .social-url {
+      color: var(--neon-magenta);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ember {
+      animation: none;
+    }
+  }
+</style>

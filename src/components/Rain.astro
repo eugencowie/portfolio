@@ -1,0 +1,199 @@
+---
+/**
+ * Rain: three depths of streaks falling on a gusting wind, drawn on a canvas
+ * fixed over the screen. It only falls within its parent, only while the
+ * parent is on screen, and not at all when the visitor prefers reduced
+ * motion. It falls in front of everything, or `behind` the parent's content
+ * and in front of anything the parent puts at a negative z-index. Every Rain
+ * on the page draws the same drops, so it runs on unbroken from one parent
+ * into the next.
+ */
+interface Props {
+  behind?: boolean;
+}
+const { behind = false } = Astro.props;
+---
+
+<canvas class:list={["rain", { behind }]} data-rain aria-hidden="true"></canvas>
+
+<style>
+  .rain {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  .behind {
+    z-index: -1;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rain {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  type Range = readonly [min: number, max: number];
+  type Drop = { x: number; y: number; length: number; speed: number };
+
+  // Near drops are fewer, longer, faster and brighter. `area` is the screen
+  // area in px² per drop.
+  const DEPTHS = [
+    { area: 3000, length: [7, 14], speed: [7.5, 11], width: 0.8, alpha: 0.17 },
+    { area: 6500, length: [14, 24], speed: [13, 18], width: 1, alpha: 0.25 },
+    { area: 25000, length: [24, 40], speed: [22, 29], width: 1.3, alpha: 0.32 },
+  ] satisfies {
+    area: number;
+    length: Range;
+    speed: Range;
+    width: number;
+    alpha: number;
+  }[];
+
+  // A streak fades from the drop at its head to nothing at its tail, drawn
+  // as a run of segments each fainter than the one before.
+  const FADE = [1, 0.6, 0.32, 0.12];
+
+  const between = ([min, max]: Range) => min + Math.random() * (max - min);
+  type Depth = (typeof DEPTHS)[number];
+  const count = (depth: Depth) =>
+    Math.round((innerWidth * innerHeight) / depth.area);
+  const drop = (depth: Depth): Drop => ({
+    x: Math.random() * innerWidth * 1.2,
+    y: Math.random() * innerHeight,
+    length: between(depth.length),
+    speed: between(depth.speed),
+  });
+
+  // One shower for the whole page: every canvas draws the same drops, each
+  // clipped to its own parent, so a streak crossing from one parent into the
+  // next carries on through the join.
+  type Canvas = {
+    canvas: HTMLCanvasElement;
+    context: CanvasRenderingContext2D;
+    parent: HTMLElement;
+    falling: boolean;
+    drawn: boolean;
+  };
+  const canvases: Canvas[] = [];
+  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+  let drops: Drop[][] = [];
+  let width = 0;
+  let running = false;
+  let last = 0;
+
+  const resize = () => {
+    const dpr = Math.min(devicePixelRatio, 2);
+    for (const { canvas, context } of canvases) {
+      canvas.width = innerWidth * dpr;
+      canvas.height = innerHeight * dpr;
+      context.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    if (innerWidth !== width) {
+      width = innerWidth;
+      drops = DEPTHS.map((depth) =>
+        Array.from({ length: count(depth) }, () => drop(depth)),
+      );
+      return;
+    }
+    // On a phone the address bar changes the screen's height as the visitor
+    // scrolls: keep the drops falling, only thinning them out or topping
+    // them up.
+    DEPTHS.forEach((depth, i) => {
+      drops[i].length = Math.min(drops[i].length, count(depth));
+      while (drops[i].length < count(depth)) drops[i].push(drop(depth));
+    });
+  };
+
+  const frame = (now: number) => {
+    const falling = canvases.filter((c) => c.falling);
+    running = falling.length > 0;
+    if (!running) return;
+    // In 60 fps frames, so the rain falls at the same speed at any rate.
+    const dt = Math.min(3, (now - last) / 16.7 || 1);
+    last = now;
+    const wind = -0.16 + Math.sin(now / 2600) * 0.07;
+    const streaks = drops.map((depth) => {
+      const segments = FADE.map(() => new Path2D());
+      for (const drop of depth) {
+        drop.y += drop.speed * dt;
+        drop.x += drop.speed * wind * dt;
+        if (drop.y - drop.length > innerHeight) {
+          drop.y = -Math.random() * 80;
+          drop.x = Math.random() * innerWidth * 1.2;
+        }
+        const dy = -drop.length / FADE.length;
+        const dx = dy * wind;
+        segments.forEach((path, i) => {
+          path.moveTo(drop.x + dx * i, drop.y + dy * i);
+          path.lineTo(drop.x + dx * (i + 1), drop.y + dy * (i + 1));
+        });
+      }
+      return segments;
+    });
+    for (const target of falling) {
+      const { context, parent } = target;
+      const { top, bottom } = parent.getBoundingClientRect();
+      const from = Math.max(0, top);
+      const to = Math.min(innerHeight, bottom);
+      // A parent touching the edge of the screen is in view, but shows none
+      // of its rain.
+      if (to <= from && !target.drawn) continue;
+      context.clearRect(0, 0, innerWidth, innerHeight);
+      target.drawn = to > from;
+      if (!target.drawn) continue;
+      context.save();
+      context.beginPath();
+      context.rect(0, from, innerWidth, to - from);
+      context.clip();
+      DEPTHS.forEach((depth, i) => {
+        context.lineWidth = depth.width;
+        streaks[i].forEach((path, j) => {
+          context.strokeStyle = `rgb(205 200 255 / ${depth.alpha * FADE[j]})`;
+          context.stroke(path);
+        });
+      });
+      context.restore();
+    }
+    requestAnimationFrame(frame);
+  };
+
+  const fall = (target: Canvas, on: boolean) => {
+    target.falling = on && !reducedMotion.matches;
+    if (!target.falling) {
+      target.context.clearRect(0, 0, innerWidth, innerHeight);
+      target.drawn = false;
+    } else if (!running) {
+      running = true;
+      last = performance.now();
+      requestAnimationFrame(frame);
+    }
+  };
+
+  for (const canvas of document.querySelectorAll<HTMLCanvasElement>(
+    "canvas[data-rain]",
+  )) {
+    const context = canvas.getContext("2d");
+    const parent = canvas.parentElement;
+    if (context && parent) {
+      canvases.push({ canvas, context, parent, falling: false, drawn: false });
+    }
+  }
+  resize();
+  addEventListener("resize", resize);
+  const inView = new Set<Element>();
+  const observer = new IntersectionObserver((entries) => {
+    for (const { target, isIntersecting } of entries) {
+      if (isIntersecting) inView.add(target);
+      else inView.delete(target);
+    }
+    for (const canvas of canvases) fall(canvas, inView.has(canvas.parent));
+  });
+  for (const { parent } of canvases) observer.observe(parent);
+  reducedMotion.addEventListener("change", () => {
+    for (const canvas of canvases) fall(canvas, inView.has(canvas.parent));
+  });
+</script>

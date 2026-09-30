@@ -1,0 +1,595 @@
+---
+import type {
+  ArrangedProjects,
+  FloorProjectEntry,
+  ProjectEntry,
+} from "@/lib/projects";
+import { brickTile } from "@/lib/brick";
+import { svgUrl } from "@/lib/svg";
+import CityBehind from "./CityBehind.astro";
+import Floor from "./Floor.astro";
+import GroundFloor from "./GroundFloor.astro";
+import Pavement from "./Pavement.astro";
+import ProjectFloor from "./ProjectFloor.astro";
+import Rain from "./Rain.astro";
+import SashWindow from "./SashWindow.astro";
+import type { SashKind } from "@/lib/sash";
+import type { ComponentProps } from "astro/types";
+import SectionHeading from "./SectionHeading.astro";
+
+/**
+ * Everything below the Hero on the home page: the Highrise, a brick building
+ * on the near bank of the Clyde, descended floor by floor in the rain. It
+ * stops short of the screen's right-hand side, where its balconies hang over
+ * a lane and the city behind it shows.
+ * Currently building is the heading on its roof, with a floor for each of its
+ * Projects beneath it. Then a floor of residents, then Games, mounted on a
+ * stone cornice above its own floors, and at street level the Other Section
+ * and the Social Links. Each Section's floors swap the window's side floor
+ * by floor, the first on the left under the heading. One Project's Sign is
+ * lit at a time: the one of the Project hovered or focused, or else the one
+ * across the middle of the screen or nearest to it. A Social Link's Sign
+ * lights only while it is hovered.
+ */
+type Props = ArrangedProjects<ProjectEntry>;
+const { building, games, other } = Astro.props;
+
+// Floors count from the street up, with the residents' floor between the
+// Sections.
+const topFloor = games.length + 1 + building.length;
+// A Section's Floors from `top` down, the window's side swapping from the left.
+const floors = (projects: FloorProjectEntry[], top: number) =>
+  projects.map((project, i): ComponentProps<typeof ProjectFloor> => ({
+    project,
+    floor: top - i,
+    side: i % 2 ? "right" : "left",
+  }));
+
+const residents: SashKind[] = [
+  "dark",
+  "person",
+  "blind",
+  "curtain",
+  "desk",
+  "dark",
+  "cat",
+  "lamp",
+];
+---
+
+<div class="highrise" style={`--bricks: ${svgUrl(brickTile())}`} data-highrise>
+  <div class="roof">
+    {building.length > 0 && (
+      <div class="roof-heading">
+        <div class="lattice" aria-hidden="true" />
+        <SectionHeading id="building">Currently building</SectionHeading>
+      </div>
+    )}
+    <div class="chimney" aria-hidden="true">
+      <span class="pot"></span>
+      <span class="pot"></span>
+      <span class="pot"></span>
+    </div>
+  </div>
+
+  <div class="brickwork">
+    <div class="bricks" aria-hidden="true"></div>
+    <div class="pipe" aria-hidden="true"></div>
+    <div class="parapet" aria-hidden="true"></div>
+    <div class="cornice" aria-hidden="true"></div>
+    <CityBehind />
+
+    {building.length > 0 && (
+      <section aria-labelledby="building">
+        <ul class="floors">
+          {floors(building, topFloor).map((floor) => (
+            <ProjectFloor {...floor} />
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <Floor
+      as="div"
+      bays={{ left: "curtain", right: "lamp" }}
+      balcony="washing"
+      class="residents"
+      aria-hidden="true"
+    >
+      <div class="residents-row">
+        {residents.map((kind) => (
+          <SashWindow kind={kind} />
+        ))}
+      </div>
+    </Floor>
+
+    {games.length > 0 && (
+      <section aria-labelledby="games">
+        <div class="band">
+          <div class="band-heading">
+            <div class="band-spill" aria-hidden="true" />
+            <SectionHeading id="games">Games</SectionHeading>
+          </div>
+        </div>
+        <div class="cornice band-cornice" aria-hidden="true" />
+        <ul class="floors">
+          {floors(games, games.length).map((floor) => (
+            <ProjectFloor {...floor} />
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <GroundFloor projects={other} />
+  </div>
+
+  <Pavement />
+  <Rain />
+</div>
+
+<style>
+  .highrise {
+    /* Dressed stone: a lit top edge over its face and its shade. */
+    --stone-edge: rgb(220 206 255 / 0.4);
+    --stone: #5a4f7c;
+    --stone-shade: #3a3256;
+    --stone-deep: #2a2440;
+    --gutter: 1.25rem;
+    --bay: 0px;
+    /* The lane between the Highrise's side and the screen's. */
+    --lane: clamp(1.75rem, 10vw, 10rem);
+    /* The content's inset from the screen's left edge, past the gutter and
+       the balcony bay, and from its right edge, past the lane as well. */
+    --inset-left: calc(var(--gutter) + var(--bay));
+    --inset-right: calc(var(--inset-left) + var(--lane));
+    /* A balcony reaches most of the way across the lane, and back over the
+       Highrise's front: from 80rem across the end bay's window, below that
+       only across part of the gutter, clear of the screenshots. */
+    --balcony-reach: calc(var(--lane) * 0.85);
+    --balcony-overlap: calc(var(--gutter) * 0.5);
+    position: relative;
+    overflow: clip;
+  }
+  @media (min-width: 64rem) {
+    .highrise {
+      --gutter: 2.5rem;
+      /* The shopfront's columns at street level, shared by the ground floor
+         and its reflection in the pavement. */
+      --shopfront-columns: minmax(0, 1.25fr) minmax(0, 0.55fr) minmax(0, 1fr);
+      --shopfront-gap: 2.5rem;
+    }
+  }
+  @media (min-width: 80rem) {
+    .highrise {
+      --bay: 8rem;
+      --balcony-overlap: calc(var(--gutter) + 5.25rem);
+    }
+    .residents {
+      --balcony-overlap: calc(var(--gutter) + 6rem);
+    }
+  }
+
+  /* ---------- Roof: Currently building on a steel lattice ---------- */
+  .roof {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    min-height: clamp(10rem, 26svh, 16rem);
+    padding-inline: var(--inset-left) var(--inset-right);
+  }
+  .roof-heading {
+    position: relative;
+    padding: 0.6rem 2.2rem 1.6rem;
+    margin-bottom: -0.2rem;
+  }
+  .roof-heading :global(h2) {
+    position: relative;
+    font-size: clamp(3.4rem, 8vw, 6.5rem);
+  }
+  .lattice {
+    position: absolute;
+    inset: 12% 0 0;
+    border-block: 0.3rem solid #2a2640;
+    background:
+      repeating-linear-gradient(
+        60deg,
+        transparent 0 1.6rem,
+        #221e36 1.6rem calc(1.6rem + 3px)
+      ),
+      repeating-linear-gradient(
+        -60deg,
+        transparent 0 1.6rem,
+        #221e36 1.6rem calc(1.6rem + 3px)
+      );
+    /* Lit from the tubes in front of it. */
+    box-shadow: 0 -0.3rem 1.2rem -0.4rem
+      color-mix(in oklab, var(--cyan) 40%, transparent);
+  }
+  .lattice::before,
+  .lattice::after {
+    content: "";
+    position: absolute;
+    bottom: -0.3rem;
+    top: -0.3rem;
+    width: 0.45rem;
+    background: #2a2640;
+  }
+  .lattice::before {
+    left: 8%;
+  }
+  .lattice::after {
+    right: 8%;
+  }
+
+  /* A chimney stack at the gable end, standing behind the parapet. */
+  .chimney {
+    display: none;
+  }
+  @media (min-width: 64rem) {
+    .chimney {
+      position: absolute;
+      right: calc(var(--lane) + var(--gutter));
+      bottom: 0;
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      width: clamp(5.5rem, 7vw, 7rem);
+      height: clamp(3.5rem, 5vw, 4.75rem);
+      background-color: #33193f;
+      background-image:
+        linear-gradient(
+          to right,
+          rgb(5 3 16 / 0.35),
+          transparent 30% 70%,
+          rgb(5 3 16 / 0.5)
+        ),
+        var(--bricks);
+      background-blend-mode: normal, multiply;
+    }
+  }
+  /* The stone cope. */
+  .chimney::before {
+    content: "";
+    position: absolute;
+    top: -0.5rem;
+    left: -0.35rem;
+    right: -0.35rem;
+    height: 0.55rem;
+    background: linear-gradient(
+      to bottom,
+      var(--stone-edge) 0 1px,
+      var(--stone) 1px,
+      var(--stone-shade)
+    );
+    box-shadow: 0 0.3rem 0.5rem rgb(5 3 16 / 0.6);
+  }
+  /* Clay pots standing on the cope. */
+  .pot {
+    position: relative;
+    width: 0.95rem;
+    height: 1.7rem;
+    translate: 0 calc(-100% - 0.5rem);
+    background: linear-gradient(
+      to right,
+      #24121a,
+      #6b3a36 35%,
+      #4a2629 65%,
+      #1c0e14
+    );
+  }
+  .pot:nth-child(2) {
+    height: 2.2rem;
+  }
+  .pot:nth-child(3) {
+    height: 1.45rem;
+  }
+  .pot::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -0.12rem;
+    right: -0.12rem;
+    height: 0.3rem;
+    background: linear-gradient(to right, #2c161d, #7d4640 35%, #24121a);
+  }
+
+  /* ---------- Brickwork ----------
+     Lights on the bricks (z-index -2) sit under the brick layer (-1), which
+     is multiplied over them; everything else stands in front. */
+  .brickwork {
+    position: relative;
+    isolation: isolate;
+    background: linear-gradient(
+        to bottom,
+        #3d1f4c,
+        #2c1739 25%,
+        #231231 70%,
+        #1a0d26
+      )
+      0 0 / calc(100% - var(--lane)) 100% no-repeat;
+    --quoin: clamp(0.5rem, 1.4vw, 1.4rem);
+    /* The eaves: the parapet, a band of bricks, and the cornice. */
+    --parapet: 0.9rem;
+    --cornice-drop: 2.2rem;
+    --cornice: 2rem;
+  }
+  /* The Highrise's corners: stone quoins down both edges. */
+  .brickwork::before,
+  .brickwork::after {
+    content: "";
+    position: absolute;
+    z-index: 3;
+    top: 0;
+    bottom: 0;
+    width: var(--quoin);
+    background: repeating-linear-gradient(
+      to bottom,
+      #4a4066 0 2.6rem,
+      #1a1428 2.6rem calc(2.6rem + 2px),
+      #3b3354 calc(2.6rem + 2px) 4rem,
+      #1a1428 4rem calc(4rem + 2px)
+    );
+    pointer-events: none;
+  }
+  .brickwork::before {
+    left: 0;
+    box-shadow: 0.3rem 0 0.6rem rgb(5 3 15 / 0.6);
+  }
+  .brickwork::after {
+    right: var(--lane);
+    box-shadow: -0.3rem 0 0.6rem rgb(5 3 15 / 0.6);
+  }
+  .bricks {
+    position: absolute;
+    inset: 0 var(--lane) 0 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image: var(--bricks);
+    mix-blend-mode: multiply;
+  }
+  /* A cast-iron downpipe from a hopper under the cornice to the street, in
+     front of the string courses. */
+  .pipe {
+    display: none;
+    position: absolute;
+    z-index: 3;
+    top: calc(var(--parapet) + var(--cornice-drop) + var(--cornice));
+    bottom: 0;
+    left: calc(var(--inset-left) - 1.6rem);
+    width: 0.65rem;
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        transparent 0 11rem,
+        #3a3150 11rem 11.6rem
+      ),
+      linear-gradient(to right, #120e1e, #3c3452 40%, #16111f);
+    box-shadow: 0.35rem 0 0.5rem rgb(0 0 0 / 0.5);
+  }
+  .pipe::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 1.7rem;
+    height: 1.9rem;
+    translate: -50% 0;
+    clip-path: polygon(0 0, 100% 0, 100% 55%, 70% 100%, 30% 100%, 0 55%);
+    background:
+      linear-gradient(
+        to bottom,
+        transparent 0.3rem,
+        #120e1e 0.3rem calc(0.3rem + 1px),
+        transparent calc(0.3rem + 1px)
+      ),
+      linear-gradient(to right, #120e1e, #463d60 40%, #16111f);
+  }
+  @media (min-width: 80rem) {
+    .pipe {
+      display: block;
+    }
+  }
+  .parapet,
+  .cornice {
+    margin-right: var(--lane);
+  }
+  .parapet {
+    height: var(--parapet);
+    background: linear-gradient(
+      to bottom,
+      var(--stone-edge) 0 1px,
+      var(--stone) 1px,
+      var(--stone-shade)
+    );
+  }
+  .cornice {
+    margin-top: var(--cornice-drop);
+    height: var(--cornice);
+    background:
+      linear-gradient(
+        to bottom,
+        transparent 55%,
+        rgb(0 0 0 / 0.35) 55% 60%,
+        transparent 60%
+      ),
+      repeating-linear-gradient(
+          to right,
+          transparent 0 0.9rem,
+          rgb(10 6 24 / 0.7) 0.9rem 1.4rem
+        )
+        0 100% / 100% 40% no-repeat,
+      linear-gradient(
+        to bottom,
+        var(--stone-edge) 0 1px,
+        var(--stone) 1px,
+        var(--stone-shade) 55%,
+        var(--stone-deep)
+      );
+    box-shadow: 0 0.9rem 1.4rem rgb(5 3 16 / 0.7);
+  }
+  .floors {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ---------- Residents: a floor of ordinary windows ---------- */
+  .residents {
+    padding-block: clamp(2.5rem, 7svh, 4.5rem) clamp(3rem, 8svh, 5rem);
+  }
+  .residents :global(.bay) {
+    --sash-w: 5.5rem;
+    padding-top: 0;
+  }
+  .residents-row {
+    --sash-w: clamp(3.2rem, 7vw, 5.5rem);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-inline: 0.5rem;
+  }
+  /* Fewer windows where they would crowd. */
+  @media (max-width: 47.99rem) {
+    .residents-row > :global(:nth-child(n + 6)) {
+      display: none;
+    }
+  }
+  @media (max-width: 29.99rem) {
+    .residents-row > :global(:nth-child(5)) {
+      display: none;
+    }
+  }
+  @media (min-width: 80rem) and (max-width: 84.99rem) {
+    .residents-row > :global(:nth-child(8)) {
+      display: none;
+    }
+  }
+  /* Spaced evenly with the end bays' windows. */
+  @media (min-width: 80rem) {
+    .residents-row {
+      --sash-w: 5.5rem;
+      margin-inline: calc(var(--sash-w) - var(--bay));
+      padding-inline: 0;
+      justify-content: space-evenly;
+    }
+  }
+
+  /* ---------- Games, mounted on a cornice ---------- */
+  .band {
+    padding: clamp(2rem, 6svh, 4rem) var(--inset-left) 0;
+  }
+  .band-heading {
+    position: relative;
+    width: fit-content;
+  }
+  .band :global(h2) {
+    font-size: clamp(3rem, 6vw, 5rem);
+  }
+  /* Its Spill on the bricks, under the brick layer. */
+  .band-spill {
+    position: absolute;
+    z-index: -2;
+    inset: -3.5rem -10rem -5.5rem;
+    background: radial-gradient(
+      closest-side,
+      color-mix(in oklab, var(--cyan) 38%, transparent),
+      transparent
+    );
+    pointer-events: none;
+  }
+  /* A smaller cornice under the heading, in place of the first floor's
+     string course. */
+  .band-cornice {
+    --cornice-drop: 1.2rem;
+    --cornice: 1.4rem;
+  }
+  .band-cornice + .floors > :global(:first-child)::before {
+    display: none;
+  }
+</style>
+
+<script>
+  function attend(highrise: HTMLElement) {
+    const targets = [
+      ...highrise.querySelectorAll<HTMLElement>("[data-attention]"),
+    ];
+    const onScreen = new Set<HTMLElement>();
+    let hovered: HTMLElement | null = null;
+    let focused: HTMLElement | null = null;
+    let centred: HTMLElement | null = null;
+    let lit: HTMLElement | null = null;
+
+    const light = () => {
+      const next = hovered ?? focused ?? centred;
+      if (next === lit) return;
+      lit?.removeAttribute("data-lit");
+      next?.setAttribute("data-lit", "");
+      lit = next;
+    };
+
+    // The one across the middle of the screen, or else the nearest to it
+    // within 40% of the screen's height.
+    let queued = false;
+    const centre = () => {
+      queued = false;
+      const middle = innerHeight / 2;
+      let nearest: HTMLElement | null = null;
+      let nearestDistance = innerHeight * 0.4;
+      for (const target of onScreen) {
+        const r = target.getBoundingClientRect();
+        const distance = Math.max(0, r.top - middle, middle - r.bottom);
+        if (distance < nearestDistance) {
+          nearest = target;
+          nearestDistance = distance;
+        }
+      }
+      centred = nearest;
+      light();
+    };
+    const schedule = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(centre);
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (!(entry.target instanceof HTMLElement)) continue;
+        if (entry.isIntersecting) onScreen.add(entry.target);
+        else onScreen.delete(entry.target);
+      }
+      schedule();
+    });
+    for (const target of targets) {
+      observer.observe(target);
+      target.addEventListener("pointerenter", (event) => {
+        if (event.pointerType !== "mouse") return;
+        hovered = target;
+        light();
+      });
+      target.addEventListener("pointerleave", () => {
+        if (hovered !== target) return;
+        hovered = null;
+        light();
+      });
+      target.addEventListener("focusin", (event) => {
+        if (!(event.target instanceof Element)) return;
+        if (!event.target.matches(":focus-visible")) return;
+        focused = target;
+        light();
+      });
+      target.addEventListener("focusout", () => {
+        if (focused !== target) return;
+        focused = null;
+        light();
+      });
+    }
+    addEventListener("scroll", schedule, { passive: true });
+    addEventListener("resize", schedule);
+  }
+
+  for (const highrise of document.querySelectorAll<HTMLElement>(
+    "[data-highrise]",
+  )) {
+    attend(highrise);
+  }
+</script>
