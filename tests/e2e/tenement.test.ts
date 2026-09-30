@@ -7,15 +7,58 @@ const floorOf = (page: Page, name: string) =>
     .filter({ has: page.getByRole("heading", { level: 3, name }) });
 
 describe("Tenement", () => {
+  it("descends from Building on the roof through Games to Other at street level", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    const headings = page
+      .locator("[data-tenement]")
+      .getByRole("heading", { level: 2 });
+    await expect(headings).toHaveText([
+      "Currently building",
+      "Games",
+      "Other projects",
+    ]);
+    const tops = await Promise.all(
+      (await headings.all()).map(async (heading) => {
+        const box = await heading.boundingBox();
+        return box?.y ?? Number.NaN;
+      }),
+    );
+    expect(tops).toEqual(tops.toSorted((a, b) => a - b));
+  });
+
   it("lights only the Sign of the Project in the middle of the screen", async ({
     page,
   }) => {
     await page.goto("/");
+    // A resting cursor hovers whatever is under it; rest it off the page.
+    await page.mouse.move(-1, -1);
+
+    for (const name of ["Fourensics", "Roman Reign"]) {
+      const floor = floorOf(page, name);
+      await floor.evaluate((el) => el.scrollIntoView({ block: "center" }));
+      await expect(floor).toHaveAttribute("data-lit");
+      await expect(page.locator("[data-lit]")).toHaveCount(1);
+    }
+  });
+
+  it("lights the Sign of the Project focused from the keyboard", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    await page.mouse.move(-1, -1);
+    await floorOf(page, "Gauge").evaluate((el) =>
+      el.scrollIntoView({ block: "center" }),
+    );
     const floor = floorOf(page, "Fourensics");
-    await floor.evaluate((el) => el.scrollIntoView({ block: "center" }));
-    // A resting cursor hovers whatever is under it; rest it mid-screen.
-    const { width, height } = page.viewportSize() ?? { width: 0, height: 0 };
-    await page.mouse.move(width / 2, height / 2);
+    // Any key press makes the next focus a keyboard one; don't scroll
+    // Fourensics into the middle of the screen.
+    await page.keyboard.press("Shift");
+    await floor
+      .getByRole("link")
+      .first()
+      .evaluate((el) => el.focus({ preventScroll: true }));
 
     await expect(floor).toHaveAttribute("data-lit");
     await expect(page.locator("[data-lit]")).toHaveCount(1);
