@@ -11,7 +11,7 @@ describe("brickTile", () => {
     expect(brickTile()).toBe(brickTile());
   });
 
-  it("shades the wall under it without covering it", () => {
+  it("shades the brickwork under it without covering it", () => {
     for (const { fill } of bricks(brickTile())) {
       const alpha = Number(/,([\d.]+)\)$/.exec(fill)?.[1]);
       expect(alpha).toBeLessThan(0.5);

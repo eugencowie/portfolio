@@ -6,14 +6,14 @@ const mortar = 2;
 const columns = 8;
 const rows = 12;
 
-// The brickwork's colour, between the wall in the dark and under a Spill.
+// The brickwork's colour, between its colour in the dark and under a Spill.
 const BRICKWORK = [60, 27, 66];
 
 /**
  * A shade that leaves `light`, out of 255 for red, green and blue, of what
  * lies under it. A grey one does so exactly whatever it is laid over. A tinted
  * one is matched to the brickwork's colour: it shows a little more of its tint
- * over a darker wall and a little less under a brighter light.
+ * in the dark and a little less under a Spill.
  */
 function shade(light: number[]): string {
   const least = Math.min(...light);
