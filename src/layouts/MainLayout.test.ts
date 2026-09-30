@@ -43,4 +43,21 @@ describe("MainLayout", () => {
       '<meta property="og:image" content="http://localhost:4321/og.png">',
     );
   });
+
+  it("presents the page as a profile of the person, in structured data", async () => {
+    const html = await render({ site: "https://example.com" });
+    const [, json] =
+      html.match(/<script type="application\/ld\+json">(.*?)<\/script>/s) ?? [];
+    expect(JSON.parse(json ?? "null")).toEqual({
+      "@context": "https://schema.org",
+      "@type": "ProfilePage",
+      description: "Astro site.",
+      mainEntity: {
+        "@type": "Person",
+        name: "Astro",
+        url: "https://example.com/",
+        sameAs: ["https://github.com/eugencowie", "https://x.com/eugencowie"],
+      },
+    });
+  });
 });

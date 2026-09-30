@@ -33,7 +33,7 @@ The links pointing to where Eugen is elsewhere, shown beneath the Identity and a
 _Avoid_: tagline, socials, profiles, subtitle
 
 **Description**:
-The one-sentence summary used for search results and link previews.
+The one-sentence summary used for search results, link previews and structured data.
 _Avoid_: tagline, bio, summary
 
 **Identity**:
