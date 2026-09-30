@@ -97,7 +97,7 @@ _Avoid_: Highlighted, pinned, hero project
 ### Highrise
 
 **Highrise**:
-The brick building below the Hero that holds the Projects: a Floor for each Building and Games Project, and the rest on the Ground Floor.
+The brick building below the Hero that holds the Projects: a Floor for each Building and Games Project, and the rest on the Ground Floor. Balconies wrap its corner over the Lane, the City Behind beyond them and the Pavement at its foot.
 _Avoid_: tenement, building (that is a Section), wall, facade, cards
 
 **Floor**:
@@ -111,6 +111,22 @@ _Avoid_: footer, bottom
 **Sash Window**:
 An ordinary window of the Highrise, with no screenshot in it.
 _Avoid_: window (ambiguous with a Project's screenshot window), background window
+
+**Balcony**:
+A Floor's balcony, wrapping the Highrise's corner over the Lane.
+_Avoid_: ledge, veranda, terrace
+
+**Lane**:
+The gap between the Highrise's right-hand side and the edge of the screen.
+_Avoid_: gutter, margin, alley
+
+**City Behind**:
+The towers seen down the Lane past the Highrise.
+_Avoid_: skyline (that is the Scene's illustration), backdrop
+
+**Pavement**:
+The street at the foot of the Highrise.
+_Avoid_: sidewalk, footpath, ground
 
 **Sign**:
 A name hung on the Highrise as Neon tubes, lit while it has attention.
