@@ -19,7 +19,7 @@ export const SASH_LIGHT_RGB = {
   cool: "110 150 255",
 } as const satisfies Record<SashLight, string>;
 
-/** The light a sash window's room throws out of it, if it is lit. */
+/** The colour of a sash window's room's light, if it is lit. */
 export function sashLight(kind: SashKind): SashLight | undefined {
   switch (kind) {
     case "dark":

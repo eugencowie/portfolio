@@ -26,7 +26,7 @@ _Avoid_: glow (that is one layer of the treatment, not the concept), tube, sign 
 
 **Spill**:
 The light a lit thing throws onto nearby surfaces.
-_Avoid_: glow, light, cast
+_Avoid_: glow, cast, light (that is what throws a Spill, not the Spill)
 
 **Social Links**:
 The links pointing to where Eugen is elsewhere, shown beneath the Identity and again on the Ground Floor.
@@ -97,7 +97,7 @@ _Avoid_: Highlighted, pinned, hero project
 ### Highrise
 
 **Highrise**:
-The brick building below the Hero that holds the Projects: a Floor for each Building and Games Project, and the rest on the Ground Floor. Balconies wrap its corner over the Lane, the City Behind beyond them and the Pavement at its foot.
+The brick building below the Hero that holds the Projects: a Floor for each Building and Games Project, and the rest on the Ground Floor. Balconies wrap its corner over the Lane and the Pavement lies at its foot.
 _Avoid_: tenement, building (that is a Section), wall, facade, cards
 
 **Floor**:
@@ -113,7 +113,7 @@ An ordinary window of the Highrise, with no screenshot in it.
 _Avoid_: window (ambiguous with a Project's screenshot window), background window
 
 **Balcony**:
-A Floor's balcony, wrapping the Highrise's corner over the Lane.
+A Floor's balcony.
 _Avoid_: ledge, veranda, terrace
 
 **Lane**:
@@ -121,11 +121,11 @@ The gap between the Highrise's right-hand side and the edge of the screen.
 _Avoid_: gutter, margin, alley
 
 **City Behind**:
-The towers seen down the Lane past the Highrise.
+The towers beyond the Highrise, seen down the Lane.
 _Avoid_: skyline (that is the Scene's illustration), backdrop
 
 **Pavement**:
-The street at the foot of the Highrise.
+The street the Highrise stands on.
 _Avoid_: sidewalk, footpath, ground
 
 **Sign**:
