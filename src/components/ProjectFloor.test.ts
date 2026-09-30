@@ -60,7 +60,7 @@ describe("ProjectFloor", () => {
       href: "https://app.example.com",
     });
     const normal = await render({ ...base, href: "https://app.example.com" });
-    expect(featured).toContain("fanlight");
-    expect(normal).not.toContain("fanlight");
+    expect(featured).toContain("data-fanlight");
+    expect(normal).not.toContain("data-fanlight");
   });
 });

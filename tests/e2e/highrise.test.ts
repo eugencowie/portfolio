@@ -126,7 +126,7 @@ describe("Highrise", () => {
   }) => {
     await page.goto("/");
     // Drawn as backgrounds, so it has no role.
-    const city = page.locator("[data-highrise] .far");
+    const city = page.locator("[data-highrise] [data-drifting]");
     const drift = () =>
       city.evaluate(
         (el) =>
