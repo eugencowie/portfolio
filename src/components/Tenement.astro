@@ -18,9 +18,9 @@ import SectionHeading from "./SectionHeading.astro";
  * stops short of the screen's right-hand side, where its balconies hang over
  * a lane and the city behind it shows.
  * Currently building is the sign on its roof, with a floor for each of its
- * Projects beneath it. Then a floor of residents, then Games, mounted on the
- * wall above its own floors, and at street level the Other Section and the
- * Social Links. One Sign is lit at a time: the one of the Project hovered or
+ * Projects beneath it. Then a floor of residents, then Games, mounted on a
+ * stone cornice above its own floors, and at street level the Other Section
+ * and the Social Links. One Sign is lit at a time: the one of the Project hovered or
  * focused, or else the one nearest the middle of the screen.
  */
 type Props = ArrangedProjects<ProjectEntry>;
@@ -127,6 +127,7 @@ function brickTile() {
             <SectionHeading id="games">Games</SectionHeading>
           </div>
         </div>
+        <div class="cornice band-cornice" aria-hidden="true" />
         <ul class="floors">
           {games.map((project, i) => (
             <ProjectFloor
@@ -484,7 +485,7 @@ function brickTile() {
     }
   }
 
-  /* ---------- Games, mounted on the wall ---------- */
+  /* ---------- Games, mounted on a cornice ---------- */
   .band {
     padding: clamp(2rem, 6svh, 4rem) calc(var(--gutter) + var(--bay)) 0;
   }
@@ -507,8 +508,13 @@ function brickTile() {
     );
     pointer-events: none;
   }
-  /* The heading takes the first floor's string course. */
-  .band + .floors > :global(:first-child)::before {
+  /* A smaller cornice under the heading, in place of the first floor's
+     string course. */
+  .band-cornice {
+    --cornice-drop: 1.2rem;
+    --cornice: 1.4rem;
+  }
+  .band-cornice + .floors > :global(:first-child)::before {
     display: none;
   }
 </style>
