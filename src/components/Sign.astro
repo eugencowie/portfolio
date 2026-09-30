@@ -1,11 +1,11 @@
 ---
 /**
- * A name on the Highrise as Neon tubes in `--tube`'s colour: dark glass at
- * rest, flickering on while the nearest `[data-lit]` ancestor has attention,
- * or while a `[data-hover-lit]` ancestor is hovered with a mouse. Each letter
- * of the lit layer is its own span, and now and then one of a lit Sign
- * buzzes; a `failing` Sign has one letter that keeps cutting out. Both
- * layers share one grid cell and the same words, so they wrap alike.
+ * A name on the Highrise as magenta Neon tubes: dark glass at rest,
+ * flickering on while the nearest `[data-lit]` ancestor has attention, or
+ * while a `[data-hover-lit]` ancestor is hovered with a mouse. Each letter of
+ * the lit layer is its own span, and now and then one of a lit Sign buzzes; a
+ * `failing` Sign has one letter that keeps cutting out. Both layers share one
+ * grid cell and the same words, so they wrap alike.
  */
 interface Props {
   text: string;
@@ -56,20 +56,21 @@ let at = 0;
   }
   /* Unlit: dark glass. */
   .unlit {
-    color: color-mix(in oklab, var(--tube) 6%, transparent);
-    -webkit-text-stroke: 1px color-mix(in oklab, var(--tube) 55%, transparent);
+    color: color-mix(in oklab, var(--magenta) 6%, transparent);
+    -webkit-text-stroke: 1px
+      color-mix(in oklab, var(--magenta) 55%, transparent);
     text-shadow: 0.02em 0.05em 0.04em rgb(0 0 0 / 0.6);
   }
   /* Lit: a pale core, a tight glow and an outer haze. */
   .lit {
-    color: color-mix(in oklab, var(--tube) 36%, white);
-    -webkit-text-stroke: 0.012em color-mix(in oklab, var(--tube) 75%, white);
+    color: var(--neon-magenta);
+    -webkit-text-stroke: 0.012em color-mix(in oklab, var(--magenta) 75%, white);
     text-shadow:
       0 0 0.02em white,
-      0 0 0.06em var(--tube),
-      0 0 0.14em var(--tube),
-      0 0 0.3em var(--tube),
-      0 0 0.8em color-mix(in oklab, var(--tube) 45%, transparent);
+      0 0 0.06em var(--magenta),
+      0 0 0.14em var(--magenta),
+      0 0 0.3em var(--magenta),
+      0 0 0.8em color-mix(in oklab, var(--magenta) 45%, transparent);
     opacity: 0;
     transition: opacity 0.35s ease-out;
     pointer-events: none;
