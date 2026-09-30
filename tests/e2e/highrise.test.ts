@@ -1,5 +1,6 @@
 import type { Page } from "@playwright/test";
 import { describe, expect, it } from "./playwright";
+import { portraitPhone } from "./viewports";
 
 const floorOf = (page: Page, name: string) =>
   page
@@ -142,7 +143,7 @@ describe("Highrise", () => {
   it("keeps every Project, its screenshot and the Social Links reachable on a phone", async ({
     page,
   }) => {
-    await page.setViewportSize({ width: 390, height: 844 });
+    await page.setViewportSize(portraitPhone);
     await page.goto("/");
     const highrise = page.locator("[data-highrise]");
     for (const target of [

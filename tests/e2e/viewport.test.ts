@@ -1,16 +1,10 @@
 import { socialLinks } from "@/site";
 import { describe, expect, it } from "./playwright";
+import { viewports } from "./viewports";
 
 // The Hero must fit on one screen with the Social Links visible, whatever the
-// viewport: portrait and landscape phones, laptops and a desktop monitor. The
-// Projects below it scroll, so only the width is checked for overflow.
-const viewports = [
-  { name: "portrait phone", width: 375, height: 667 },
-  { name: "landscape phone", width: 844, height: 390 },
-  { name: "small laptop", width: 1280, height: 720 },
-  { name: "laptop", width: 1366, height: 768 },
-  { name: "desktop", width: 1920, height: 1080 },
-];
+// viewport. The Projects below it scroll, so only the width is checked for
+// overflow.
 
 describe("Hero", () => {
   for (const { name, ...viewport } of viewports) {
