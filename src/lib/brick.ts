@@ -6,20 +6,26 @@ const mortar = 2;
 const columns = 8;
 const rows = 12;
 
-// The brickwork's colour, between its colour in the dark and under a Spill.
-const BRICKWORK = [60, 27, 66];
+type Rgb = readonly [red: number, green: number, blue: number];
+
+// The colour a tinted shade is matched to: the brickwork's, between its colour
+// in the dark and under a Spill. It follows the gradient on `.brickwork` in
+// Highrise.astro.
+const BRICKWORK_COLOUR: Rgb = [60, 27, 66];
 
 /**
- * A shade that leaves `light`, out of 255 for red, green and blue, of what
+ * A shade that leaves `kept`, out of 255 for red, green and blue, of what
  * lies under it. A grey one does so exactly whatever it is laid over. A tinted
  * one is matched to the brickwork's colour: it shows a little more of its tint
  * in the dark and a little less under a Spill.
  */
-function shade(light: number[]): string {
-  const least = Math.min(...light);
+function shade(kept: Rgb): string {
+  const least = Math.min(...kept);
   const alpha = 1 - least / 255;
-  const [r, g, b] = light.map((part, i) =>
-    alpha ? Math.round((BRICKWORK[i] * (part - least)) / 255 / alpha) : 0,
+  const [r, g, b] = kept.map((part, i) =>
+    alpha
+      ? Math.round((BRICKWORK_COLOUR[i] * (part - least)) / 255 / alpha)
+      : 0,
   );
   return `rgba(${r},${g},${b},${alpha.toFixed(3)})`;
 }
