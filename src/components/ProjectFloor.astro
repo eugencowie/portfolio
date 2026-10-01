@@ -15,9 +15,8 @@ import type { Bays } from "./Floor.astro";
  * it. Its name hangs beside the window as a Sign, over the tagline and host.
  * The Featured Project's window is wider and arched, with a fanlight lit by
  * the screenshot, on a taller floor. From 64rem the window takes one side
- * and the Sign the other. From 80rem the Featured floor's end bays narrow to
- * piers of brick, without their Sash Windows or balcony, and its window and
- * Sign spread into the room they leave.
+ * and the Sign the other. From 80rem the Featured floor has Piers in place of
+ * its Bays, and its window and Sign spread into the room they leave.
  */
 interface Props {
   project: FloorProjectEntry;
@@ -70,6 +69,7 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
   as="li"
   bays={BAYS[floor % BAYS.length]}
   balcony={balcony}
+  ends={featured ? "piers" : "bays"}
   class="project"
   data-attention
   data-window={side}
@@ -147,19 +147,6 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
       min-height: clamp(40rem, 94svh, 60rem);
     }
   }
-  /* From 80rem --bay narrows the Featured floor's end bays to piers, and their
-     Sash Windows and the balcony are hidden, so balconies.ts gives the start of
-     its list to the other floors, whose balconies show here. */
-  @media (min-width: 80rem) {
-    .project[data-featured] {
-      --bay: 3rem;
-    }
-    .project[data-featured] :global(.bay),
-    .project[data-featured] :global(.balcony) {
-      display: none;
-    }
-  }
-
   /* The window and the Sign. The whole of it is the Project's link. */
   .body {
     position: relative;
