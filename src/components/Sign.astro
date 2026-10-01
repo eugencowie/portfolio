@@ -87,25 +87,25 @@ let at = 0;
       0 0 0.14em var(--magenta),
       0 0 0.3em var(--magenta),
       0 0 0.8em color-mix(in oklab, var(--magenta) 45%, transparent);
-    opacity: 0;
-    transition: opacity 0.35s ease-out;
+    opacity: var(--lit);
+    transition: --lit 0.35s ease-out;
     pointer-events: none;
   }
   :global([data-lit]) .lit {
-    opacity: 1;
+    --lit: 1;
     animation: neon-flicker 0.9s linear both;
   }
   /* With a mouse only: on a touch screen a tapped one would stay lit. */
   @media (hover: hover) {
     :global([data-hover-lit]:hover) .lit {
-      opacity: 1;
+      --lit: 1;
       animation: neon-flicker 0.9s linear both;
     }
   }
   /* Without scripting, hovering or focusing lights a Sign instead. */
   @media (scripting: none) {
     :global([data-attention]:is(:hover, :focus-within)) .lit {
-      opacity: 1;
+      --lit: 1;
     }
   }
   :global([data-lit]) [data-failing] {

@@ -34,9 +34,12 @@ const avatarWidth = `min(26rem, 100vw - 2 * ${gutter}, 48svh)`;
 </header>
 
 <style define:vars={{ gutter }}>
+  /* Clipped at the screen's sides, so the room made for the Wordmark's glow
+     never scrolls the page sideways. */
   .hero {
     padding-block-start: var(--page-block-inset);
     padding-inline: var(--gutter);
+    overflow-x: clip;
   }
   /* The Social Links often land on the rooftops, so they get a dark halo to
      stay legible against the neon. */
