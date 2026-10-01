@@ -93,13 +93,13 @@ let at = 0;
   }
   :global([data-lit]) .lit {
     --lit: 1;
-    animation: neon-flicker 0.9s linear both;
+    animation: neon-flicker 0.9s linear;
   }
   /* With a mouse only: on a touch screen a tapped one would stay lit. */
   @media (hover: hover) {
     :global([data-hover-lit]:hover) .lit {
       --lit: 1;
-      animation: neon-flicker 0.9s linear both;
+      animation: neon-flicker 0.9s linear;
     }
   }
   /* Without scripting, hovering or focusing lights a Sign instead. */

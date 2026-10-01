@@ -121,7 +121,7 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
       </div>
       <div class="sill" aria-hidden="true"></div>
     </div>
-    <div class="sign-spill" aria-hidden="true"></div>
+    <div class="sign-spill" aria-hidden="true" data-spill></div>
     <div class="caption" data-caption>
       <h3 class="name">
         <a href={href}>
@@ -492,7 +492,7 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
   }
   [data-lit] .sign-spill {
     --lit: 1;
-    animation: neon-flicker 0.9s linear both;
+    animation: neon-flicker 0.9s linear;
   }
   @media (min-width: 64rem) {
     /* Dropped with the Caption. */
