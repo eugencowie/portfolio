@@ -16,10 +16,10 @@ export type BalconyKind = (typeof BALCONIES)[number] | "washing";
 /**
  * The Sections' floors, each with its balcony over the Lane, handed out from
  * the top of the Highrise down: a floor that isn't Featured takes the next from
- * the start of BALCONIES, and a Featured floor, whose balcony shows only below
- * 80rem (ProjectFloor.astro hides it from there), the next from the end. The
- * residents' washing line is their own, so it isn't in the list. With more than
- * six Project floors, the kinds repeat.
+ * the start of BALCONIES, and a Featured floor, whose Balcony shows only below
+ * 80rem (its Bays are Piers from there, see Floor.astro), the next from the
+ * end. The residents' washing line is their own, so it isn't in the list. With
+ * more than six Project floors, the kinds repeat.
  */
 export function handOutBalconies<F extends { project: HasProject }>(
   sections: F[][],
