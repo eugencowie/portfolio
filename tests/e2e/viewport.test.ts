@@ -41,26 +41,28 @@ describe("Hero", () => {
   }
 });
 
-// A Project's name is sized to fit its caption on two lines at most, whatever
+// A Project's Sign is sized to fit its Caption on two lines at most, whatever
 // the viewport, so a long name neither wraps onto a third line nor overflows.
 
 describe("Highrise", () => {
   for (const { name, ...viewport } of viewports) {
-    it(`fits every Project's name on two lines on a ${name}`, async ({
+    it(`fits every Project's Sign on two lines on a ${name}`, async ({
       page,
     }) => {
       await open(page, viewport);
 
-      const names = page
+      const signs = page
         .locator("[data-highrise]")
-        .getByRole("heading", { level: 3 });
-      expect(await names.count()).toBeGreaterThan(0);
-      for (const heading of await names.all()) {
+        .getByRole("heading", { level: 3 })
+        .filter({ has: page.locator("[data-sign]") });
+      expect(await signs.count()).toBeGreaterThan(0);
+      for (const heading of await signs.all()) {
         const { text, lines, overflow } = await heading.evaluate((el) => {
-          const lineHeight = parseFloat(getComputedStyle(el).lineHeight);
+          const sign = el.querySelector("[data-sign]")!;
+          const lineHeight = parseFloat(getComputedStyle(sign).lineHeight);
           return {
             text: el.textContent,
-            lines: el.getBoundingClientRect().height / lineHeight,
+            lines: sign.getBoundingClientRect().height / lineHeight,
             overflow: el.scrollWidth - el.clientWidth,
           };
         });

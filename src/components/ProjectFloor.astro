@@ -123,7 +123,7 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
     </div>
     <div class="sign-spill" aria-hidden="true"></div>
     <div class="caption">
-      <h3 class="name font-name lowercase" style={`--name-width: ${nameWidth}`}>
+      <h3 class="name" style={`--name-width: ${nameWidth}`}>
         <a href={href}>
           <Sign text={name} failing={floor % 3 === 1} />
         </a>
@@ -434,15 +434,13 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
       text-align: right;
     }
   }
-  /* Capped to fit the caption: --name-width is the name's width on at most two
-     lines in em, and the 4% slack covers the letter-spacing. */
+  /* Capped to fit the Caption: --name-width is the name's width on at most two
+     lines in em, and the 4% slack covers the Sign's letter-spacing. */
   .name {
     font-size: min(
       clamp(1.8rem, 3.1vw, 3.3rem),
       100cqi * 0.96 / var(--name-width)
     );
-    line-height: 1.12;
-    letter-spacing: 0.01em;
   }
   [data-featured] .name {
     font-size: min(

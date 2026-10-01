@@ -1,11 +1,12 @@
 ---
 /**
- * A name on the Highrise as magenta Neon tubes: dark glass at rest,
- * flickering on while the nearest `[data-lit]` ancestor has attention, or
- * while a `[data-hover-lit]` ancestor is hovered with a mouse. Each letter of
- * the lit layer is its own span, and now and then one of a lit Sign buzzes; a
- * `failing` Sign has one letter that keeps cutting out. Both layers share one
- * grid cell and the same words, so they wrap alike.
+ * A name on the Highrise as magenta Neon tubes: set in lowercase Michroma at
+ * the font size it inherits, dark glass at rest, flickering on while the
+ * nearest `[data-lit]` ancestor has attention, or while a `[data-hover-lit]`
+ * ancestor is hovered with a mouse. Each letter of the lit layer is its own
+ * span, and now and then one of a lit Sign buzzes; a `failing` Sign has one
+ * letter that keeps cutting out. Both layers share one grid cell and the same
+ * words, so they wrap alike.
  */
 interface Props {
   text: string;
@@ -18,7 +19,7 @@ const failingAt = failing ? Math.floor(words.flat().length * 0.62) : -1;
 let at = 0;
 ---
 
-<span class="sign">
+<span class="sign" data-sign>
   <span class="unlit">
     {words.map((word, i) => (
       <>
@@ -45,7 +46,11 @@ let at = 0;
 
 <style>
   .sign {
-    display: inline-grid;
+    display: grid;
+    font-family: var(--font-name);
+    text-transform: lowercase;
+    letter-spacing: 0.01em;
+    line-height: 1.12;
   }
   .unlit,
   .lit {
