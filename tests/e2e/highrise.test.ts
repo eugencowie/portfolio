@@ -1,6 +1,6 @@
 import type { Locator, Page } from "@playwright/test";
 import { describe, expect, it } from "./playwright";
-import { portraitPhone, smallLaptop } from "./viewports";
+import { portraitPhone, smallLaptop, viewports } from "./viewports";
 
 const floorOf = (page: Page, name: string) =>
   page
@@ -79,6 +79,28 @@ describe("Highrise", () => {
       floorOf(page, "Gauge").locator("[data-balcony]"),
     ).toBeVisible();
   });
+
+  // From 64rem a Floor's Caption stands beside its window.
+  for (const { name, ...viewport } of viewports.filter(
+    ({ width }) => width >= 1024,
+  )) {
+    it(`centres each Project's Caption on its screenshot on a ${name}`, async ({
+      page,
+    }) => {
+      await page.setViewportSize(viewport);
+      await page.goto("/");
+      const middle = async (locator: Locator) => {
+        const box = await locator.boundingBox();
+        return box ? box.y + box.height / 2 : Number.NaN;
+      };
+      for (const floor of await page.locator("[data-attention]").all()) {
+        const caption = await middle(floor.locator("[data-caption]"));
+        const screenshot = await middle(floor.getByRole("img"));
+        // Within the pane's thicker top border.
+        expect(Math.abs(caption - screenshot)).toBeLessThan(1);
+      }
+    });
+  }
 
   it("lights a Project's Sign only while any part of its Caption is in the middle of the screen", async ({
     page,

@@ -432,6 +432,23 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
       align-items: flex-end;
       text-align: right;
     }
+    /* Beside the window, the Caption and its Spill are lowered from the
+       window's middle to the screenshot's: by as much as the window's head is
+       taller than its sill. A percentage is of the Caption's width. */
+    .body {
+      --lower: calc(1.2rem - 0.95rem);
+    }
+    /* The fanlight is 24% of the window's width tall, less the 0.5rem the
+       pane overlaps it, and the window is 62/38 of the Caption's width. */
+    [data-featured] .body {
+      --lower: calc(24% * 62 / 38 - 0.5rem - 0.95rem);
+    }
+    .caption {
+      margin-top: var(--lower);
+    }
+    .sign-spill {
+      margin-block: calc(var(--lower) / 2) calc(var(--lower) / -2);
+    }
   }
   /* The Sign's largest size; it shrinks to fit the Caption. */
   .name {
