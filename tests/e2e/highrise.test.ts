@@ -1,6 +1,6 @@
 import type { Page } from "@playwright/test";
 import { describe, expect, it } from "./playwright";
-import { portraitPhone } from "./viewports";
+import { portraitPhone, smallLaptop } from "./viewports";
 
 const floorOf = (page: Page, name: string) =>
   page
@@ -27,6 +27,35 @@ describe("Highrise", () => {
       }),
     );
     expect(tops).toEqual(tops.toSorted((a, b) => a - b));
+  });
+
+  it("gives a Featured floor Piers from 80rem, with no Sash Window or Balcony", async ({
+    page,
+  }) => {
+    await page.setViewportSize(smallLaptop);
+    await page.goto("/");
+    const featured = floorOf(page, "Gauge");
+    await expect(featured.locator("[data-bay]")).toHaveCount(2);
+    for (const bay of await featured.locator("[data-bay]").all()) {
+      await expect(bay).toBeHidden();
+    }
+    await expect(featured.locator("[data-balcony]")).toHaveCount(1);
+    await expect(featured.locator("[data-balcony]")).toBeHidden();
+
+    const ordinary = floorOf(page, "Roman Reign");
+    await expect(ordinary.locator("[data-bay]")).toHaveCount(2);
+    for (const bay of await ordinary.locator("[data-bay]").all()) {
+      await expect(bay).toBeVisible();
+    }
+    await expect(ordinary.locator("[data-balcony]")).toBeVisible();
+  });
+
+  it("keeps a Featured floor's Balcony on a phone", async ({ page }) => {
+    await page.setViewportSize(portraitPhone);
+    await page.goto("/");
+    await expect(
+      floorOf(page, "Gauge").locator("[data-balcony]"),
+    ).toBeVisible();
   });
 
   it("lights only the Sign of the Project in the middle of the screen", async ({

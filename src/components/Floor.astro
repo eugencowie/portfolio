@@ -6,31 +6,44 @@ import Balcony from "./Balcony.astro";
 import SashWindow from "./SashWindow.astro";
 
 /**
- * One storey of the Highrise: a stone string course along its top, then an
- * end bay, the floor's own content, and another end bay. From 80rem each end
- * bay has an ordinary sash window, unless a Featured floor (ProjectFloor.astro)
- * narrows it to a pier, so the Highrise reads as a grid of floors even one
- * screen at a time. A balcony, if any, wraps the Highrise's corner: its railing
- * crosses the end bay's window and reaches out over the lane, lit by the room
- * behind that window if it is.
+ * One storey of the Highrise: a stone string course along its top, then a Bay,
+ * the floor's own content, and another Bay. From 80rem each Bay has a Sash
+ * Window, so the Highrise reads as a grid of floors even one screen at a time,
+ * unless the floor has Piers in their place: narrowed to brick, with no Sash
+ * Window and no Balcony, as a Featured floor's are from there. A Balcony, if
+ * any, wraps the Highrise's corner: its railing crosses the Bay's Sash Window
+ * and reaches out over the Lane, lit by the room behind it if it is.
  */
 export type Bays = { left: SashKind; right: SashKind };
 type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
   bays?: Bays;
   balcony?: BalconyKind;
+  /** Bays unless the floor has Piers in their place from 80rem. */
+  ends?: "bays" | "piers";
 };
-const { as: Tag, bays, balcony, class: className, ...attrs } = Astro.props;
+const {
+  as: Tag,
+  bays,
+  balcony,
+  ends = "bays",
+  class: className,
+  ...attrs
+} = Astro.props;
 const balconyLight = bays && sashLight(bays.right);
 ---
 
-<Tag class:list={["floor", className]} {...attrs}>
-  <div class="bay start">{bays && <SashWindow kind={bays.left} />}</div>
+<Tag class:list={["floor", { piers: ends === "piers" }, className]} {...attrs}>
+  <div class="bay start" data-bay>
+    {bays && <SashWindow kind={bays.left} />}
+  </div>
   <div class="content">
     <slot />
   </div>
-  <div class="bay end">{bays && <SashWindow kind={bays.right} />}</div>
+  <div class="bay end" data-bay>
+    {bays && <SashWindow kind={bays.right} />}
+  </div>
   {balcony && (
-    <div class="balcony">
+    <div class="balcony" data-balcony>
       <Balcony kind={balcony} light={balconyLight} />
     </div>
   )}
@@ -58,6 +71,17 @@ const balconyLight = bays && sashLight(bays.right);
       var(--stone-shade)
     );
     box-shadow: 0 0.5rem 0.9rem rgb(5 3 16 / 0.6);
+  }
+  /* Piers: the Bays narrowed to brick, their Sash Windows and the Balcony
+     gone, so the content spreads into the room they leave. */
+  @media (min-width: 80rem) {
+    .piers {
+      --bay: 3rem;
+    }
+    .piers .bay,
+    .piers .balcony {
+      display: none;
+    }
   }
   .content {
     grid-column: 2;
