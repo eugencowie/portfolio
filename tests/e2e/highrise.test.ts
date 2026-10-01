@@ -29,6 +29,67 @@ const settle = (page: Page) =>
       }),
   );
 
+/** What lights on a Project's Floor: its Sign, and the Spill around it. */
+const litLayers = { sign: "[data-sign] .lit", spill: "[data-spill]" };
+
+/** Waits until a lit Floor's Sign and Spill have flickered on. */
+const flickeredOn = async (floor: Locator) => {
+  await expect(floor).toHaveAttribute("data-lit");
+  for (const selector of Object.values(litLayers)) {
+    await expect
+      .poll(() =>
+        floor
+          .locator(selector)
+          .evaluate((el) =>
+            el
+              .getAnimations()
+              .every((animation) => animation.playState === "finished"),
+          ),
+      )
+      .toBe(true);
+  }
+};
+
+/**
+ * Scrolls `screens` screens down, and reads the opacity of a Floor's Sign and
+ * Spill the moment that lights or puts out the Sign, before a frame can pass.
+ * Given `holdAt`, first holds their flicker or fade that many ms in, until the
+ * Sign next lights or goes out.
+ */
+const opacityAsSignToggles = (
+  floor: Locator,
+  { screens, holdAt }: { screens: number; holdAt?: number },
+) =>
+  floor.evaluate(
+    (el, { screens, holdAt, litLayers }) =>
+      new Promise<{ sign: string; spill: string }>((resolve) => {
+        const layerOf = (selector: string) => {
+          const layer = el.querySelector(selector);
+          if (!layer) throw new Error(`No ${selector} on the Floor`);
+          return layer;
+        };
+        const sign = layerOf(litLayers.sign);
+        const spill = layerOf(litLayers.spill);
+        new MutationObserver((_, observer) => {
+          observer.disconnect();
+          if (holdAt !== undefined) {
+            for (const layer of [sign, spill]) {
+              for (const animation of layer.getAnimations()) {
+                animation.pause();
+                animation.currentTime = holdAt;
+              }
+            }
+          }
+          resolve({
+            sign: getComputedStyle(sign).opacity,
+            spill: getComputedStyle(spill).opacity,
+          });
+        }).observe(el, { attributeFilter: ["data-lit"] });
+        scrollBy(0, innerHeight * screens);
+      }),
+    { screens, holdAt, litLayers },
+  );
+
 describe("Highrise", () => {
   it("descends from Building on the roof through Games to Other at street level", async ({
     page,
@@ -132,43 +193,56 @@ describe("Highrise", () => {
   }) => {
     await page.goto("/");
     const floor = floorOf(page, "Fourensics");
-    const layers = { sign: "[data-sign] .lit", spill: "[data-spill]" };
-    const sign = floor.locator(layers.sign);
-    const spill = floor.locator(layers.spill);
     await scrollEdgeTo(floor.locator("[data-caption]"), "top", 0.5);
-    await expect(floor).toHaveAttribute("data-lit");
-    for (const layer of [sign, spill]) {
-      await expect
-        .poll(() =>
-          layer.evaluate((el) =>
-            el
-              .getAnimations()
-              .every((animation) => animation.playState === "finished"),
-          ),
-        )
-        .toBe(true);
-    }
+    await flickeredOn(floor);
 
-    // Read the moment the Caption leaves the middle of the screen, before a
-    // frame can pass.
-    const opacityAsItGoesOut = await floor.evaluate(
-      (el, { sign, spill }) =>
-        new Promise((resolve) => {
-          const opacity = (selector: string) => {
-            const element = el.querySelector(selector);
-            return element && getComputedStyle(element).opacity;
-          };
-          new MutationObserver((_, observer) => {
-            observer.disconnect();
-            resolve({ sign: opacity(sign), spill: opacity(spill) });
-          }).observe(el, { attributeFilter: ["data-lit"] });
-          scrollBy(0, innerHeight);
-        }),
-      layers,
+    expect(await opacityAsSignToggles(floor, { screens: 1 })).toEqual({
+      sign: "1",
+      spill: "1",
+    });
+    await expect(floor.locator(litLayers.sign)).toHaveCSS("opacity", "0");
+    await expect(floor.locator(litLayers.spill)).toHaveCSS("opacity", "0");
+  });
+
+  it("fades a Project's Sign and its Spill out mid-flicker from however lit they are", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    const floor = floorOf(page, "Fourensics");
+    // A screen below the middle, so the next scroll lights it.
+    await scrollEdgeTo(floor.locator("[data-caption]"), "top", 1.5);
+
+    // 270ms into the flicker it is 0.95: the 0.95 30% stop of --neon-flicker
+    // in global.css.
+    const midFlicker = { sign: "0.95", spill: "0.95" };
+    expect(
+      await opacityAsSignToggles(floor, { screens: 1, holdAt: 270 }),
+    ).toEqual(midFlicker);
+    expect(await opacityAsSignToggles(floor, { screens: 1 })).toEqual(
+      midFlicker,
     );
-    expect(opacityAsItGoesOut).toEqual({ sign: "1", spill: "1" });
-    await expect(sign).toHaveCSS("opacity", "0");
-    await expect(spill).toHaveCSS("opacity", "0");
+    await expect(floor.locator(litLayers.sign)).toHaveCSS("opacity", "0");
+    await expect(floor.locator(litLayers.spill)).toHaveCSS("opacity", "0");
+  });
+
+  it("flickers a Project's Sign and its Spill back on mid-fade from however lit they still are", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    const floor = floorOf(page, "Fourensics");
+    await scrollEdgeTo(floor.locator("[data-caption]"), "top", 0.5);
+    await flickeredOn(floor);
+
+    // Held 100ms into the fade.
+    const fading = await opacityAsSignToggles(floor, {
+      screens: 1,
+      holdAt: 100,
+    });
+    expect(Number(fading.sign)).toBeGreaterThan(0);
+    expect(Number(fading.spill)).toBeGreaterThan(0);
+    expect(await opacityAsSignToggles(floor, { screens: -1 })).toEqual(fading);
+    await expect(floor.locator(litLayers.sign)).toHaveCSS("opacity", "1");
+    await expect(floor.locator(litLayers.spill)).toHaveCSS("opacity", "1");
   });
 
   it("leaves a hovered Project's Sign unlit outside the middle of the screen", async ({
