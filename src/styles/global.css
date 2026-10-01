@@ -41,38 +41,49 @@
 /* Component styles write Tailwind's lg and xl breakpoints by value, 64rem and
    80rem: a media query takes no variable. */
 
+/* How lit a Neon tube is, from 0 to 1, for what it lights to take as its
+   opacity. Registered, so it animates, and animated in place of opacity: in
+   Safari an animated opacity gets a compositing layer of its own, and a Spill
+   under the brick layer with one gives the bricks and every floor in front
+   of them one too. */
+@property --lit {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
 /* A Neon tube lighting up: a few stuttering tries, then steady. */
 @keyframes neon-flicker {
   0% {
-    opacity: 0;
+    --lit: 0;
   }
   6% {
-    opacity: 0.85;
+    --lit: 0.85;
   }
   10% {
-    opacity: 0.1;
+    --lit: 0.1;
   }
   18% {
-    opacity: 0.7;
+    --lit: 0.7;
   }
   21% {
-    opacity: 0.05;
+    --lit: 0.05;
   }
   30% {
-    opacity: 0.95;
+    --lit: 0.95;
   }
   34% {
-    opacity: 0.35;
+    --lit: 0.35;
   }
   44% {
-    opacity: 1;
+    --lit: 1;
   }
   48% {
-    opacity: 0.75;
+    --lit: 0.75;
   }
   54%,
   100% {
-    opacity: 1;
+    --lit: 1;
   }
 }
 
