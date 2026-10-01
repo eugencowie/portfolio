@@ -253,19 +253,23 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
     );
     pointer-events: none;
   }
-  /* Rain running down the glass. Each drip's track is the size of the pane,
-     so it can slide the drop down by a share of the pane's height. */
+  /* Rain running down the glass. Each drip's track is the height of the pane,
+     so it can slide the drop down by a share of the pane's height, and only
+     the width of the drop, so the layer Safari animates it in is no wider. */
   .drip {
     position: absolute;
-    inset: 0;
+    top: 0;
+    bottom: 0;
+    left: var(--x);
+    width: var(--size);
     pointer-events: none;
     animation: drip var(--duration) var(--delay) infinite;
   }
   .drop {
     position: absolute;
     top: 0;
-    left: var(--x);
-    width: var(--size);
+    left: 0;
+    width: 100%;
     height: calc(var(--size) * 1.35);
     border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
     background: radial-gradient(
@@ -477,8 +481,8 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
     z-index: -2;
     inset: -40% -30%;
     pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.6s ease-out;
+    opacity: var(--lit);
+    transition: --lit 0.6s ease-out;
     background: radial-gradient(
       closest-side,
       color-mix(in oklab, var(--magenta) 42%, transparent),
@@ -487,7 +491,7 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
     );
   }
   [data-lit] .sign-spill {
-    opacity: 1;
+    --lit: 1;
     animation: neon-flicker 0.9s linear both;
   }
   @media (min-width: 64rem) {

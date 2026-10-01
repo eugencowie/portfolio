@@ -12,8 +12,11 @@ import { svgUrl } from "@/lib/svg";
  * Drawn in units of 1/160 of 10rem and cropped by the lane's width. Its sky
  * fades in from clear at the top, so where the Skyline is held behind the
  * Highrise it shows down the lane past its towers. Below that it is opaque
- * and must sit in the brickwork after its lights and bricks and before its
- * floors, so the light spilling past the Highrise's side is hidden.
+ * and stands in front of the brickwork's lights, bricks and floors, behind
+ * only the string courses, quoins and balconies: in front of the lights to
+ * hide their Spill past the Highrise's side, and in front of the floors,
+ * which reach into the Lane, so that none is drawn over the drifting towers:
+ * in Safari, that would give every floor a compositing layer of its own.
  */
 const random = seededRandom(20260928);
 
@@ -170,7 +173,7 @@ const switching = Array.from({ length: 12 }, () => {
   .city {
     --u: calc(10rem / 160);
     position: absolute;
-    z-index: 0;
+    z-index: 1;
     top: 0;
     right: 0;
     bottom: 0;
