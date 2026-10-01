@@ -29,7 +29,7 @@ const { avatarWidth } = Astro.props;
     priority
     class="avatar h-auto select-none"
   />
-  <div class="wordmark relative w-full">
+  <div class="wordmark relative">
     <Wordmark class="relative w-full text-center" />
   </div>
 </div>
@@ -54,8 +54,17 @@ const { avatarWidth } = Astro.props;
       transparent
     );
   }
+  /* The Wordmark's glow is clipped --glow-reach beyond it, where it has faded
+     to nothing: its drop shadows reach much further on paper, and Safari
+     gives the Identity a compositing layer that big. The padding makes the
+     room, and the width and margins take it back out of the layout. */
   .wordmark {
+    --glow-reach: 0.75em;
     font-size: var(--wm);
-    margin-top: calc(-1 * var(--overlap));
+    width: calc(100% + 2 * var(--glow-reach));
+    margin: calc(-1 * var(--overlap) - var(--glow-reach))
+      calc(-1 * var(--glow-reach)) calc(-1 * var(--glow-reach));
+    padding: var(--glow-reach);
+    overflow: clip;
   }
 </style>
