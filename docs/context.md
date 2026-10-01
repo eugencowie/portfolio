@@ -108,6 +108,14 @@ _Avoid_: row, card, level
 The Highrise at street level, holding the Other Section and the Social Links.
 _Avoid_: footer, bottom
 
+**Bay**:
+One of the two ends of a Floor, where a Sash Window sits.
+_Avoid_: end bay, side, column
+
+**Pier**:
+The narrow masonry a Featured Floor has in place of each Bay.
+_Avoid_: pillar, narrow bay
+
 **Sash Window**:
 An ordinary window of the Highrise, with no screenshot in it.
 _Avoid_: window (ambiguous with a Project's screenshot window), background window
