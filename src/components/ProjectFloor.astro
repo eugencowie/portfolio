@@ -4,7 +4,6 @@ import { ArrowUpRight } from "@lucide/astro";
 import type { BalconyKind } from "@/lib/balconies";
 import type { FloorProjectEntry } from "@/lib/projects";
 import { seededRandom } from "@/lib/random";
-import { twoLineWidth } from "@/lib/sign";
 import Floor from "./Floor.astro";
 import Sign from "./Sign.astro";
 import type { Bays } from "./Floor.astro";
@@ -43,9 +42,6 @@ const BAYS: Bays[] = [
 // A blurred thumbnail is all the Spill and the fanlight's glass need.
 const blurred = await getImage({ src: screenshot, width: 160, format: "webp" });
 const blurredStyle = `background-image: url(${blurred.src})`;
-
-// The name's size is capped so it fits the Sign's column on two lines at most.
-const nameWidth = twoLineWidth(name);
 
 const random = seededRandom(floor);
 const drips = Array.from({ length: 7 }, () => ({
@@ -123,9 +119,9 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
     </div>
     <div class="sign-spill" aria-hidden="true"></div>
     <div class="caption">
-      <h3 class="name" style={`--name-width: ${nameWidth}`}>
+      <h3 class="name">
         <a href={href}>
-          <Sign text={name} failing={floor % 3 === 1} />
+          <Sign text={name} fit failing={floor % 3 === 1} />
         </a>
       </h3>
       <p class="tagline">{tagline}</p>
@@ -422,7 +418,7 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
   /* ---------- The Sign, its light on the bricks, the tagline and host ---------- */
   .caption {
     grid-area: caption;
-    /* Measured, for the name to fit to. */
+    /* A size container, for the Sign to fit to. */
     container-type: inline-size;
     display: flex;
     flex-direction: column;
@@ -434,19 +430,12 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
       text-align: right;
     }
   }
-  /* Capped to fit the Caption: --name-width is the name's width on at most two
-     lines in em, and the 4% slack covers the Sign's letter-spacing. */
+  /* The Sign's largest size; it shrinks to fit the Caption. */
   .name {
-    font-size: min(
-      clamp(1.8rem, 3.1vw, 3.3rem),
-      100cqi * 0.96 / var(--name-width)
-    );
+    font-size: clamp(1.8rem, 3.1vw, 3.3rem);
   }
   [data-featured] .name {
-    font-size: min(
-      clamp(2.4rem, 4.6vw, 4.8rem),
-      100cqi * 0.96 / var(--name-width)
-    );
+    font-size: clamp(2.4rem, 4.6vw, 4.8rem);
   }
   .name a:focus-visible {
     outline: none;
