@@ -56,7 +56,7 @@ describe("Index", () => {
     });
   });
 
-  it("uses the intended fonts for Section headings and Project names", async ({
+  it("uses the intended fonts for Section headings, Signs and the directory", async ({
     page,
   }) => {
     await page.goto("/");
@@ -65,7 +65,9 @@ describe("Index", () => {
       page.getByRole("heading", { level: 2, name: "Currently building" }),
     ).toHaveCSS("font-family", /Yellowtail/);
     await expect(
-      page.getByRole("heading", { level: 3, name: "Gauge" }),
+      page
+        .getByRole("heading", { level: 3, name: "Gauge" })
+        .locator("[data-sign]"),
     ).toHaveCSS("font-family", /Michroma/);
     await expect(
       page.getByRole("heading", { level: 3, name: "aptabase-rs" }),

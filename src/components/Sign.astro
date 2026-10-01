@@ -1,24 +1,31 @@
 ---
+import { twoLineWidth } from "@/lib/sign";
+
 /**
- * A name on the Highrise as magenta Neon tubes: dark glass at rest,
- * flickering on while the nearest `[data-lit]` ancestor has attention, or
- * while a `[data-hover-lit]` ancestor is hovered with a mouse. Each letter of
- * the lit layer is its own span, and now and then one of a lit Sign buzzes; a
- * `failing` Sign has one letter that keeps cutting out. Both layers share one
+ * A name on the Highrise as magenta Neon tubes: set in lowercase Michroma at
+ * the font size it inherits, or, made to `fit`, shrunk from there until it
+ * fits the nearest size container's width on two lines at most. Dark glass at
+ * rest, flickering on while the nearest `[data-lit]` ancestor has attention,
+ * or while a `[data-hover-lit]` ancestor is hovered with a mouse. Each letter
+ * of the lit layer is its own span, and now and then one of a lit Sign buzzes;
+ * a `failing` Sign has one letter that keeps cutting out. Both layers share one
  * grid cell and the same words, so they wrap alike.
  */
 interface Props {
   text: string;
+  /** Shrink to fit the nearest size container on two lines at most. */
+  fit?: boolean;
   failing?: boolean;
 }
-const { text, failing = false } = Astro.props;
+const { text, fit = false, failing = false } = Astro.props;
+const style = fit ? `--sign-width: ${twoLineWidth(text)}` : undefined;
 
 const words = text.split(" ").map((word) => [...word]);
 const failingAt = failing ? Math.floor(words.flat().length * 0.62) : -1;
 let at = 0;
 ---
 
-<span class="sign">
+<span class:list={["sign", { fit }]} style={style} data-sign>
   <span class="unlit">
     {words.map((word, i) => (
       <>
@@ -45,7 +52,16 @@ let at = 0;
 
 <style>
   .sign {
-    display: inline-grid;
+    display: grid;
+    font-family: var(--font-name);
+    text-transform: lowercase;
+    letter-spacing: 0.01em;
+    line-height: 1.12;
+  }
+  /* --sign-width is the name's width on at most two lines in em, and the 4%
+     slack covers the letter-spacing. */
+  .fit {
+    font-size: min(1em, 100cqi * 0.96 / var(--sign-width));
   }
   .unlit,
   .lit {
