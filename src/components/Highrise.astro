@@ -4,6 +4,7 @@ import type {
   FloorProjectEntry,
   ProjectEntry,
 } from "@/lib/projects";
+import { handOutBalconies } from "@/lib/balconies";
 import { brickTile } from "@/lib/brick";
 import { svgUrl } from "@/lib/svg";
 import CityBehind from "./CityBehind.astro";
@@ -37,13 +38,20 @@ const { building, games, other } = Astro.props;
 // Floors count from the street up, with the residents' floor between the
 // Sections.
 const topFloor = games.length + 1 + building.length;
+
 // A Section's Floors from `top` down, the window's side swapping from the left.
 const floors = (projects: FloorProjectEntry[], top: number) =>
-  projects.map((project, i): ComponentProps<typeof ProjectFloor> => ({
-    project,
-    floor: top - i,
-    side: i % 2 ? "right" : "left",
-  }));
+  projects.map(
+    (project, i): Omit<ComponentProps<typeof ProjectFloor>, "balcony"> => ({
+      project,
+      floor: top - i,
+      side: i % 2 ? "right" : "left",
+    }),
+  );
+const [buildingFloors, gamesFloors] = handOutBalconies([
+  floors(building, topFloor),
+  floors(games, games.length),
+]);
 
 const residents: SashKind[] = [
   "dark",
@@ -82,7 +90,7 @@ const residents: SashKind[] = [
     {building.length > 0 && (
       <section aria-labelledby="building">
         <ul class="floors">
-          {floors(building, topFloor).map((floor) => (
+          {buildingFloors.map((floor) => (
             <ProjectFloor {...floor} />
           ))}
         </ul>
@@ -113,7 +121,7 @@ const residents: SashKind[] = [
         </div>
         <div class="cornice band-cornice" aria-hidden="true" />
         <ul class="floors">
-          {floors(games, games.length).map((floor) => (
+          {gamesFloors.map((floor) => (
             <ProjectFloor {...floor} />
           ))}
         </ul>
@@ -138,8 +146,9 @@ const residents: SashKind[] = [
     --bay: 0px;
     /* The lane between the Highrise's side and the screen's. */
     --lane: clamp(1.75rem, 10vw, 10rem);
-    /* The content's inset from the screen's left edge, past the gutter and
-       the balcony bay, and from its right edge, past the lane as well. */
+    /* The content's inset from the screen's left edge, past the gutter and the
+       end bay, and from its right edge, past the lane as well. Restated on a
+       Featured floor in ProjectFloor.astro. */
     --inset-left: calc(var(--gutter) + var(--bay));
     --inset-right: calc(var(--inset-left) + var(--lane));
     /* A balcony reaches most of the way across the lane, and back over the
@@ -346,14 +355,15 @@ const residents: SashKind[] = [
     background-image: var(--bricks);
   }
   /* A cast-iron downpipe from a hopper under the cornice to the street, in
-     front of the string courses. */
+     front of the string courses. It runs by the corner, clear of the Featured
+     floors' windows. */
   .pipe {
     display: none;
     position: absolute;
     z-index: 3;
     top: calc(var(--parapet) + var(--cornice-drop) + var(--cornice));
     bottom: 0;
-    left: calc(var(--inset-left) - 1.6rem);
+    left: calc(var(--quoin) + 0.3rem);
     width: 0.65rem;
     background:
       repeating-linear-gradient(
