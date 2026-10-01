@@ -52,41 +52,28 @@
   initial-value: 0;
 }
 
-/* A Neon tube lighting up: a few stuttering tries, then steady. Not filled:
-   whatever it runs on sets --lit to 1 to hold it lit, as a flicker held at the
-   end would keep --lit from transitioning when the tube goes out, and it would
-   snap dark. */
-@keyframes neon-flicker {
-  0% {
-    --lit: 0;
-  }
-  6% {
-    --lit: 0.85;
-  }
-  10% {
-    --lit: 0.1;
-  }
-  18% {
-    --lit: 0.7;
-  }
-  21% {
-    --lit: 0.05;
-  }
-  30% {
-    --lit: 0.95;
-  }
-  34% {
-    --lit: 0.35;
-  }
-  44% {
-    --lit: 1;
-  }
-  48% {
-    --lit: 0.75;
-  }
-  54%,
-  100% {
-    --lit: 1;
+/* A Neon tube lighting up, as the easing of its transition to lit: a few
+   stuttering tries, then steady. Not an animation: a tube going out
+   mid-flicker, or lit again mid-fade, interrupts the transition, and fades or
+   flickers back on from however lit it is, where from an animation it would
+   snap dark. Undefined with reduced motion, so each lit rule falls back to its
+   own fade. */
+@media (prefers-reduced-motion: no-preference) {
+  :root {
+    --neon-flicker: 0.9s
+      linear(
+        0,
+        0.85 6%,
+        0.1 10%,
+        0.7 18%,
+        0.05 21%,
+        0.95 30%,
+        0.35 34%,
+        1 44%,
+        0.75 48%,
+        1 54%,
+        1
+      );
   }
 }
 

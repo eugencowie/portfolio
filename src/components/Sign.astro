@@ -93,13 +93,13 @@ let at = 0;
   }
   :global([data-lit]) .lit {
     --lit: 1;
-    animation: neon-flicker 0.9s linear;
+    transition: --lit var(--neon-flicker, 0.35s ease-out);
   }
   /* With a mouse only: on a touch screen a tapped one would stay lit. */
   @media (hover: hover) {
     :global([data-hover-lit]:hover) .lit {
       --lit: 1;
-      animation: neon-flicker 0.9s linear;
+      transition: --lit var(--neon-flicker, 0.35s ease-out);
     }
   }
   /* Without scripting, hovering or focusing lights a Sign instead. */
@@ -164,8 +164,6 @@ let at = 0;
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    :global([data-lit]) .lit,
-    :global([data-hover-lit]:hover) .lit,
     :global([data-lit]) [data-failing],
     [data-letter][data-buzz] {
       animation: none;
