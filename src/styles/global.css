@@ -88,10 +88,12 @@
 }
 
 /* Something held on screen as the page scrolls, once it is covered: hidden,
-   so it is no longer drawn behind what covers it. */
+   so it is no longer drawn behind what covers it, and its contents skipped,
+   so nothing animating in it keeps a compositing layer under the page. */
 @keyframes covered {
   to {
     visibility: hidden;
+    content-visibility: hidden;
   }
 }
 
