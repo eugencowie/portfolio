@@ -52,7 +52,10 @@
   initial-value: 0;
 }
 
-/* A Neon tube lighting up: a few stuttering tries, then steady. */
+/* A Neon tube lighting up: a few stuttering tries, then steady. Not filled:
+   whatever it runs on sets --lit to 1 to hold it lit, as a flicker held at the
+   end would keep --lit from transitioning when the tube goes out, and it would
+   snap dark. */
 @keyframes neon-flicker {
   0% {
     --lit: 0;
