@@ -1,8 +1,7 @@
 /**
  * The advance width of each glyph a Sign might hold, in em, measured in a
- * browser from Michroma, the font `--font-name` sets in global.css. A glyph not
- * listed here counts as the widest that is, so a name is never sized to
- * overflow.
+ * browser from Michroma, the font Sign.astro sets. A glyph not listed here
+ * counts as the widest that is, so a name is never sized to overflow.
  */
 const GLYPH_WIDTHS: Record<string, number> = {
   " ": 0.28,
@@ -58,9 +57,8 @@ const GLYPH_WIDTHS: Record<string, number> = {
 const WIDEST = Math.max(...Object.values(GLYPH_WIDTHS));
 
 /**
- * The width of `text` set on one line in lowercase Michroma, in em. The
- * lowercase follows the `lowercase` class on the Sign's `.name` heading in
- * ProjectFloor.astro.
+ * The width of `text` set on one line in lowercase Michroma, in em, as
+ * Sign.astro sets it.
  */
 export const signWidth = (text: string): number =>
   [...text.toLowerCase()].reduce(

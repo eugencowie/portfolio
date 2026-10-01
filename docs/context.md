@@ -136,6 +136,10 @@ _Avoid_: skyline (that is the Scene's illustration), backdrop
 The street the Highrise stands on.
 _Avoid_: sidewalk, footpath, ground
 
+**Caption**:
+A Project's Sign, tagline and host, on its Floor.
+_Avoid_: text, details, meta
+
 **Sign**:
 A name hung on the Highrise as Neon tubes, lit while it has attention.
 _Avoid_: title, label, neon sign

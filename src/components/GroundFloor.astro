@@ -62,7 +62,7 @@ const { projects } = Astro.props;
         {socialLinks.map((link) => (
           <li class="social" data-hover-lit>
             <a href={link.url} class="social-link">
-              <span class="social-name font-name lowercase">
+              <span class="social-name">
                 <Sign text={link.name} />
               </span>
               <span class="social-url">{link.displayUrl}</span>
@@ -315,7 +315,6 @@ const { projects } = Astro.props;
   }
   .social-name {
     font-size: clamp(1.3rem, 2.2vw, 1.9rem);
-    line-height: 1.1;
   }
   .social-url {
     font-size: 0.72rem;
