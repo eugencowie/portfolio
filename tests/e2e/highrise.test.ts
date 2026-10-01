@@ -1,4 +1,4 @@
-import type { Page } from "@playwright/test";
+import type { Locator, Page } from "@playwright/test";
 import { describe, expect, it } from "./playwright";
 import { portraitPhone, smallLaptop } from "./viewports";
 
@@ -6,6 +6,28 @@ const floorOf = (page: Page, name: string) =>
   page
     .getByRole("listitem")
     .filter({ has: page.getByRole("heading", { level: 3, name }) });
+
+/** Scrolls until `locator`'s `edge` is `fraction` of the way down the screen. */
+const scrollEdgeTo = (
+  locator: Locator,
+  edge: "top" | "bottom",
+  fraction: number,
+) =>
+  locator.evaluate(
+    (el, [edge, fraction]) => {
+      scrollBy(0, el.getBoundingClientRect()[edge] - innerHeight * fraction);
+    },
+    [edge, fraction] as const,
+  );
+
+/** Waits two frames, by when the page's scripts have seen where it is. */
+const settle = (page: Page) =>
+  page.evaluate(
+    () =>
+      new Promise((resolve) => {
+        requestAnimationFrame(() => requestAnimationFrame(resolve));
+      }),
+  );
 
 describe("Highrise", () => {
   it("descends from Building on the roof through Games to Other at street level", async ({
@@ -58,55 +80,88 @@ describe("Highrise", () => {
     ).toBeVisible();
   });
 
-  it("lights only the Sign of the Project in the middle of the screen", async ({
+  it("lights a Project's Sign only while any part of its Caption is in the middle of the screen", async ({
     page,
   }) => {
     await page.goto("/");
-    // A resting cursor hovers whatever is under it; rest it off the page.
-    await page.mouse.move(-1, -1);
+    await settle(page);
+    await expect(page.locator("[data-lit]")).toHaveCount(0);
 
-    for (const name of ["Fourensics", "Roman Reign"]) {
+    for (const name of ["Fourensics", "Gauge", "Roman Reign"]) {
       const floor = floorOf(page, name);
-      await floor.evaluate((el) => el.scrollIntoView({ block: "center" }));
+      const caption = floor.locator("[data-caption]");
+      // The middle of the screen runs from 35% to 65% of the way down it.
+      await scrollEdgeTo(caption, "top", 0.64);
       await expect(floor).toHaveAttribute("data-lit");
       await expect(page.locator("[data-lit]")).toHaveCount(1);
+      await scrollEdgeTo(caption, "top", 0.66);
+      await expect(floor).not.toHaveAttribute("data-lit");
+      await scrollEdgeTo(caption, "bottom", 0.36);
+      await expect(floor).toHaveAttribute("data-lit");
+      await scrollEdgeTo(caption, "bottom", 0.34);
+      await expect(floor).not.toHaveAttribute("data-lit");
     }
   });
 
-  it("lights the Project whose floor is across the middle of the screen, even near its edge", async ({
+  it("leaves a hovered Project's Sign unlit outside the middle of the screen", async ({
     page,
   }) => {
     await page.goto("/");
-    await page.mouse.move(-1, -1);
-    const floor = floorOf(page, "Gauge");
-    // The Featured floor is tall: with its bottom edge just below the middle
-    // of the screen, its centre is far above it.
-    await floor.evaluate((el) => {
-      scrollBy(0, el.getBoundingClientRect().bottom - innerHeight / 2 - 32);
-    });
-    await expect(floor).toHaveAttribute("data-lit");
-    await expect(page.locator("[data-lit]")).toHaveCount(1);
+    const floor = floorOf(page, "Fourensics");
+    await scrollEdgeTo(floor.locator("[data-caption]"), "top", 0.75);
+    // The link over the Floor takes the hover, so point at the Sign.
+    const sign = floor.locator("[data-sign]");
+    const box = await sign.boundingBox();
+    expect(box).not.toBeNull();
+    if (!box) return;
+
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await settle(page);
+    await expect(page.locator("[data-lit]")).toHaveCount(0);
+    await expect(sign.locator(".lit")).toHaveCSS("opacity", "0");
   });
 
-  it("lights the Sign of the Project focused from the keyboard", async ({
+  it("lights the Sign of the Project focused from the keyboard, as well as the one in the middle of the screen", async ({
     page,
   }) => {
     await page.goto("/");
-    await page.mouse.move(-1, -1);
-    await floorOf(page, "Gauge").evaluate((el) =>
-      el.scrollIntoView({ block: "center" }),
-    );
+    const middle = floorOf(page, "Gauge");
+    await scrollEdgeTo(middle.locator("[data-caption]"), "top", 0.5);
+    await expect(middle).toHaveAttribute("data-lit");
+
     const floor = floorOf(page, "Fourensics");
+    const link = floor.getByRole("link").first();
     // Any key press makes the next focus a keyboard one; don't scroll
     // Fourensics into the middle of the screen.
     await page.keyboard.press("Shift");
-    await floor
-      .getByRole("link")
-      .first()
-      .evaluate((el) => el.focus({ preventScroll: true }));
-
+    await link.evaluate((el) => el.focus({ preventScroll: true }));
     await expect(floor).toHaveAttribute("data-lit");
-    await expect(page.locator("[data-lit]")).toHaveCount(1);
+    await expect(middle).toHaveAttribute("data-lit");
+
+    await link.blur();
+    await expect(floor).not.toHaveAttribute("data-lit");
+    await expect(middle).toHaveAttribute("data-lit");
+  });
+
+  it("lights the Sign of a Project clicked once a key is pressed", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    // Stay on the page.
+    await page.evaluate(() => {
+      addEventListener("click", (event) => event.preventDefault(), {
+        capture: true,
+      });
+    });
+    const floor = floorOf(page, "Fourensics");
+    await scrollEdgeTo(floor.locator("[data-caption]"), "top", 0.7);
+    const link = floor.getByRole("link").first();
+    await link.click();
+    await expect(link).toBeFocused();
+    await expect(floor).not.toHaveAttribute("data-lit");
+
+    await page.keyboard.press("Shift");
+    await expect(floor).toHaveAttribute("data-lit");
   });
 
   it("lights a Social Link's Sign only while it is hovered", async ({

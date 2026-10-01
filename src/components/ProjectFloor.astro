@@ -15,7 +15,10 @@ import type { Bays } from "./Floor.astro";
  * The Featured Project's window is wider and arched, with a fanlight lit by
  * the screenshot, on a taller floor. From 64rem the window takes one side
  * and the Sign the other. From 80rem the Featured floor has Piers in place of
- * its Bays, and its window and Sign spread into the room they leave.
+ * its Bays, and its window and Sign spread into the room they leave. Its Sign
+ * is lit while any part of its Caption is in the middle 30% of the screen's
+ * height, or while the Project is focused from the keyboard, wherever the
+ * mouse is.
  */
 interface Props {
   project: FloorProjectEntry;
@@ -118,7 +121,7 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
       <div class="sill" aria-hidden="true"></div>
     </div>
     <div class="sign-spill" aria-hidden="true"></div>
-    <div class="caption">
+    <div class="caption" data-caption>
       <h3 class="name">
         <a href={href}>
           <Sign text={name} fit failing={floor % 3 === 1} />
@@ -496,3 +499,37 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
     }
   }
 </style>
+
+<script>
+  for (const floor of document.querySelectorAll<HTMLElement>(
+    "[data-attention]",
+  )) {
+    let inMiddle = false;
+    let focused = false;
+    const light = () => floor.toggleAttribute("data-lit", inMiddle || focused);
+
+    // Any part of its Caption in the middle 30% of the screen.
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) inMiddle = entry.isIntersecting;
+        light();
+      },
+      { rootMargin: "-35% 0px" },
+    );
+    for (const caption of floor.querySelectorAll("[data-caption]")) {
+      observer.observe(caption);
+    }
+
+    // A key press after a click makes the focus a keyboard one too.
+    const attend = () => {
+      focused = floor.querySelector(":focus-visible") !== null;
+      light();
+    };
+    floor.addEventListener("focusin", attend);
+    floor.addEventListener("keyup", attend);
+    floor.addEventListener("focusout", () => {
+      focused = false;
+      light();
+    });
+  }
+</script>
