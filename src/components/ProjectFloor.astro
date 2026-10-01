@@ -1,12 +1,12 @@
 ---
 import { Image, getImage } from "astro:assets";
 import { ArrowUpRight } from "@lucide/astro";
+import type { BalconyKind } from "@/lib/balconies";
 import type { FloorProjectEntry } from "@/lib/projects";
 import { seededRandom } from "@/lib/random";
 import { twoLineWidth } from "@/lib/sign";
 import Floor from "./Floor.astro";
 import Sign from "./Sign.astro";
-import type { BalconyKind } from "./Balcony.astro";
 import type { Bays } from "./Floor.astro";
 
 /**
@@ -15,15 +15,18 @@ import type { Bays } from "./Floor.astro";
  * it. Its name hangs beside the window as a Sign, over the tagline and host.
  * The Featured Project's window is wider and arched, with a fanlight lit by
  * the screenshot, on a taller floor. From 64rem the window takes one side
- * and the Sign the other.
+ * and the Sign the other. From 80rem the Featured floor's end bays narrow to
+ * piers of brick, without their Sash Windows or balcony, and its window and
+ * Sign spread into the room they leave.
  */
 interface Props {
   project: FloorProjectEntry;
   /** Counted from the street up. */
   floor: number;
   side: "left" | "right";
+  balcony: BalconyKind;
 }
-const { project, floor, side } = Astro.props;
+const { project, floor, side, balcony } = Astro.props;
 const { name, tagline, href, featured, screenshot } = project.data;
 
 // The end bays' sash windows, a pattern repeating every eight floors.
@@ -36,18 +39,6 @@ const BAYS: Bays[] = [
   { left: "plant", right: "curtain" },
   { left: "tv", right: "dark" },
   { left: "dark", right: "blind" },
-];
-
-// The balcony across the right-hand end bay, a pattern repeating every seven
-// floors.
-const BALCONIES: BalconyKind[] = [
-  "lights",
-  "table",
-  "cat",
-  "person",
-  "washing",
-  "bike",
-  "plants",
 ];
 
 // A blurred thumbnail is all the Spill and the fanlight's glass need.
@@ -78,7 +69,7 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
 <Floor
   as="li"
   bays={BAYS[floor % BAYS.length]}
-  balcony={BALCONIES[floor % BALCONIES.length]}
+  balcony={balcony}
   class="project"
   data-attention
   data-window={side}
@@ -154,6 +145,22 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
     }
     .project[data-featured] {
       min-height: clamp(40rem, 94svh, 60rem);
+    }
+  }
+  /* From 80rem --bay narrows the Featured floor's end bays to piers, and their
+     Sash Windows and the balcony are hidden, so balconies.ts gives the start of
+     its list to the other floors, whose balconies show here. The insets follow
+     `.highrise` in Highrise.astro, restated because a custom property is worked
+     out where it is declared. */
+  @media (min-width: 80rem) {
+    .project[data-featured] {
+      --bay: 3rem;
+      --inset-left: calc(var(--gutter) + var(--bay));
+      --inset-right: calc(var(--inset-left) + var(--lane));
+    }
+    .project[data-featured] :global(.bay),
+    .project[data-featured] :global(.balcony) {
+      display: none;
     }
   }
 
@@ -354,7 +361,7 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
   /* ---------- Featured: an arched head with a lit fanlight and a keystone ---------- */
   /* The arch's stone runs on down the jambs, in the shade of its foot. The
      sill reaches past them, its ends tucked behind the quoins, or from 80rem
-     behind the downpipe. */
+     resting on the pier. */
   [data-featured] .window {
     --surround: 0.85rem;
     --sill-reach: 1rem;
@@ -364,11 +371,6 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
     [data-featured] .window {
       --surround: 1.2rem;
       --sill-reach: 1.7rem;
-    }
-  }
-  @media (min-width: 80rem) {
-    [data-featured] .window {
-      --sill-reach: 1.5rem;
     }
   }
   /* Drawn beside the pane, not as its shadow: a shadow would have the pane

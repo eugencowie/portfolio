@@ -25,6 +25,7 @@ async function render(data: ProjectData) {
       project: { id: "gauge", collection: "projects", data },
       floor: 1,
       side: "left",
+      balcony: "lights",
     } satisfies ComponentProps<typeof ProjectFloor>,
   });
 }
