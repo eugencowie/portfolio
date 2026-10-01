@@ -27,10 +27,7 @@ import SectionHeading from "./SectionHeading.astro";
  * Projects beneath it. Then a floor of residents, then Games, mounted on a
  * stone cornice above its own floors, and at street level the Other Section
  * and the Social Links. Each Section's floors swap the window's side floor
- * by floor, the first on the left under the heading. One Project's Sign is
- * lit at a time: the one of the Project hovered or focused, or else the one
- * across the middle of the screen or nearest to it. A Social Link's Sign
- * lights only while it is hovered.
+ * by floor, the first on the left under the heading.
  */
 type Props = ArrangedProjects<ProjectEntry>;
 const { building, games, other } = Astro.props;
@@ -513,90 +510,3 @@ const residents: SashKind[] = [
     display: none;
   }
 </style>
-
-<script>
-  function attend(highrise: HTMLElement) {
-    const targets = [
-      ...highrise.querySelectorAll<HTMLElement>("[data-attention]"),
-    ];
-    const onScreen = new Set<HTMLElement>();
-    let hovered: HTMLElement | null = null;
-    let focused: HTMLElement | null = null;
-    let centred: HTMLElement | null = null;
-    let lit: HTMLElement | null = null;
-
-    const light = () => {
-      const next = hovered ?? focused ?? centred;
-      if (next === lit) return;
-      lit?.removeAttribute("data-lit");
-      next?.setAttribute("data-lit", "");
-      lit = next;
-    };
-
-    // The one across the middle of the screen, or else the nearest to it
-    // within 40% of the screen's height.
-    let queued = false;
-    const centre = () => {
-      queued = false;
-      const middle = innerHeight / 2;
-      let nearest: HTMLElement | null = null;
-      let nearestDistance = innerHeight * 0.4;
-      for (const target of onScreen) {
-        const r = target.getBoundingClientRect();
-        const distance = Math.max(0, r.top - middle, middle - r.bottom);
-        if (distance < nearestDistance) {
-          nearest = target;
-          nearestDistance = distance;
-        }
-      }
-      centred = nearest;
-      light();
-    };
-    const schedule = () => {
-      if (queued) return;
-      queued = true;
-      requestAnimationFrame(centre);
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      for (const entry of entries) {
-        if (!(entry.target instanceof HTMLElement)) continue;
-        if (entry.isIntersecting) onScreen.add(entry.target);
-        else onScreen.delete(entry.target);
-      }
-      schedule();
-    });
-    for (const target of targets) {
-      observer.observe(target);
-      target.addEventListener("pointerenter", (event) => {
-        if (event.pointerType !== "mouse") return;
-        hovered = target;
-        light();
-      });
-      target.addEventListener("pointerleave", () => {
-        if (hovered !== target) return;
-        hovered = null;
-        light();
-      });
-      target.addEventListener("focusin", (event) => {
-        if (!(event.target instanceof Element)) return;
-        if (!event.target.matches(":focus-visible")) return;
-        focused = target;
-        light();
-      });
-      target.addEventListener("focusout", () => {
-        if (focused !== target) return;
-        focused = null;
-        light();
-      });
-    }
-    addEventListener("scroll", schedule, { passive: true });
-    addEventListener("resize", schedule);
-  }
-
-  for (const highrise of document.querySelectorAll<HTMLElement>(
-    "[data-highrise]",
-  )) {
-    attend(highrise);
-  }
-</script>
