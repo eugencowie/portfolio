@@ -1,12 +1,18 @@
 import { describe, expect, it } from "vitest";
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
+import type { ComponentProps } from "astro/types";
 import MainLayout from "./MainLayout.astro";
 
 describe("MainLayout", () => {
   async function render({ site }: { site?: string } = {}) {
     const container = await AstroContainer.create({ astroConfig: { site } });
+    // The container takes any props, so they are checked against the layout's
+    // here.
     return container.renderToString(MainLayout, {
-      props: { title: "Astro", description: "Astro site." },
+      props: {
+        title: "Astro",
+        description: "Astro site.",
+      } satisfies ComponentProps<typeof MainLayout>,
       request: new Request("http://localhost:4321/about/"),
     });
   }

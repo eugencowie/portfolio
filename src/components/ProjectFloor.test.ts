@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
+import type { ComponentProps } from "astro/types";
 import type { FloorProjectEntry } from "@/lib/projects";
 import ProjectFloor from "./ProjectFloor.astro";
 import screenshot from "@/content/projects/gauge/screenshot.png";
@@ -17,12 +18,15 @@ const base = {
 
 async function render(data: ProjectData) {
   const container = await AstroContainer.create();
+  // The container takes any props, so they are checked against the component's
+  // here.
   return container.renderToString(ProjectFloor, {
     props: {
       project: { id: "gauge", collection: "projects", data },
       floor: 1,
       side: "left",
-    },
+      balcony: "lights",
+    } satisfies ComponentProps<typeof ProjectFloor>,
   });
 }
 

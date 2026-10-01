@@ -1,4 +1,5 @@
 ---
+import type { BalconyKind } from "@/lib/balconies";
 import { SASH_LIGHT_RGB, type SashLight } from "@/lib/sash";
 
 /**
@@ -6,8 +7,6 @@ import { SASH_LIGHT_RGB, type SashLight } from "@/lib/sash";
  * bracket, a railing, and whatever the residents keep out there, lit by the
  * room behind if it is.
  */
-export type BalconyKind =
-  "lights" | "plants" | "bike" | "washing" | "person" | "cat" | "table";
 interface Props {
   kind: BalconyKind;
   /** The light from the room behind. */
