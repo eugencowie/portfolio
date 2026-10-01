@@ -31,7 +31,7 @@ When starting the dev server, use background mode:
 mise run astro dev --background
 ```
 
-To make it available over Tailscale, use `--host 0.0.0.0` and connect to it using the Tailscale IP address.
+To make it available over Tailscale, use `--host "$(tailscale ip -4)"` and connect to it using the Tailscale IP address.
 
 Manage the background server with `mise run astro dev stop`, `mise run astro dev status`, and `mise run astro dev logs`.
 
