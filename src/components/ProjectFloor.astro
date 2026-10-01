@@ -15,10 +15,11 @@ import type { Bays } from "./Floor.astro";
  * The Featured Project's window is wider and arched, with a fanlight lit by
  * the screenshot, on a taller floor. From 64rem the window takes one side
  * and the Sign the other. From 80rem the Featured floor has Piers in place of
- * its Bays, and its window and Sign spread into the room they leave. Its Sign
- * is lit while any part of its Caption is in the middle 30% of the screen's
- * height, or while the Project is focused from the keyboard, wherever the
- * mouse is.
+ * its Bays, and its window and Sign spread into the room they leave. Beside
+ * the window, the Caption is centred on the screenshot, not the whole window.
+ * Every floor's Sign is lit while any part of its Caption is in the middle
+ * 30% of the screen's height, or while its Project is focused from the
+ * keyboard, wherever the mouse is.
  */
 interface Props {
   project: FloorProjectEntry;
@@ -146,8 +147,12 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
       min-height: clamp(40rem, 94svh, 60rem);
     }
   }
-  /* The window and the Sign. The whole of it is the Project's link. */
+  /* The window and the Sign. The whole of it is the Project's link. The
+     window's stones are measured here, for the Caption beside it too. */
   .body {
+    --lintel: 1.2rem;
+    --sill: 0.95rem;
+    --fanlight-overlap: 0.5rem;
     position: relative;
     display: grid;
     grid-template-areas: "window" "caption";
@@ -175,6 +180,17 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
     [data-featured][data-window="right"] .body {
       grid-template-columns: minmax(0, 38fr) minmax(0, 62fr);
     }
+    /* How far the screenshot's middle lies below the window's: half of how
+       much taller the window's head is than its sill. A percentage is of the
+       Caption's width. */
+    .body {
+      --drop: calc((var(--lintel) - var(--sill)) / 2);
+    }
+    /* The fanlight is 24% of the window's width tall, less the pane's
+       overlap, and the window is 62/38 of the Caption's width. */
+    [data-featured] .body {
+      --drop: calc((24% * 62 / 38 - var(--fanlight-overlap) - var(--sill)) / 2);
+    }
   }
 
   /* ---------- The window: stone head and sill, the screenshot the room ---------- */
@@ -185,7 +201,7 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
   /* A flat arch of three stones. */
   .lintel {
     margin-inline: -0.9rem;
-    height: 1.2rem;
+    height: var(--lintel);
     background:
       linear-gradient(
         to right,
@@ -292,7 +308,7 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
   .sill {
     position: relative;
     margin-inline: -1.1rem;
-    height: 0.95rem;
+    height: var(--sill);
     /* Its top edge catches the window's light. */
     background: linear-gradient(
       to bottom,
@@ -363,7 +379,7 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
   .fanlight {
     position: relative;
     aspect-ratio: 100 / 24;
-    margin-bottom: -0.5rem;
+    margin-bottom: calc(-1 * var(--fanlight-overlap));
   }
   .fanlight::before {
     content: "";
@@ -432,22 +448,10 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
       align-items: flex-end;
       text-align: right;
     }
-    /* Beside the window, the Caption and its Spill are lowered from the
-       window's middle to the screenshot's: by as much as the window's head is
-       taller than its sill. A percentage is of the Caption's width. */
-    .body {
-      --lower: calc(1.2rem - 0.95rem);
-    }
-    /* The fanlight is 24% of the window's width tall, less the 0.5rem the
-       pane overlaps it, and the window is 62/38 of the Caption's width. */
-    [data-featured] .body {
-      --lower: calc(24% * 62 / 38 - 0.5rem - 0.95rem);
-    }
+    /* Dropped to the screenshot's middle: centred in its row, the Caption
+       moves by half its margin. */
     .caption {
-      margin-top: var(--lower);
-    }
-    .sign-spill {
-      margin-block: calc(var(--lower) / 2) calc(var(--lower) / -2);
+      margin-top: calc(2 * var(--drop));
     }
   }
   /* The Sign's largest size; it shrinks to fit the Caption. */
@@ -485,6 +489,12 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
   [data-lit] .sign-spill {
     opacity: 1;
     animation: neon-flicker 0.9s linear both;
+  }
+  @media (min-width: 64rem) {
+    /* Dropped with the Caption. */
+    .sign-spill {
+      margin-block: var(--drop) calc(-1 * var(--drop));
+    }
   }
   .tagline {
     max-width: 34ch;
@@ -533,17 +543,16 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
       },
       { rootMargin: "-35% 0px" },
     );
-    for (const caption of floor.querySelectorAll("[data-caption]")) {
-      observer.observe(caption);
-    }
+    const caption = floor.querySelector("[data-caption]");
+    if (caption) observer.observe(caption);
 
     // A key press after a click makes the focus a keyboard one too.
-    const attend = () => {
+    const checkFocus = () => {
       focused = floor.querySelector(":focus-visible") !== null;
       light();
     };
-    floor.addEventListener("focusin", attend);
-    floor.addEventListener("keyup", attend);
+    floor.addEventListener("focusin", checkFocus);
+    floor.addEventListener("keyup", checkFocus);
     floor.addEventListener("focusout", () => {
       focused = false;
       light();

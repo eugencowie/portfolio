@@ -81,22 +81,24 @@ describe("Highrise", () => {
   });
 
   // From 64rem a Floor's Caption stands beside its window.
-  for (const { name, ...viewport } of viewports.filter(
-    ({ width }) => width >= 1024,
-  )) {
+  for (const { name, ...viewport } of [
+    { name: "landscape tablet", width: 1024, height: 768 },
+    ...viewports.filter(({ width }) => width >= 1024),
+  ]) {
     it(`centres each Project's Caption on its screenshot on a ${name}`, async ({
       page,
     }) => {
       await page.setViewportSize(viewport);
       await page.goto("/");
-      const middle = async (locator: Locator) => {
+      const centreOf = async (locator: Locator) => {
         const box = await locator.boundingBox();
         return box ? box.y + box.height / 2 : Number.NaN;
       };
       for (const floor of await page.locator("[data-attention]").all()) {
-        const caption = await middle(floor.locator("[data-caption]"));
-        const screenshot = await middle(floor.getByRole("img"));
-        // Within the pane's thicker top border.
+        const caption = await centreOf(floor.locator("[data-caption]"));
+        const screenshot = await centreOf(floor.getByRole("img"));
+        // Within half the 0.1rem a Featured pane's top border is thicker
+        // than its bottom.
         expect(Math.abs(caption - screenshot)).toBeLessThan(1);
       }
     });
@@ -147,9 +149,9 @@ describe("Highrise", () => {
     page,
   }) => {
     await page.goto("/");
-    const middle = floorOf(page, "Gauge");
-    await scrollEdgeTo(middle.locator("[data-caption]"), "top", 0.5);
-    await expect(middle).toHaveAttribute("data-lit");
+    const centred = floorOf(page, "Gauge");
+    await scrollEdgeTo(centred.locator("[data-caption]"), "top", 0.5);
+    await expect(centred).toHaveAttribute("data-lit");
 
     const floor = floorOf(page, "Fourensics");
     const link = floor.getByRole("link").first();
@@ -158,11 +160,11 @@ describe("Highrise", () => {
     await page.keyboard.press("Shift");
     await link.evaluate((el) => el.focus({ preventScroll: true }));
     await expect(floor).toHaveAttribute("data-lit");
-    await expect(middle).toHaveAttribute("data-lit");
+    await expect(centred).toHaveAttribute("data-lit");
 
     await link.blur();
     await expect(floor).not.toHaveAttribute("data-lit");
-    await expect(middle).toHaveAttribute("data-lit");
+    await expect(centred).toHaveAttribute("data-lit");
   });
 
   it("lights the Sign of a Project clicked once a key is pressed", async ({
