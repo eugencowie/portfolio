@@ -38,6 +38,19 @@ describe("Hero", () => {
         ).toBeInViewport({ ratio: 1 });
       }
     });
+
+    it(`lets every Social Link be clicked on a ${name}`, async ({ page }) => {
+      await open(page, viewport);
+
+      const hero = page.locator("header");
+      for (const link of socialLinks) {
+        // A trial click runs the actionability checks, pointer interception
+        // included, without following the link.
+        await hero
+          .getByRole("link", { name: link.name, exact: true })
+          .click({ trial: true });
+      }
+    });
   }
 });
 
