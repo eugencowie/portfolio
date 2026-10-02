@@ -57,7 +57,9 @@ const { avatarWidth } = Astro.props;
   /* The Wordmark's glow is clipped --glow-reach beyond it, where it has faded
      to nothing: its drop shadows reach much further on paper, and Safari
      gives the Identity a compositing layer that big. The padding makes the
-     room, and the width and margins take it back out of the layout. */
+     room, the width and margins take it back out of the layout, and it
+     lets the pointer through to whatever lies under it, the Hero's Social
+     Links in the room below; the Wordmark itself still takes it. */
   .wordmark {
     --glow-reach: 0.75em;
     font-size: var(--wm);
@@ -66,5 +68,9 @@ const { avatarWidth } = Astro.props;
       calc(-1 * var(--glow-reach)) calc(-1 * var(--glow-reach));
     padding: var(--glow-reach);
     overflow: clip;
+    pointer-events: none;
+  }
+  .wordmark > :global(*) {
+    pointer-events: auto;
   }
 </style>
