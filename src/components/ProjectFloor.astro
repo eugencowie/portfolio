@@ -19,8 +19,7 @@ import type { Bays } from "./Floor.astro";
  * the window, the Caption is centred on the screenshot, not the whole window.
  * Every floor's Sign is lit while any part of its Caption is in the middle
  * 30% of the screen's height, or while its Project is focused from the
- * keyboard, wherever the mouse is; without scripting, while the Floor is
- * hovered or focused.
+ * keyboard, wherever the mouse is.
  */
 interface Props {
   project: FloorProjectEntry;
@@ -536,12 +535,6 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
      too. */
   .project:has(:focus-visible) {
     --floor-lit: 1;
-  }
-  /* Without scripting, hovering or focusing instead. */
-  @media (scripting: none) {
-    .project:is(:hover, :focus-within) {
-      --floor-lit: 1;
-    }
   }
 
   @media (prefers-reduced-motion: reduce) {

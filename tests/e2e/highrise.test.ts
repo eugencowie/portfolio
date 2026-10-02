@@ -208,12 +208,21 @@ describe("Highrise", () => {
     for (const name of ["Fourensics", "Gauge", "Roman Reign"]) {
       const floor = floorOf(page, name);
       const caption = floor.locator("[data-caption]");
+      const host = floor.locator("[data-host]");
       // The middle of the screen runs from 35% to 65% of the way down it.
       await scrollEdgeTo(caption, "top", 0.64);
       await expect(floor).toHaveAttribute("data-lit");
       await expect(page.locator("[data-lit]")).toHaveCount(1);
+      await expect(host).toHaveCSS(
+        "color",
+        await colorOf(page, "var(--neon-magenta)"),
+      );
       await scrollEdgeTo(caption, "top", 0.66);
       await expect(floor).not.toHaveAttribute("data-lit");
+      await expect(host).toHaveCSS(
+        "color",
+        await colorOf(page, "var(--muted)"),
+      );
       await scrollEdgeTo(caption, "bottom", 0.36);
       await expect(floor).toHaveAttribute("data-lit");
       await scrollEdgeTo(caption, "bottom", 0.34);
@@ -384,50 +393,6 @@ describe("Highrise", () => {
 
     await social.hover();
     await expect(lit).toHaveCSS("opacity", "1");
-  });
-
-  describe("without scripting", () => {
-    it.use({ javaScriptEnabled: false });
-
-    it("lights a Project's Floor hovered or focused as a lit one", async ({
-      page,
-    }) => {
-      await page.goto("/");
-      await expect(page.locator("[data-lit]")).toHaveCount(0);
-      const floor = floorOf(page, "Gauge");
-      const link = floor.getByRole("link").first();
-      const sign = floor.locator(litLayers.sign);
-      const spill = floor.locator(litLayers.spill);
-      const host = floor.locator("[data-host]");
-      const letter = floor.locator(failingLayers.letter);
-      await expect(sign).toHaveCSS("opacity", "0");
-      await expect(spill).toHaveCSS("opacity", "0");
-      await expect(host).toHaveCSS(
-        "color",
-        await colorOf(page, "var(--muted)"),
-      );
-      expect(await playStates(letter)).toEqual(["paused"]);
-
-      await link.hover();
-      // The flicker is the linear() easing of --neon-flicker in global.css;
-      // the fade it replaces is ease-out.
-      await expect(sign).toHaveCSS("transition-timing-function", /^linear\(/);
-      await expect(sign).toHaveCSS("opacity", "1");
-      await expect(spill).toHaveCSS("opacity", "1");
-      await expect(host).toHaveCSS(
-        "color",
-        await colorOf(page, "var(--neon-magenta)"),
-      );
-      expect(await playStates(letter)).toEqual(["running"]);
-
-      await page.mouse.move(0, 0);
-      await expect(sign).toHaveCSS("opacity", "0");
-      await expect(spill).toHaveCSS("opacity", "0");
-
-      await link.evaluate((el) => el.focus());
-      await expect(sign).toHaveCSS("opacity", "1");
-      await expect(spill).toHaveCSS("opacity", "1");
-    });
   });
 
   it("links a Project's whole window to the Project", async ({ page }) => {
