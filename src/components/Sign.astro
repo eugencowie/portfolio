@@ -5,8 +5,8 @@ import { twoLineWidth } from "@/lib/sign";
  * A name on the Highrise as magenta Neon tubes: set in lowercase Michroma at
  * the font size it inherits, or, made to `fit`, shrunk from there until it
  * fits the nearest size container's width on two lines at most. Dark glass at
- * rest, flickering on while the nearest `[data-lit]` ancestor has attention,
- * or while a `[data-hover-lit]` ancestor is hovered with a mouse. Each letter
+ * rest, flickering on while the Floor it is on is lit (`--floor-lit`), or
+ * while a `[data-hover-lit]` ancestor is hovered with a mouse. Each letter
  * of the lit layer is its own span, and now and then one of a lit Sign buzzes;
  * a `failing` Sign has one letter that keeps cutting out. Both layers share one
  * grid cell and the same words, so they wrap alike.
@@ -91,9 +91,11 @@ let at = 0;
     transition: --lit 0.35s ease-out;
     pointer-events: none;
   }
-  :global([data-lit]) .lit {
-    --lit: 1;
-    transition: --lit var(--neon-flicker, 0.35s ease-out);
+  @container style(--floor-lit: 1) {
+    .lit {
+      --lit: 1;
+      transition: --lit var(--neon-flicker, 0.35s ease-out);
+    }
   }
   /* With a mouse only: on a touch screen a tapped one would stay lit. */
   @media (hover: hover) {
@@ -108,17 +110,8 @@ let at = 0;
     opacity: var(--failing);
     animation: failing 4.7s steps(1) infinite paused;
   }
-  :global([data-lit]) [data-failing] {
-    animation-play-state: running;
-  }
-  /* Without scripting, hovering or focusing lights a Sign instead, failing
-     letter and all. */
-  @media (scripting: none) {
-    :global([data-attention]:is(:hover, :focus-within)) .lit {
-      --lit: 1;
-      transition: --lit var(--neon-flicker, 0.35s ease-out);
-    }
-    :global([data-attention]:is(:hover, :focus-within)) [data-failing] {
+  @container style(--floor-lit: 1) {
+    [data-failing] {
       animation-play-state: running;
     }
   }
@@ -192,12 +185,20 @@ let at = 0;
 <script>
   const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
 
-  // Now and then a letter of a lit Sign buzzes.
+  // Now and then a letter of a lit Sign buzzes. A Sign is lit on a lit Floor,
+  // read from the flag rather than from whatever set it, or hovered.
+  const lit = (sign: Element) =>
+    getComputedStyle(sign).getPropertyValue("--floor-lit") === "1" ||
+    sign.closest("[data-hover-lit]:hover") !== null;
   setInterval(() => {
     if (reducedMotion.matches || Math.random() > 0.45) return;
-    const letters = document.querySelectorAll<HTMLElement>(
-      ":is([data-lit], [data-hover-lit]:hover) [data-letter]:not([data-failing])",
-    );
+    const letters = [...document.querySelectorAll("[data-sign]")]
+      .filter(lit)
+      .flatMap((sign) => [
+        ...sign.querySelectorAll<HTMLElement>(
+          "[data-letter]:not([data-failing])",
+        ),
+      ]);
     const letter = letters[Math.floor(Math.random() * letters.length)];
     if (!letter) return;
     letter.removeAttribute("data-buzz");

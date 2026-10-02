@@ -491,9 +491,11 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
       transparent
     );
   }
-  [data-lit] .sign-spill {
-    --lit: 1;
-    transition: --lit var(--neon-flicker, 0.6s ease-out);
+  @container style(--floor-lit: 1) {
+    .sign-spill {
+      --lit: 1;
+      transition: --lit var(--neon-flicker, 0.6s ease-out);
+    }
   }
   @media (min-width: 64rem) {
     /* Dropped with the Caption. */
@@ -518,17 +520,27 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
     color: var(--muted);
     transition: color 0.4s;
   }
-  [data-lit] .host {
-    color: var(--neon-magenta);
-  }
-  /* Without scripting, hovering or focusing lights a Floor instead. */
-  @media (scripting: none) {
-    [data-attention]:is(:hover, :focus-within) .sign-spill {
-      --lit: 1;
-      transition: --lit var(--neon-flicker, 0.6s ease-out);
-    }
-    [data-attention]:is(:hover, :focus-within) .host {
+  @container style(--floor-lit: 1) {
+    .host {
       color: var(--neon-magenta);
+    }
+  }
+
+  /* ---------- What lights the Floor ---------- */
+  /* The script, while any part of the Caption is in the middle of the
+     screen. */
+  [data-lit] {
+    --floor-lit: 1;
+  }
+  /* Keyboard focus; a key press after a click makes the focus a keyboard one
+     too. */
+  .project:has(:focus-visible) {
+    --floor-lit: 1;
+  }
+  /* Without scripting, hovering or focusing instead. */
+  @media (scripting: none) {
+    .project:is(:hover, :focus-within) {
+      --floor-lit: 1;
     }
   }
 
@@ -543,31 +555,16 @@ const bars = [0.08, 0.24, 0.4, 0.5, 0.6, 0.76, 0.92].map((f) => {
   for (const floor of document.querySelectorAll<HTMLElement>(
     "[data-attention]",
   )) {
-    let inMiddle = false;
-    let focused = false;
-    const light = () => floor.toggleAttribute("data-lit", inMiddle || focused);
-
     // Any part of its Caption in the middle 30% of the screen.
     const observer = new IntersectionObserver(
       (entries) => {
-        for (const entry of entries) inMiddle = entry.isIntersecting;
-        light();
+        for (const entry of entries) {
+          floor.toggleAttribute("data-lit", entry.isIntersecting);
+        }
       },
       { rootMargin: "-35% 0px" },
     );
     const caption = floor.querySelector("[data-caption]");
     if (caption) observer.observe(caption);
-
-    // A key press after a click makes the focus a keyboard one too.
-    const checkFocus = () => {
-      focused = floor.querySelector(":focus-visible") !== null;
-      light();
-    };
-    floor.addEventListener("focusin", checkFocus);
-    floor.addEventListener("keyup", checkFocus);
-    floor.addEventListener("focusout", () => {
-      focused = false;
-      light();
-    });
   }
 </script>
