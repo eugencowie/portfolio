@@ -31,6 +31,27 @@ const settle = (page: Page) =>
 
 /** What lights on a Project's Floor: its Sign, and the Spill around it. */
 const litLayers = { sign: "[data-sign] .lit", spill: "[data-spill]" };
+/** A failing Sign's letter that keeps cutting out. */
+const failingLayers = { letter: "[data-failing]" };
+
+/** The play states of an element's animations. */
+const playStates = (el: Locator) =>
+  el.evaluate((el) =>
+    el.getAnimations().map((animation) => animation.playState),
+  );
+
+/**
+ * What a colour computes to on the page, resolved rather than written out:
+ * the palette's colour-mix() colours serialise differently in each engine.
+ */
+const colorOf = (page: Page, color: string) =>
+  page.evaluate((color) => {
+    const probe = document.body.appendChild(document.createElement("span"));
+    probe.style.color = color;
+    const computed = getComputedStyle(probe).color;
+    probe.remove();
+    return computed;
+  }, color);
 
 /** Waits until a lit Floor's Sign and Spill have flickered on. */
 const flickeredOn = async (floor: Locator) => {
@@ -258,12 +279,7 @@ describe("Highrise", () => {
     const floor = floorOf(page, "Gauge");
     await scrollEdgeTo(floor.locator("[data-caption]"), "top", 0.5);
     await flickeredOn(floor);
-    const failingLayers = { letter: "[data-failing]" };
     const letter = floor.locator(failingLayers.letter);
-    const playStates = () =>
-      letter.evaluate((el) =>
-        el.getAnimations().map((animation) => animation.playState),
-      );
     // 4150ms into its cycle the letter has cut out to 0.05, from the 88% stop
     // of `failing` in Sign.astro to its 96%.
     await letter.evaluate((el) => {
@@ -276,11 +292,11 @@ describe("Highrise", () => {
     expect(
       await opacityAsSignToggles(floor, { screens: 1, layers: failingLayers }),
     ).toEqual(cutOut);
-    expect(await playStates()).toEqual(["paused"]);
+    expect(await playStates(letter)).toEqual(["paused"]);
     expect(
       await opacityAsSignToggles(floor, { screens: -1, layers: failingLayers }),
     ).toEqual(cutOut);
-    expect(await playStates()).toEqual(["running"]);
+    expect(await playStates(letter)).toEqual(["running"]);
   });
 
   it("leaves a hovered Project's Sign unlit outside the middle of the screen", async ({
@@ -357,6 +373,50 @@ describe("Highrise", () => {
 
     await social.hover();
     await expect(lit).toHaveCSS("opacity", "1");
+  });
+
+  describe("without scripting", () => {
+    it.use({ javaScriptEnabled: false });
+
+    it("lights a Project's Floor hovered or focused as a lit one", async ({
+      page,
+    }) => {
+      await page.goto("/");
+      await expect(page.locator("[data-lit]")).toHaveCount(0);
+      const floor = floorOf(page, "Gauge");
+      const link = floor.getByRole("link").first();
+      const sign = floor.locator(litLayers.sign);
+      const spill = floor.locator(litLayers.spill);
+      const host = floor.locator("[data-host]");
+      const letter = floor.locator(failingLayers.letter);
+      await expect(sign).toHaveCSS("opacity", "0");
+      await expect(spill).toHaveCSS("opacity", "0");
+      await expect(host).toHaveCSS(
+        "color",
+        await colorOf(page, "var(--muted)"),
+      );
+      expect(await playStates(letter)).toEqual(["paused"]);
+
+      await link.hover();
+      // The flicker is the linear() easing of --neon-flicker in global.css;
+      // the fade it replaces is ease-out.
+      await expect(sign).toHaveCSS("transition-timing-function", /^linear\(/);
+      await expect(sign).toHaveCSS("opacity", "1");
+      await expect(spill).toHaveCSS("opacity", "1");
+      await expect(host).toHaveCSS(
+        "color",
+        await colorOf(page, "var(--neon-magenta)"),
+      );
+      expect(await playStates(letter)).toEqual(["running"]);
+
+      await page.mouse.move(0, 0);
+      await expect(sign).toHaveCSS("opacity", "0");
+      await expect(spill).toHaveCSS("opacity", "0");
+
+      await link.evaluate((el) => el.focus());
+      await expect(sign).toHaveCSS("opacity", "1");
+      await expect(spill).toHaveCSS("opacity", "1");
+    });
   });
 
   it("links a Project's whole window to the Project", async ({ page }) => {

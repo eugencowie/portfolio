@@ -102,12 +102,6 @@ let at = 0;
       transition: --lit var(--neon-flicker, 0.35s ease-out);
     }
   }
-  /* Without scripting, hovering or focusing lights a Sign instead. */
-  @media (scripting: none) {
-    :global([data-attention]:is(:hover, :focus-within)) .lit {
-      --lit: 1;
-    }
-  }
   /* Paused rather than removed as the Sign goes out, so a cut-out letter fades
      out with it, and carries on where it was once the Sign is lit again. */
   [data-failing] {
@@ -116,6 +110,17 @@ let at = 0;
   }
   :global([data-lit]) [data-failing] {
     animation-play-state: running;
+  }
+  /* Without scripting, hovering or focusing lights a Sign instead, failing
+     letter and all. */
+  @media (scripting: none) {
+    :global([data-attention]:is(:hover, :focus-within)) .lit {
+      --lit: 1;
+      transition: --lit var(--neon-flicker, 0.35s ease-out);
+    }
+    :global([data-attention]:is(:hover, :focus-within)) [data-failing] {
+      animation-play-state: running;
+    }
   }
   [data-letter][data-buzz] {
     animation: buzz 0.45s steps(1);
