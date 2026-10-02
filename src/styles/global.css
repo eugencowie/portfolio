@@ -52,6 +52,15 @@
   initial-value: 0;
 }
 
+/* Whether a Floor is lit, inherited by all it holds: set to 1 by each thing
+   that lights a Floor, read by each thing a lit Floor shows, so neither needs
+   to know the other. */
+@property --floor-lit {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
 /* A Neon tube lighting up, as the easing of its transition to lit: a few
    stuttering tries, then steady. Not an animation: a tube going out
    mid-flicker, or lit again mid-fade, interrupts the transition, and fades or

@@ -20,6 +20,12 @@ const scrollEdgeTo = (
     [edge, fraction] as const,
   );
 
+/**
+ * Makes the next focus a keyboard one, with a letter: WebKit doesn't count a
+ * bare modifier as a key press.
+ */
+const keyboardNext = (page: Page) => page.keyboard.press("a");
+
 /** Waits two frames, by when the page's scripts have seen where it is. */
 const settle = (page: Page) =>
   page.evaluate(
@@ -327,15 +333,18 @@ describe("Highrise", () => {
 
     const floor = floorOf(page, "Fourensics");
     const link = floor.getByRole("link").first();
-    // Any key press makes the next focus a keyboard one; don't scroll
-    // Fourensics into the middle of the screen.
-    await page.keyboard.press("Shift");
+    const sign = floor.locator(litLayers.sign);
+    const spill = floor.locator(litLayers.spill);
+    // Don't scroll Fourensics into the middle of the screen.
+    await keyboardNext(page);
     await link.evaluate((el) => el.focus({ preventScroll: true }));
-    await expect(floor).toHaveAttribute("data-lit");
+    await expect(sign).toHaveCSS("opacity", "1");
+    await expect(spill).toHaveCSS("opacity", "1");
     await expect(centred).toHaveAttribute("data-lit");
 
     await link.blur();
-    await expect(floor).not.toHaveAttribute("data-lit");
+    await expect(sign).toHaveCSS("opacity", "0");
+    await expect(spill).toHaveCSS("opacity", "0");
     await expect(centred).toHaveAttribute("data-lit");
   });
 
@@ -355,9 +364,11 @@ describe("Highrise", () => {
     await link.click();
     await expect(link).toBeFocused();
     await expect(floor).not.toHaveAttribute("data-lit");
+    const sign = floor.locator(litLayers.sign);
+    await expect(sign).toHaveCSS("opacity", "0");
 
-    await page.keyboard.press("Shift");
-    await expect(floor).toHaveAttribute("data-lit");
+    await keyboardNext(page);
+    await expect(sign).toHaveCSS("opacity", "1");
   });
 
   it("lights a Social Link's Sign only while it is hovered", async ({
