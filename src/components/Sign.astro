@@ -108,39 +108,52 @@ let at = 0;
       --lit: 1;
     }
   }
+  /* Paused rather than removed as the Sign goes out, so a cut-out letter fades
+     out with it, and carries on where it was once the Sign is lit again. */
+  [data-failing] {
+    opacity: var(--failing);
+    animation: failing 4.7s steps(1) infinite paused;
+  }
   :global([data-lit]) [data-failing] {
-    animation: failing 4.7s steps(1) infinite;
+    animation-play-state: running;
   }
   [data-letter][data-buzz] {
     animation: buzz 0.45s steps(1);
   }
+  /* How lit a failing letter is. Animated in place of its opacity, like --lit:
+     in Safari a paused opacity animation keeps a compositing layer. */
+  @property --failing {
+    syntax: "<number>";
+    inherits: false;
+    initial-value: 1;
+  }
   @keyframes failing {
     0% {
-      opacity: 1;
+      --failing: 1;
     }
     31% {
-      opacity: 0.15;
+      --failing: 0.15;
     }
     33% {
-      opacity: 1;
+      --failing: 1;
     }
     35% {
-      opacity: 0.1;
+      --failing: 0.1;
     }
     41% {
-      opacity: 0.9;
+      --failing: 0.9;
     }
     72% {
-      opacity: 0.2;
+      --failing: 0.2;
     }
     73% {
-      opacity: 1;
+      --failing: 1;
     }
     88% {
-      opacity: 0.05;
+      --failing: 0.05;
     }
     96% {
-      opacity: 1;
+      --failing: 1;
     }
   }
   @keyframes buzz {
@@ -164,7 +177,7 @@ let at = 0;
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    :global([data-lit]) [data-failing],
+    [data-failing],
     [data-letter][data-buzz] {
       animation: none;
     }
