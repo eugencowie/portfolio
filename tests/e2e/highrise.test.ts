@@ -51,43 +51,49 @@ const flickeredOn = async (floor: Locator) => {
 };
 
 /**
- * Scrolls `screens` screens down, and reads the opacity of a Floor's Sign and
- * Spill the moment that lights or puts out the Sign, before a frame can pass.
- * Given `holdAt`, first holds their flicker or fade that many ms in, until the
- * Sign next lights or goes out.
+ * Scrolls `screens` screens down, and reads the opacity of `layers` of a
+ * Floor, its Sign and Spill unless given, the moment that lights or puts out
+ * the Sign, before a frame can pass. Given `holdAt`, first holds their
+ * animations that many ms in, until the Sign next lights or goes out.
  */
 const opacityAsSignToggles = (
   floor: Locator,
-  { screens, holdAt }: { screens: number; holdAt?: number },
+  {
+    screens,
+    holdAt,
+    layers = litLayers,
+  }: { screens: number; holdAt?: number; layers?: Record<string, string> },
 ) =>
   floor.evaluate(
-    (el, { screens, holdAt, litLayers }) =>
-      new Promise<{ sign: string; spill: string }>((resolve) => {
-        const layerOf = (selector: string) => {
+    (el, { screens, holdAt, selectors }) =>
+      new Promise<Record<string, string>>((resolve) => {
+        const layers = Object.entries(selectors).map(([name, selector]) => {
           const layer = el.querySelector(selector);
           if (!layer) throw new Error(`No ${selector} on the Floor`);
-          return layer;
-        };
-        const sign = layerOf(litLayers.sign);
-        const spill = layerOf(litLayers.spill);
+          return { name, layer };
+        });
         new MutationObserver((_, observer) => {
           observer.disconnect();
           if (holdAt !== undefined) {
-            for (const layer of [sign, spill]) {
+            for (const { layer } of layers) {
               for (const animation of layer.getAnimations()) {
                 animation.pause();
                 animation.currentTime = holdAt;
               }
             }
           }
-          resolve({
-            sign: getComputedStyle(sign).opacity,
-            spill: getComputedStyle(spill).opacity,
-          });
+          resolve(
+            Object.fromEntries(
+              layers.map(({ name, layer }) => [
+                name,
+                getComputedStyle(layer).opacity,
+              ]),
+            ),
+          );
         }).observe(el, { attributeFilter: ["data-lit"] });
         scrollBy(0, innerHeight * screens);
       }),
-    { screens, holdAt, litLayers },
+    { screens, holdAt, selectors: layers },
   );
 
 describe("Highrise", () => {
@@ -243,6 +249,38 @@ describe("Highrise", () => {
     expect(await opacityAsSignToggles(floor, { screens: -1 })).toEqual(fading);
     await expect(floor.locator(litLayers.sign)).toHaveCSS("opacity", "1");
     await expect(floor.locator(litLayers.spill)).toHaveCSS("opacity", "1");
+  });
+
+  it("keeps a Sign's failing letter cut out as the Sign goes out and comes back on", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    const floor = floorOf(page, "Gauge");
+    await scrollEdgeTo(floor.locator("[data-caption]"), "top", 0.5);
+    await flickeredOn(floor);
+    const failingLayers = { letter: "[data-failing]" };
+    const letter = floor.locator(failingLayers.letter);
+    const playStates = () =>
+      letter.evaluate((el) =>
+        el.getAnimations().map((animation) => animation.playState),
+      );
+    // 4150ms into its cycle the letter has cut out to 0.05, from the 88% stop
+    // of `failing` in Sign.astro to its 96%.
+    await letter.evaluate((el) => {
+      for (const animation of el.getAnimations()) {
+        animation.currentTime = 4150;
+      }
+    });
+
+    const cutOut = { letter: "0.05" };
+    expect(
+      await opacityAsSignToggles(floor, { screens: 1, layers: failingLayers }),
+    ).toEqual(cutOut);
+    expect(await playStates()).toEqual(["paused"]);
+    expect(
+      await opacityAsSignToggles(floor, { screens: -1, layers: failingLayers }),
+    ).toEqual(cutOut);
+    expect(await playStates()).toEqual(["running"]);
   });
 
   it("leaves a hovered Project's Sign unlit outside the middle of the screen", async ({
