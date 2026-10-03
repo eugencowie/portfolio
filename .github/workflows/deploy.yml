@@ -1,3 +1,15 @@
+# Deploys the Worker to production on every push to main.
+#
+# Repository secrets
+# - CLOUDFLARE_API_TOKEN: an API token with the Workers Scripts: Edit
+#   permission
+# - CLOUDFLARE_ACCOUNT_ID: the account that owns the Worker
+#
+# Repository variables
+# - SITE_URL: the public URL of the site, used for canonical links
+#
+# wrangler-action reuses the wrangler that pnpm/setup installs, so the
+# version stays pinned in package.json.
 name: Deploy
 
 on:
