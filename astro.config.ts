@@ -2,8 +2,6 @@ import { defineConfig, fontProviders } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-  // Deploy-time setting; see the variables section in wrangler.jsonc.
-  site: process.env.SITE_URL,
   vite: {
     plugins: [tailwindcss()],
   },

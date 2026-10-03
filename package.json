@@ -14,9 +14,7 @@
     "test": "vitest run",
     "test:watch": "pnpm run test --watch",
     "e2e": "playwright test",
-    "deploy": "wrangler deploy",
-    "deploy:dry-run": "pnpm run deploy --dry-run",
-    "deploy:preview": "wrangler preview",
+    "deploy:dry-run": "wrangler deploy --dry-run",
     "validate": "pnpm run build && pnpm run check && pnpm run lint && pnpm run format && pnpm run test && pnpm run e2e && pnpm run deploy:dry-run",
     "validate:fix": "pnpm run lint:fix && pnpm run format:fix && pnpm run validate"
   },
