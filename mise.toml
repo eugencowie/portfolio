@@ -23,9 +23,7 @@ format = "pnpm run format"
 test = "pnpm run test"
 "test:watch" = "pnpm run test:watch"
 e2e = ["pnpm run build", "pnpm run e2e"]
-deploy = ["pnpm run validate", "pnpm run deploy"]
 "deploy:dry-run" = ["pnpm run build", "pnpm run deploy:dry-run"]
-"deploy:preview" = ["pnpm run build", "pnpm run deploy:preview"]
 validate = "pnpm run validate"
 "validate:fix" = "pnpm run validate:fix"
 
