@@ -1,18 +1,17 @@
-# Builds a Worker Preview for every pull request, named after the branch
-# so each push updates the same preview URL, and deletes it when the
-# pull request closes. The URL is attached to the run as a GitHub
-# Deployment; nothing is posted to the pull request thread.
+#
+# Deploy a preview for every pull request.
 #
 # Repository secrets
-# - CLOUDFLARE_API_TOKEN: an API token with the Workers Scripts: Edit
-#   permission
-# - CLOUDFLARE_ACCOUNT_ID: the account that owns the Worker
+# - CLOUDFLARE_ACCOUNT_ID: the account that owns the worker.
+# - CLOUDFLARE_API_TOKEN: a user API token with the following permissions:
+#   - Account Settings: Read
+#   - Workers Scripts: Edit
+#   - User Details: Read
 #
 # Repository variables
-# - SITE_URL: the public URL of the site, used for canonical links
+# - SITE_URL: the public URL of the site, used for canonical links.
 #
-# wrangler-action reuses the wrangler that pnpm/setup installs, so the
-# version stays pinned in package.json.
+
 name: Preview
 
 on:
@@ -45,9 +44,6 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           gitHubToken: ${{ github.token }}
 
-  # Previews are named after the branch, so this deletes the one the
-  # preview job above created. Needs no build: wrangler only reads the
-  # Worker name from wrangler.jsonc.
   cleanup:
     if: github.event.action == 'closed'
     runs-on: ubuntu-latest
