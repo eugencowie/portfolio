@@ -4,6 +4,10 @@ on:
   push:
     branches: [main]
 
+# Queue deploys so two quick merges cannot race to go live out of order.
+concurrency:
+  group: deploy
+
 permissions:
   contents: read
   deployments: write

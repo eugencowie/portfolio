@@ -3,6 +3,11 @@ name: Preview
 on:
   pull_request:
 
+# A newer push to the branch replaces the in-flight preview run.
+concurrency:
+  group: preview-${{ github.head_ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
   deployments: write
