@@ -16,7 +16,6 @@ name: Preview
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened, closed]
 
 # A newer push to the branch replaces the in-flight preview run.
 concurrency:
@@ -29,12 +28,13 @@ permissions:
 
 jobs:
   preview:
-    if: github.event.action != 'closed'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: pnpm/setup@703c52620218391530e48b9e8870d5c0082e1b9b # v2.1.0
-        env: { pnpm_config_pm_on_fail: ignore } # https://github.com/pnpm/setup/issues/34
+        env:
+          pnpm_config_pm_on_fail: ignore # https://github.com/pnpm/setup/issues/34
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1 # no e2e here; skip the 187 MB Chromium
         with: { cache: true }
       - run: pnpm run build --site "${{ vars.SITE_URL }}"
       - uses: cloudflare/wrangler-action@953926a2e2182532811c01a25e53647d93bf07c0 # v4.1.3
@@ -43,17 +43,3 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           gitHubToken: ${{ github.token }}
-
-  cleanup:
-    if: github.event.action == 'closed'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: pnpm/setup@703c52620218391530e48b9e8870d5c0082e1b9b # v2.1.0
-        env: { pnpm_config_pm_on_fail: ignore } # https://github.com/pnpm/setup/issues/34
-        with: { cache: true }
-      - uses: cloudflare/wrangler-action@953926a2e2182532811c01a25e53647d93bf07c0 # v4.1.3
-        with:
-          command: preview delete --skip-confirmation
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
