@@ -1,20 +1,10 @@
 # Agent Instructions
 
-## Agent skills
+## Domain Docs
 
-### Issue tracker
+Use the vocabulary in the glossary, [docs/context.md](docs/context.md), and read the ADRs in [docs/architecture/](docs/architecture/) that touch the area you're working in.
 
-Tickets live as local Markdown files in `docs/planning/`. See `docs/agents/issue-tracker.md`.
-
-### Triage labels
-
-Default canonical labels. See `docs/agents/triage-labels.md`.
-
-### Domain docs
-
-Single-context layout: `docs/context.md` and ADRs in `docs/architecture/`. See `docs/agents/domain.md`.
-
-## Development environment
+## Development Environment
 
 This project uses mise to manage the development environment.
 
