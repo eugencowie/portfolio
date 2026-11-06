@@ -1,9 +1,5 @@
 # Agent Instructions
 
-## Domain Docs
-
-Use the vocabulary in the glossary, [docs/context.md](docs/context.md), and read the ADRs in [docs/architecture/](docs/architecture/) that touch the area you're working in.
-
 ## Development Environment
 
 This project uses mise to manage the development environment.
@@ -37,3 +33,7 @@ Consult these guides before working on related tasks:
 - [Adding or managing content](https://docs.astro.build/en/guides/content-collections/)
 - [Adding styles or using Tailwind](https://docs.astro.build/en/guides/styling/)
 - [Supporting multiple languages](https://docs.astro.build/en/guides/internationalization/)
+
+### Domain
+
+Single-context layout: `docs/glossary.md` and ADRs in `docs/architecture/`.
