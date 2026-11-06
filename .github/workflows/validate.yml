@@ -3,18 +3,35 @@ name: Validate
 on:
   pull_request:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   validate:
+    name: Validate
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v7.0.1
-      - uses: pnpm/setup@v3.1.2
+      - name: Checkout
+        uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install dependencies
+        uses: pnpm/setup@v3.1.2
         # Re-run install scripts on every job: Playwright downloads Chromium outside
         # the cached store, so a cached "already built" mark would leave no browser.
         env: { pnpm_config_side_effects_cache: false }
         with: { cache: true }
-      - run: pnpm run validate
-      - uses: actions/upload-artifact@v7.0.2
+
+      - name: Validate
+        run: pnpm run validate
+
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v7.0.2
         if: ${{ !cancelled() }}
         with:
           name: playwright-report
