@@ -1,5 +1,7 @@
 [tools]
+jactionlint = "latest"
 pnpm = "latest"
+shellcheck = "latest"
 
 [tasks]
 install = "pnpm install"
@@ -11,6 +13,7 @@ build = "pnpm run build"
 preview = ["pnpm run build", "pnpm run preview"]
 check = "pnpm run check"
 lint = "pnpm run lint"
+"lint:actions" = "jactionlint"
 "lint:fix" = "pnpm run lint:fix"
 format = "pnpm run format"
 "format:fix" = "pnpm run format:fix"
