@@ -20,7 +20,7 @@ on:
 
 # Queue deploys so two quick merges cannot race to go live out of order.
 concurrency:
-  group: deploy
+  group: ${{ github.workflow }}
 
 jobs:
   deploy:

@@ -19,7 +19,7 @@ on:
 
 # A newer push to the branch replaces the in-flight preview run.
 concurrency:
-  group: preview-${{ github.head_ref }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
