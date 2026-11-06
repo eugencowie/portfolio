@@ -22,10 +22,12 @@ jobs:
 
       - name: Install dependencies
         uses: pnpm/setup@v3.1.2
-        # Re-run install scripts on every job: Playwright downloads Chromium outside
-        # the cached store, so a cached "already built" mark would leave no browser.
-        env: { pnpm_config_side_effects_cache: false }
-        with: { cache: true }
+        with:
+          cache: true
+        env:
+          # Re-run install scripts on every job: Playwright downloads Chromium outside
+          # the cached store, so a cached "already built" mark would leave no browser.
+          pnpm_config_side_effects_cache: false
 
       - name: Validate
         run: pnpm run validate

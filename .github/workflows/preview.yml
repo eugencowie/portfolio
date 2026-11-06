@@ -36,7 +36,6 @@ jobs:
         with:
           persist-credentials: false
 
-      # No pnpm store cache: a poisoned entry would end up in the deployed preview.
       - name: Install dependencies
         uses: pnpm/setup@v3.1.2
         env:
