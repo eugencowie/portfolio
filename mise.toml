@@ -2,10 +2,7 @@
 disable_backends = ["asdf"] # cannot be updated by Renovate
 
 [tools]
-"aqua:astral-sh/uv" = "latest"
-"pipx:cruft" = "latest"
 pnpm = "latest"
-python = "latest"
 
 [tasks]
 install = "pnpm install"
@@ -27,10 +24,3 @@ e2e = ["pnpm run build", "pnpm run e2e"]
 validate = "pnpm run validate"
 "validate:fix" = "pnpm run validate:fix"
 
-[tasks."template:update"]
-description = "Update project with the latest changes from the template"
-run = "cruft update"
-
-[tasks."template:restore"]
-description = "Restore template-managed files"
-run = "cruft diff | git apply"
