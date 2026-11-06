@@ -22,7 +22,7 @@ type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
   ends?: "bays" | "piers";
 };
 const {
-  as: Tag,
+  as: Tag = "div",
   bays,
   balcony,
   ends = "bays",
