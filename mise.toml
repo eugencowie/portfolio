@@ -13,7 +13,6 @@ build = "pnpm run build"
 preview = ["pnpm run build", "pnpm run preview"]
 check = "pnpm run check"
 lint = "pnpm run lint"
-"lint:actions" = "jactionlint"
 "lint:fix" = "pnpm run lint:fix"
 format = "pnpm run format"
 "format:fix" = "pnpm run format:fix"
@@ -21,6 +20,5 @@ test = "pnpm run test"
 "test:watch" = "pnpm run test:watch"
 e2e = ["pnpm run build", "pnpm run e2e"]
 "deploy:dry-run" = ["pnpm run build", "pnpm run deploy:dry-run"]
-validate = { depends = ["lint:actions"], run = "pnpm run validate" }
-"validate:fix" = { depends = ["lint:actions"], run = "pnpm run validate:fix" }
-
+validate = ["jactionlint", "pnpm run validate"]
+"validate:fix" = ["jactionlint", "pnpm run validate:fix"]
