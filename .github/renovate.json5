@@ -37,5 +37,11 @@
         commands: ["mise install --locked", "mise run install --lockfile-only"],
       },
     },
+    {
+      // See https://github.com/typescript-eslint/typescript-eslint/issues/10940
+      description: "Hold TypeScript below 7 until typescript-eslint and @astrojs/check support it",
+      matchPackageNames: ["typescript"],
+      allowedVersions: "<7",
+    },
   ],
 }
