@@ -29,8 +29,14 @@ jobs:
           # the cached store, so a cached "already built" mark would leave no browser.
           pnpm_config_side_effects_cache: false
 
+      # pnpm/setup owns pnpm and its cache, so mise installs only the workflow linters.
+      - name: Install tools
+        uses: jdx/mise-action@v5.2.6
+        with:
+          install_args: jactionlint shellcheck
+
       - name: Validate
-        run: pnpm run validate
+        run: mise run --skip-tools validate
 
       - name: Upload Playwright report
         uses: actions/upload-artifact@v7.0.2
