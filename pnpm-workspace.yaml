@@ -5,3 +5,13 @@ allowBuilds:
 
 patchedDependencies:
   prettier-plugin-tailwindcss@0.8.1: patches/prettier-plugin-tailwindcss@0.8.1.patch
+
+packageExtensions:
+  # astro2tsx lists @emnapi/runtime only as a devDependency, so pnpm fills the
+  # @napi-rs/wasm-runtime peer with any version in the tree (e.g. 2.0.0-beta.2
+  # from rolldown's wasm binding), which is ABI-incompatible with its pinned
+  # @emnapi/core and breaks `astro check`. Match the runtime to the core.
+  # https://github.com/withastro/astro/issues/18642
+  "@astrojs/astro2tsx@0.1.3":
+    dependencies:
+      "@emnapi/runtime": "1.11.3"
