@@ -24,8 +24,6 @@ jobs:
 
       - name: Install tools
         uses: jdx/mise-action@v5.2.6
-        with:
-          install_args: jactionlint shellcheck
 
       - name: Lint workflows
-        run: mise run --skip-tools lint:actions
+        run: mise run lint:actions
