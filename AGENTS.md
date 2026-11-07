@@ -1,20 +1,6 @@
 # Agent Instructions
 
-## Agent skills
-
-### Issue tracker
-
-Tickets live as local Markdown files in `docs/planning/`. See `docs/agents/issue-tracker.md`.
-
-### Triage labels
-
-Default canonical labels. See `docs/agents/triage-labels.md`.
-
-### Domain docs
-
-Single-context layout: `docs/context.md` and ADRs in `docs/architecture/`. See `docs/agents/domain.md`.
-
-## Development environment
+## Development Environment
 
 This project uses mise to manage the development environment.
 
@@ -47,3 +33,7 @@ Consult these guides before working on related tasks:
 - [Adding or managing content](https://docs.astro.build/en/guides/content-collections/)
 - [Adding styles or using Tailwind](https://docs.astro.build/en/guides/styling/)
 - [Supporting multiple languages](https://docs.astro.build/en/guides/internationalization/)
+
+### Domain
+
+Single-context layout: `docs/glossary.md` and ADRs in `docs/architecture/`.
