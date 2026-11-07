@@ -30,7 +30,7 @@ jobs:
           pnpm_config_side_effects_cache: false
 
       - name: Install tools
-        uses: jdx/mise-action@v5.2.6
+        uses: jdx/mise-action@v5.2.7
         with:
           # pnpm/setup owns pnpm and its cache, so mise installs only the workflow linters.
           install_args: jactionlint shellcheck
