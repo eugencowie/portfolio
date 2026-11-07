@@ -21,6 +21,6 @@ test = "pnpm run test"
 "test:watch" = "pnpm run test:watch"
 e2e = ["pnpm run build", "pnpm run e2e"]
 "deploy:dry-run" = ["pnpm run build", "pnpm run deploy:dry-run"]
-validate = "pnpm run validate"
-"validate:fix" = "pnpm run validate:fix"
+validate = { depends = ["lint:actions"], run = "pnpm run validate" }
+"validate:fix" = { depends = ["lint:actions"], run = "pnpm run validate:fix" }
 
